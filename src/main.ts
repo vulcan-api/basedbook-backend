@@ -1,8 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as dotenv from 'dotenv';
 
-async function bootstrap() {
+dotenv.config();
+const { PORT = 3000 } = process.env;
+
+(async function () {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
-}
-bootstrap();
+  await app.listen(PORT, () => {
+    console.log(`Server is listening on port: ${PORT}...`);
+  });
+})();
