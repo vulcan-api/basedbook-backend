@@ -9,3 +9,62 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id              Int      @id @default(autoincrement())
+  name            String
+  username        String
+  surname         String
+  class_name      String
+  passwordHash    String
+  profileDesc     String
+  avatar          String
+  postsProjects   String
+  skills          String
+  profileSettings String
+  loginID         Int
+  email           String   @unique
+  restURL         RestURL  @relation(fields: [restURLId], references: [id])
+  restURLId       Int
+  certificate     String
+  fingerprint     String
+  privateKey      String
+  firebaseToken   String
+  Post            Post[]
+  Report          Report[]
+}
+
+model RestURL {
+  id    Int    @id @default(autoincrement())
+  url   String
+  users User[] @relation()
+}
+
+model Post {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  title       String
+  text        String
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    Int
+  category    Category
+  like        Int
+  dislike     Int
+  isAnonymous Boolean
+  Report      Report[]
+}
+
+enum Category {
+  USER
+  ADMIN
+}
+
+model Report {
+  Id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  createdAt DateTime @default(now())
+  reason    String
+}
