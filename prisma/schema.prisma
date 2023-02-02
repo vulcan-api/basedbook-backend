@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   name            String
   username        String
   surname         String
@@ -23,15 +23,18 @@ model User {
   skills          String
   profileSettings String
   loginID         Int
-  email           String   @unique
-  restURL         RestURL  @relation(fields: [restURLId], references: [id])
+  email           String        @unique
+  restURL         RestURL       @relation(fields: [restURLId], references: [id])
   restURLId       Int
   certificate     String
   fingerprint     String
   privateKey      String
   firebaseToken   String
-  Post            Post[]
-  Report          Report[]
+  spottedPost     SpottedPost[]
+  project         Project[]
+  report          Report[]
+  UserProject     UserProject?  @relation(fields: [userProjectId], references: [id])
+  userProjectId   Int?
 }
 
 model RestURL {
@@ -40,31 +43,45 @@ model RestURL {
   users User[] @relation()
 }
 
-model Post {
+model SpottedPost {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   title       String
   text        String
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
-  category    Category
   like        Int
   dislike     Int
   isAnonymous Boolean
   Report      Report[]
 }
 
-enum Category {
-  USER
-  ADMIN
+model Project {
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  title       String
+  text        String
+  author      User          @relation(fields: [authorId], references: [id])
+  authorId    Int
+  Report      Report[]
+  UserProject UserProject[]
+}
+
+model UserProject {
+  id        Int      @id @default(autoincrement())
+  project   Project? @relation(fields: [projectId], references: [id])
+  projectId Int?
+  Users     User[]   @relation()
 }
 
 model Report {
-  Id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
-  createdAt DateTime @default(now())
-  reason    String
+  Id            Int          @id @default(autoincrement())
+  user          User         @relation(fields: [userId], references: [id])
+  userId        Int
+  spottedPost   SpottedPost? @relation(fields: [spottedPostId], references: [id])
+  spottedPostId Int?
+  project       Project?     @relation(fields: [projectId], references: [id])
+  projectId     Int?
+  createdAt     DateTime     @default(now())
+  reason        String
 }
