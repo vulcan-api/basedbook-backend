@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { LoginDto, RegisterDto } from './dto';
 import { DbService } from '../db/db.service';
-import bcrypt from 'bcrypt';
+import { sha512 } from 'js-sha512';
 import {
   AccountTools,
   Keystore,
@@ -9,11 +9,12 @@ import {
   VulcanHebe,
 } from 'vulcan-api-js';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
   constructor(private prisma: DbService) {}
-  async signup(dto: RegisterDto): Promise<object> {
+  async signup(dto: RegisterDto, res: Response): Promise<Response> {
     const keystore = new Keystore();
     await keystore.init('Muj Elektryk');
 
@@ -32,13 +33,6 @@ export class AuthService {
     const student = (await vulcanClient.getStudents())[0];
     const lesson = (await vulcanClient.getLessons(new Date('2022-09-02')))[0];
     const classNumber = student.periods.at(-1)?.level;
-    const saltRounds = 10;
-    let hashedPassword = '';
-    bcrypt.genSalt(saltRounds, (err, salt) => {
-      bcrypt.hash(dto.password, salt, (err, hash) => {
-        hashedPassword = hash;
-      });
-    });
 
     try {
       const restURL = await this.prisma.restURL.upsert({
@@ -48,9 +42,12 @@ export class AuthService {
         where: {
           url: vulcanAccount.restUrl,
         },
-        update: {},
+        update: {
+          url: vulcanAccount.restUrl,
+        },
       });
-      return await this.prisma.user.create({
+
+      await this.prisma.user.create({
         data: {
           name: student.pupil.firstName,
           username: dto.username,
@@ -59,7 +56,7 @@ export class AuthService {
             classNumber && lesson.class?.symbol
               ? classNumber + lesson.class.symbol
               : '',
-          passwordHash: hashedPassword,
+          passwordHash: sha512(dto.password),
           profileDesc: '',
           avatar: '',
           postsProjects: '',
@@ -74,6 +71,8 @@ export class AuthService {
           firebaseToken: keystore.firebaseToken ?? '',
         },
       });
+      res.cookie('test', 'value', { httpOnly: true });
+      return res;
     } catch (error: any) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -84,14 +83,15 @@ export class AuthService {
     }
   }
 
-  async login(dto: LoginDto): Promise<object> {
+  async login(dto: LoginDto, res: Response): Promise<Response> {
     const user = await this.prisma.user.findUniqueOrThrow({
       where: { username: dto.username },
     });
 
-    bcrypt.compare(dto.password, user.passwordHash, (err, result) => {
-      if (result) return user;
-    });
+    if (sha512(dto.password) === user.passwordHash) {
+      res.cookie('test', 'value', { httpOnly: true });
+      return res;
+    }
     throw new ForbiddenException('Wrong credentials!');
   }
 }

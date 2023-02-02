@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { LoginDto } from '../dto';
+import { Response } from 'express';
 
 @Controller('auth/login')
 export class LoginController {
@@ -10,7 +11,7 @@ export class LoginController {
     return 'If you want to get login page, you should use our React app instead of nestjs API ;)';
   }
   @Post()
-  login(@Body() dto: LoginDto): object {
-    return this.authService.login(dto);
+  async login(@Body() dto: LoginDto, @Res() res: Response): Promise<Response> {
+    return (await this.authService.login(dto, res)).send();
   }
 }
