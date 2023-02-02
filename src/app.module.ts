@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { DbModule } from './db/db.module';
+import { SpottedModule } from './spotted/spotted.module';
 
 @Module({
   controllers: [AppController],
@@ -13,6 +14,7 @@ import { DbModule } from './db/db.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    SpottedModule,
   ],
   providers: [AppService],
 })

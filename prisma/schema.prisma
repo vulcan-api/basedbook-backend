@@ -48,8 +48,8 @@ model Post {
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
   category    Category
-  like        Int
-  dislike     Int
+  like        Int      @default(0)
+  dislike     Int      @default(0)
   isAnonymous Boolean
   Report      Report[]
 }
