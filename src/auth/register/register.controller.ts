@@ -10,7 +10,6 @@ export class RegisterController {
   handleGetRequest(): string {
     return 'If you want to get login page, you should use our React app instead of nestjs API ;)';
   }
-
   @Post()
   async register(
     @Body() dto: RegisterDto,

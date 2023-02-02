@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, IsNumberString, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsNumberString,
+  Length,
+} from 'class-validator';
 
 /*
  *  DTO class layout
@@ -13,6 +19,11 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   username: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsEmail()
+  email: string;
 
   @IsString()
   @IsNotEmpty()

@@ -42,9 +42,7 @@ export class AuthService {
         where: {
           url: vulcanAccount.restUrl,
         },
-        update: {
-          url: vulcanAccount.restUrl,
-        },
+        update: {},
       });
 
       await this.prisma.user.create({
@@ -64,7 +62,7 @@ export class AuthService {
           profileSettings: '',
           restURLId: restURL.id,
           loginID: vulcanAccount.loginId,
-          email: vulcanAccount.userLogin,
+          email: dto.email,
           certificate: keystore.certificate ?? '',
           fingerprint: keystore.fingerprint ?? '',
           privateKey: keystore.privateKey ?? '',
@@ -85,7 +83,7 @@ export class AuthService {
 
   async login(dto: LoginDto, res: Response): Promise<Response> {
     const user = await this.prisma.user.findUniqueOrThrow({
-      where: { username: dto.username },
+      where: { email: dto.email },
     });
 
     if (sha512(dto.password) === user.passwordHash) {
