@@ -13,15 +13,13 @@ export class SpottedService {
       const fields: any = {};
       for (const fieldName in fieldsArray) fields[fieldName] = true;
 
-      posts = prisma.post.findMany({ select: fields });
+      posts = prisma.spottedPost.findMany({ select: fields });
     } else {
-      posts = prisma.post.findMany();
+      posts = prisma.spottedPost.findMany();
     }
 
     return posts;
   }
 
-  addNewPost() {
-
-  }
+  addNewPost() {}
 }
