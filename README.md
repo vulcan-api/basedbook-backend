@@ -10,10 +10,13 @@ An innovative educational social platform backend.
 ### Running from compiled js files
 ``` pnpm start ```
 
-### Build project (node_modules)
+### Build project (node_modules + prisma)
 ``` pnpm build ```
 
-### Build (node_modules + TS into JS)
+### Build prisma
+``` pnpm build:prisma ```
+
+### Build (node_modules + prisma + TS into JS)
 ``` pnpm build:prod ```
 
 ### We highly recommend to use prepared commands. You can add or/and check other commands in package.json file
