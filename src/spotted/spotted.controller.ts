@@ -1,5 +1,5 @@
 import { SpottedService } from './spotted.service';
-import { Body, Controller, Get, Param, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
 import { NewSpottedPostDto } from './dto/newSpottedPost.dto';
 
 @Controller('spotted')
@@ -7,8 +7,11 @@ export class SpottedController {
   constructor(private readonly spottedService: SpottedService) {}
 
   @Get('/post')
-  getAllPosts(): Promise<object> {
-    return this.spottedService.getPostList();
+  getAllPosts(
+    @Query('skip') skip = '0',
+    @Query('take') take = '10',
+  ): Promise<object> {
+    return this.spottedService.getPostList(parseInt(skip), parseInt(take));
   }
 
   @Get('/post/:id')

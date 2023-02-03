@@ -6,8 +6,12 @@ import { NewSpottedPostDto } from './dto/newSpottedPost.dto';
 export class SpottedService {
   constructor(private readonly prisma: DbService) {}
 
-  getPostList(): Promise<any> {
-    return this.prisma.spottedPost.findMany();
+  getPostList(skip: number, take: number): Promise<any> {
+    return this.prisma.spottedPost.findMany({
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take,
+    });
   }
 
   getPostById(id: number): Promise<any> {
