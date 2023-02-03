@@ -10,8 +10,11 @@ An innovative educational social platform backend.
 ### Running from compiled js files
 ``` pnpm start ```
 
-### Build project (node_modules)
+### Build project (node_modules + prisma)
 ``` pnpm build ```
+
+### Build prisma
+``` pnpm build:prisma ```
 
 ### Build (node_modules + TS into JS)
 ``` pnpm build:prod ```
