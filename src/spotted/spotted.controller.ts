@@ -1,16 +1,14 @@
 import { SpottedService } from './spotted.service';
-import { Controller, Get, Param, Put } from '@nestjs/common';
+import { Controller, Get, Put, Query } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 
 @Controller('spotted')
 export class SpottedController {
-  constructor(
-    private readonly spottedService: SpottedService,
-    private readonly db: DbService,
-  ) {}
+  constructor(private readonly spottedService: SpottedService) {}
 
   @Get('/post')
-  async getAllPosts(@Param() param: string[]): Promise<any> {
+  async getAllPosts(@Query() param: any): Promise<any> {
+    console.log('params: ', param);
     return await this.spottedService.getPostList(param);
   }
 
