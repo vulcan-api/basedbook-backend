@@ -22,7 +22,7 @@ export class SpottedService {
     await this.prisma.spottedPost.create({ data: postData });
   }
 
-  async changePost(newPostData: UpdatePostDto) {
+  async changePostById(newPostData: UpdatePostDto) {
     console.log('newPostData: ', newPostData);
     const { id } = newPostData;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -33,5 +33,9 @@ export class SpottedService {
       where: { id },
     });
     return 'xd';
+  }
+
+  async deletePostById(id: number) {
+    await this.prisma.spottedPost.delete({ where: { id } });
   }
 }

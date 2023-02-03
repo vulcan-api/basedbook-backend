@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -9,6 +10,13 @@ import {
 } from '@nestjs/common';
 import { SpottedService } from './spotted.service';
 import { PostDto, UpdatePostDto } from './dto/post.dto';
+
+/*
+ * TODO:
+ *  All of endpoints bellow are very unsecure
+ *  There is no ownership validation and this will be changed
+ *  when jwt validation middleware will be done
+ * */
 
 @Controller('spotted')
 export class SpottedController {
@@ -35,7 +43,13 @@ export class SpottedController {
 
   @Patch('/post')
   async changePostData(@Body() body: UpdatePostDto): Promise<object> {
-    await this.spottedService.changePost(body);
+    await this.spottedService.changePostById(body);
+    return { ok: true, statusCode: 200 };
+  }
+
+  @Delete('/post')
+  async deletePost(@Body('id') id: number): Promise<object> {
+    await this.spottedService.deletePostById(id);
     return { ok: true, statusCode: 200 };
   }
 }
