@@ -16,7 +16,7 @@ An innovative educational social platform backend.
 ### Build prisma
 ``` pnpm build:prisma ```
 
-### Build (node_modules + TS into JS)
+### Build (node_modules + prisma + TS into JS)
 ``` pnpm build:prod ```
 
 ### We highly recommend to use prepared commands. You can add or/and check other commands in package.json file
