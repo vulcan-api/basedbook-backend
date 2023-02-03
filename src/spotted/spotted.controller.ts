@@ -1,19 +1,24 @@
 import { SpottedService } from './spotted.service';
-import { Controller, Get, Put, Query } from '@nestjs/common';
-import { DbService } from '../db/db.service';
+import { Body, Controller, Get, Param, Put } from '@nestjs/common';
+import { NewSpottedPostDto } from './dto/newSpottedPost.dto';
 
 @Controller('spotted')
 export class SpottedController {
   constructor(private readonly spottedService: SpottedService) {}
 
   @Get('/post')
-  async getAllPosts(@Query() param: any): Promise<any> {
-    console.log('params: ', param);
-    return await this.spottedService.getPostList(param);
+  getAllPosts(): Promise<object> {
+    return this.spottedService.getPostList();
+  }
+
+  @Get('/post/:id')
+  getSpecificPost(@Param('id') id: string): object {
+    return this.spottedService.getPostById(parseInt(id));
   }
 
   @Put('post/add')
-  addNewSpottedPost(): string {
-    return 'to be continued';
+  async addNewSpottedPost(@Body() body: NewSpottedPostDto): Promise<object> {
+    await this.spottedService.insertNewPost(body);
+    return { ok: true };
   }
 }

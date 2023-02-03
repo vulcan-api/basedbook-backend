@@ -1,15 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
+import { NewSpottedPostDto } from './dto/newSpottedPost.dto';
 
 @Injectable()
 export class SpottedService {
   constructor(private readonly prisma: DbService) {}
 
-  async getPostList(fieldsArray: object): Promise<any> {
-    const { prisma } = this;
+  getPostList(): Promise<any> {
+    return this.prisma.spottedPost.findMany();
+  }
 
-    const posts = prisma.spottedPost.findMany({ select: { id: true } });
+  getPostById(id: number): Promise<any> {
+    return this.prisma.spottedPost.findUnique({ where: { id } });
+  }
 
-    return posts;
+  async insertNewPost(postData: NewSpottedPostDto) {
+    await this.prisma.spottedPost.create({ data: postData });
   }
 }
