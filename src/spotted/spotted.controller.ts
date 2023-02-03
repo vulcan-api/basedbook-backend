@@ -1,6 +1,14 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { SpottedService } from './spotted.service';
-import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
-import { NewSpottedPostDto } from './dto/newSpottedPost.dto';
+import { PostDto, UpdatePostDto } from './dto/post.dto';
 
 @Controller('spotted')
 export class SpottedController {
@@ -19,9 +27,15 @@ export class SpottedController {
     return this.spottedService.getPostById(parseInt(id));
   }
 
-  @Put('post/add')
-  async addNewSpottedPost(@Body() body: NewSpottedPostDto): Promise<object> {
+  @Put('/post')
+  async addNewSpottedPost(@Body() body: PostDto): Promise<object> {
     await this.spottedService.insertNewPost(body);
-    return { ok: true };
+    return { ok: true, statusCode: 200 };
+  }
+
+  @Patch('/post')
+  async changePostData(@Body() body: UpdatePostDto): Promise<object> {
+    await this.spottedService.changePost(body);
+    return { ok: true, statusCode: 200 };
   }
 }

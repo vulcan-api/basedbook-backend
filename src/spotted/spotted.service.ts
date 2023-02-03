@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
-import { NewSpottedPostDto } from './dto/newSpottedPost.dto';
+import { PostDto, UpdatePostDto } from './dto/post.dto';
 
 @Injectable()
 export class SpottedService {
@@ -18,7 +18,20 @@ export class SpottedService {
     return this.prisma.spottedPost.findUnique({ where: { id } });
   }
 
-  async insertNewPost(postData: NewSpottedPostDto) {
+  async insertNewPost(postData: PostDto) {
     await this.prisma.spottedPost.create({ data: postData });
+  }
+
+  async changePost(newPostData: UpdatePostDto) {
+    console.log('newPostData: ', newPostData);
+    const { id } = newPostData;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    delete newPostData.id;
+    await this.prisma.spottedPost.update({
+      data: newPostData,
+      where: { id },
+    });
+    return 'xd';
   }
 }
