@@ -54,8 +54,8 @@ export class SpottedService {
     await this.prisma.spottedPost.update({
       where: { id: id },
       data: {
-        like: {
-          increment: -1,
+        dislike: {
+          increment: 1,
         },
       },
     });
