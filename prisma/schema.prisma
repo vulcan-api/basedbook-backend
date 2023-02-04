@@ -13,7 +13,7 @@ datasource db {
 model User {
   id              Int           @id @default(autoincrement())
   name            String
-  username        String   @unique
+  username        String        @unique
   surname         String
   class_name      String
   passwordHash    String
@@ -35,6 +35,8 @@ model User {
   report          Report[]
   UserProject     UserProject?  @relation(fields: [userProjectId], references: [id])
   userProjectId   Int?
+  Like            Like[]
+  Dislike         Dislike[]
 }
 
 model RestURL {
@@ -44,16 +46,32 @@ model RestURL {
 }
 
 model SpottedPost {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
   title       String
   text        String
-  author      User     @relation(fields: [authorId], references: [id])
+  author      User      @relation(fields: [authorId], references: [id])
   authorId    Int
-  like        Int      @default(0)
-  dislike     Int      @default(0)
   isAnonymous Boolean
   Report      Report[]
+  Like        Like[]
+  Dislike     Dislike[]
+}
+
+model Like {
+  id     Int         @id @default(autoincrement())
+  post   SpottedPost @relation(fields: [postId], references: [id])
+  postId Int
+  user   User        @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+model Dislike {
+  id     Int         @id @default(autoincrement())
+  post   SpottedPost @relation(fields: [postId], references: [id])
+  postId Int
+  user   User        @relation(fields: [userId], references: [id])
+  userId Int
 }
 
 model Project {
