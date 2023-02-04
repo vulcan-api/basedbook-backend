@@ -11,7 +11,6 @@ export class AppService {
     const projects = await this.prisma.project.findMany({
       orderBy: { createdAt: 'desc' },
     });
-    console.log(spottedPosts);
     return {
       spottedPosts,
       projects,
