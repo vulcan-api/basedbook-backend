@@ -38,4 +38,26 @@ export class SpottedService {
   async deletePostById(id: number) {
     await this.prisma.spottedPost.delete({ where: { id } });
   }
+
+  async giveALike(id: number, userId: number) {
+    await this.prisma.spottedPost.update({
+      where: { id: id },
+      data: {
+        like: {
+          increment: 1,
+        },
+      },
+    });
+  }
+
+  async giveADislike(id: number, userId: number) {
+    await this.prisma.spottedPost.update({
+      where: { id: id },
+      data: {
+        like: {
+          increment: -1,
+        },
+      },
+    });
+  }
 }

@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Patch,
+  Post,
   Put,
   Query,
 } from '@nestjs/common';
@@ -50,6 +51,18 @@ export class SpottedController {
   @Delete('/post')
   async deletePost(@Body('id') id: number): Promise<object> {
     await this.spottedService.deletePostById(id);
+    return { ok: true, statusCode: 200 };
+  }
+
+  @Post('/post/:id/like')
+  async giveALike(@Body('id') id: number): Promise<object> {
+    await this.spottedService.giveALike(id, 8);
+    return { ok: true, statusCode: 200 };
+  }
+
+  @Post('/post/:id/dislike')
+  async giveADislike(@Body('id') id: number): Promise<object> {
+    await this.spottedService.giveADislike(id, 8);
     return { ok: true, statusCode: 200 };
   }
 }
