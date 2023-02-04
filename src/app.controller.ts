@@ -1,15 +1,11 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Request } from 'express';
 
-@Controller('/')
+@Controller('')
 export class AppController {
   constructor(private readonly appService: AppService) {}
-
   @Get()
-  getHello(@Req() req: Request): string {
-    //return this.appService.getHello();
-    // I know, changes inside this controller are useless :)
-    return req.url;
+  async getMainPage(): Promise<object> {
+    return this.appService.getPosts();
   }
 }
