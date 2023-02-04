@@ -5,13 +5,13 @@ import { DbService } from 'src/db/db.service';
 export class AppService {
   constructor(private readonly prisma: DbService) {}
   async getPosts(): Promise<object> {
-    const spottedPosts = this.prisma.spottedPost.findMany({
+    const spottedPosts = await this.prisma.spottedPost.findMany({
       orderBy: { createdAt: 'desc' },
     });
-    const projects = this.prisma.project.findMany({
+    const projects = await this.prisma.project.findMany({
       orderBy: { createdAt: 'desc' },
     });
-
+    console.log(spottedPosts);
     return {
       spottedPosts,
       projects,
