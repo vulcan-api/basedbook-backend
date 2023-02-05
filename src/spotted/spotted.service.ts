@@ -40,23 +40,19 @@ export class SpottedService {
   }
 
   async giveALike(id: number, userId: number) {
-    await this.prisma.spottedPost.update({
-      where: { id: id },
+    await this.prisma.like.create({
       data: {
-        like: {
-          increment: 1,
-        },
+        postId: id,
+        userId,
       },
     });
   }
 
   async giveADislike(id: number, userId: number) {
-    await this.prisma.spottedPost.update({
-      where: { id: id },
+    await this.prisma.dislike.create({
       data: {
-        dislike: {
-          increment: 1,
-        },
+        postId: id,
+        userId,
       },
     });
   }
