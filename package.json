@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "pnpm build:packages && pnpm build:prisma",
-    "build:packages": "pnpm i --lockfile-only --frozen-lockfile",
+    "build:packages": "pnpm i --frozen-lockfile",
     "build:prod": "pnpm build && rimraf dist && nest build",
     "build:prisma": "prisma generate",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
