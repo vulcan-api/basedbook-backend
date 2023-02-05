@@ -8,13 +8,24 @@ import {
   registerAccount,
   VulcanHebe,
 } from 'vulcan-api-js';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { Response } from 'express';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: DbService) {}
+  constructor(
+    private prisma: DbService,
+    private readonly mailerService: MailerService,
+  ) {}
+
   async signup(dto: RegisterDto, res: Response): Promise<Response> {
+    const sampleUser = await this.prisma.user.findUnique({
+      where: {
+        username: dto.username,
+      },
+    });
+    if (sampleUser) throw new ForbiddenException('Credentials taken!');
+
     const keystore = new Keystore();
     await keystore.init('Muj Elektryk');
 
@@ -34,51 +45,51 @@ export class AuthService {
     const lesson = (await vulcanClient.getLessons(new Date('2022-09-02')))[0];
     const classNumber = student.periods.at(-1)?.level;
 
-    try {
-      const restURL = await this.prisma.restURL.upsert({
-        create: {
-          url: vulcanAccount.restUrl,
-        },
-        where: {
-          url: vulcanAccount.restUrl,
-        },
-        update: {},
-      });
+    const restURL = await this.prisma.restURL.upsert({
+      create: {
+        url: vulcanAccount.restUrl,
+      },
+      where: {
+        url: vulcanAccount.restUrl,
+      },
+      update: {},
+    });
 
-      await this.prisma.user.create({
-        data: {
-          name: student.pupil.firstName,
-          username: dto.username,
-          surname: student.pupil.surname,
-          class_name:
-            classNumber && lesson.class?.symbol
-              ? classNumber + lesson.class.symbol
-              : '',
-          passwordHash: sha512(dto.password),
-          profileDesc: '',
-          avatar: '',
-          postsProjects: '',
-          skills: '',
-          profileSettings: '',
-          restURLId: restURL.id,
-          loginID: vulcanAccount.loginId,
-          email: dto.email,
-          certificate: keystore.certificate ?? '',
-          fingerprint: keystore.fingerprint ?? '',
-          privateKey: keystore.privateKey ?? '',
-          firebaseToken: keystore.firebaseToken ?? '',
-        },
-      });
-      res.cookie('test', 'value', { httpOnly: true });
-      return res;
-    } catch (error: any) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ForbiddenException('Credentials taken!');
-        }
-      }
-      throw error;
-    }
+    await this.prisma.user.create({
+      data: {
+        name: student.pupil.firstName,
+        username: dto.username,
+        surname: student.pupil.surname,
+        class_name:
+          classNumber && lesson.class?.symbol
+            ? classNumber + lesson.class.symbol
+            : '',
+        passwordHash: sha512(dto.password),
+        profileDesc: '',
+        avatar: '',
+        postsProjects: '',
+        skills: '',
+        profileSettings: '',
+        restURLId: restURL.id,
+        loginID: vulcanAccount.loginId,
+        email: dto.email,
+        certificate: keystore.certificate ?? '',
+        fingerprint: keystore.fingerprint ?? '',
+        privateKey: keystore.privateKey ?? '',
+        firebaseToken: keystore.firebaseToken ?? '',
+      },
+    });
+
+    /* sending confirmation email */
+    await this.mailerService.sendMail({
+      to: dto.email,
+      from: 'noreply@muj-elektryk.com',
+      subject: 'Potwierdzenie adresu email w serwisie Muj Elektryk',
+      html: '<h1>Tutaj jakiś link potwierdzający</h1>',
+    });
+
+    res.cookie('test', 'value', { httpOnly: true });
+    return res;
   }
 
   async login(dto: LoginDto, res: Response): Promise<Response> {
