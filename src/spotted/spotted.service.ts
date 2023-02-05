@@ -6,16 +6,29 @@ import { PostDto, UpdatePostDto } from './dto/post.dto';
 export class SpottedService {
   constructor(private readonly prisma: DbService) {}
 
+  private readonly spottedPostSelectTemplate = {
+    _count: {
+      select: {
+        Like: true,
+        Dislike: true,
+      },
+    },
+  };
+
   getPostList(skip: number, take: number): Promise<any> {
     return this.prisma.spottedPost.findMany({
       orderBy: { createdAt: 'desc' },
       skip,
       take,
+      select: this.spottedPostSelectTemplate,
     });
   }
 
   getPostById(id: number): Promise<any> {
-    return this.prisma.spottedPost.findUnique({ where: { id } });
+    return this.prisma.spottedPost.findUnique({
+      where: { id },
+      select: this.spottedPostSelectTemplate,
+    });
   }
 
   async insertNewPost(postData: PostDto) {
