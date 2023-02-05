@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DbModule } from './db/db.module';
 import { SpottedModule } from './spotted/spotted.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { ProjectModule } from './project/project.module';
 import * as process from 'process';
 
 @Module({
@@ -29,6 +30,7 @@ import * as process from 'process';
         },
       }),
     }),
+    ProjectModule,
   ],
 })
 export class AppModule {}
