@@ -10,11 +10,12 @@ import {
 } from 'vulcan-api-js';
 import { Response } from 'express';
 import { MailerService } from '@nestjs-modules/mailer';
+import { JwtAuthDto } from './dto/jwt-auth.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: DbService,
+    private readonly prisma: DbService,
     private readonly mailerService: MailerService,
   ) {}
 
@@ -102,5 +103,10 @@ export class AuthService {
       return res;
     }
     throw new ForbiddenException('Wrong credentials!');
+  }
+
+  async generateAuthJwt(payload: JwtAuthDto): Promise<string> {
+    console.log('payload: ', payload);
+    return 'to be continued';
   }
 }
