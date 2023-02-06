@@ -37,7 +37,7 @@ model User {
   userProjectId   Int?
   Like            Like[]
   Dislike         Dislike[]
-  isVerified      Boolean
+  isVerified      Boolean          @default(false)
   UnverifiedUser  UnverifiedUser[]
 }
 

@@ -18,10 +18,17 @@ export class AuthService {
     private readonly mailerService: MailerService,
   ) {}
 
-  async signup(dto: RegisterDto, res: Response): Promise<Response> {
-    const sampleUser = await this.prisma.user.findUnique({
+  async signup(dto: RegisterDto): Promise<object> {
+    const sampleUser = await this.prisma.user.findFirst({
       where: {
-        username: dto.username,
+        OR: [
+          {
+            username: dto.username,
+          },
+          {
+            email: dto.email,
+          },
+        ],
       },
     });
     if (sampleUser) throw new ForbiddenException('Credentials taken!');
@@ -55,7 +62,7 @@ export class AuthService {
       update: {},
     });
 
-    await this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: {
         name: student.pupil.firstName,
         username: dto.username,
@@ -80,16 +87,27 @@ export class AuthService {
       },
     });
 
+    /* generating tempID */
+    const tempUser = await this.prisma.unverifiedUser.create({
+      data: {
+        tempId: sha512(String(user.id)),
+        userId: user.id,
+      },
+    });
+
+    const emailHTML = `
+       <h1>Witaj na najlepszej platformie społecznościowej - Muj Elektryk!</h1>
+       <p><a href="http://localhost:3000/auth/verify/${tempUser.tempId}">Potwierdź konto</a></p>
+    `;
     /* sending confirmation email */
     await this.mailerService.sendMail({
       to: dto.email,
       from: 'noreply@muj-elektryk.com',
       subject: 'Potwierdzenie adresu email w serwisie Muj Elektryk',
-      html: '<h1>Tutaj jakiś link potwierdzający</h1>',
+      html: emailHTML,
     });
 
-    res.cookie('test', 'value', { httpOnly: true });
-    return res;
+    return { msg: 'Successfully registered a new account!' };
   }
 
   async login(dto: LoginDto, res: Response): Promise<Response> {
@@ -102,5 +120,31 @@ export class AuthService {
       return res;
     }
     throw new ForbiddenException('Wrong credentials!');
+  }
+
+  async verify(id: string, res: Response): Promise<Response> {
+    const unverifiedUser = await this.prisma.unverifiedUser.findUniqueOrThrow({
+      where: {
+        tempId: id,
+      },
+    });
+
+    await this.prisma.user.update({
+      where: {
+        id: unverifiedUser.userId,
+      },
+      data: {
+        isVerified: true,
+      },
+    });
+
+    await this.prisma.unverifiedUser.delete({
+      where: {
+        tempId: id,
+      },
+    });
+
+    res.cookie('test', 'value', { httpOnly: true });
+    return res;
   }
 }
