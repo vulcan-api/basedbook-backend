@@ -5,11 +5,10 @@ import { RegisterModule } from './register/register.module';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-
-const { SECRET = 'please set other secret in .env file' } = process.env;
+import { VerifyModule } from './verify/verify.module';
 
 @Module({
-  imports: [LoginModule, RegisterModule, PassportModule],
+  imports: [LoginModule, RegisterModule, PassportModule, VerifyModule],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
 })
