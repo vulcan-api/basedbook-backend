@@ -11,9 +11,9 @@ datasource db {
 }
 
 model User {
-  id              Int           @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   name            String
-  username        String        @unique
+  username        String           @unique
   surname         String
   class_name      String
   passwordHash    String
@@ -23,8 +23,8 @@ model User {
   skills          String
   profileSettings String
   loginID         Int
-  email           String        @unique
-  restURL         RestURL       @relation(fields: [restURLId], references: [id])
+  email           String           @unique
+  restURL         RestURL          @relation(fields: [restURLId], references: [id])
   restURLId       Int
   certificate     String
   fingerprint     String
@@ -33,10 +33,18 @@ model User {
   spottedPost     SpottedPost[]
   project         Project[]
   report          Report[]
-  UserProject     UserProject?  @relation(fields: [userProjectId], references: [id])
+  UserProject     UserProject?     @relation(fields: [userProjectId], references: [id])
   userProjectId   Int?
   Like            Like[]
   Dislike         Dislike[]
+  isVerified      Boolean
+  UnverifiedUser  UnverifiedUser[]
+}
+
+model UnverifiedUser {
+  tempId String @id
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int
 }
 
 model RestURL {
@@ -64,6 +72,7 @@ model Like {
   postId Int
   user   User        @relation(fields: [userId], references: [id])
   userId Int
+
   @@unique([userId, postId])
 }
 
@@ -73,6 +82,7 @@ model Dislike {
   postId Int
   user   User        @relation(fields: [userId], references: [id])
   userId Int
+
   @@unique([userId, postId])
 }
 
