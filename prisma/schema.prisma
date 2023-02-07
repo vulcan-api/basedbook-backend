@@ -39,6 +39,10 @@ model User {
   Dislike         Dislike[]
   isVerified      Boolean          @default(false)
   UnverifiedUser  UnverifiedUser[]
+  GroupAdmin      GroupAdmin[]
+  GroupMember     GroupMember[]
+  GroupPost       GroupPost[]
+  UserPost        UserPost[]
 }
 
 model UnverifiedUser {
@@ -67,21 +71,29 @@ model SpottedPost {
 }
 
 model Like {
-  id     Int         @id @default(autoincrement())
-  post   SpottedPost @relation(fields: [postId], references: [id])
-  postId Int
-  user   User        @relation(fields: [userId], references: [id])
-  userId Int
+  id          Int         @id @default(autoincrement())
+  post        SpottedPost @relation(fields: [postId], references: [id])
+  postId      Int
+  user        User        @relation(fields: [userId], references: [id])
+  userId      Int
+  GroupPost   GroupPost?  @relation(fields: [groupPostId], references: [id])
+  groupPostId Int?
+  UserPost    UserPost?   @relation(fields: [userPostId], references: [id])
+  userPostId  Int?
 
   @@unique([userId, postId])
 }
 
 model Dislike {
-  id     Int         @id @default(autoincrement())
-  post   SpottedPost @relation(fields: [postId], references: [id])
-  postId Int
-  user   User        @relation(fields: [userId], references: [id])
-  userId Int
+  id          Int         @id @default(autoincrement())
+  post        SpottedPost @relation(fields: [postId], references: [id])
+  postId      Int
+  user        User        @relation(fields: [userId], references: [id])
+  userId      Int
+  GroupPost   GroupPost?  @relation(fields: [groupPostId], references: [id])
+  groupPostId Int?
+  UserPost    UserPost?   @relation(fields: [userPostId], references: [id])
+  userPostId  Int?
 
   @@unique([userId, postId])
 }
@@ -114,4 +126,56 @@ model Report {
   projectId     Int?
   createdAt     DateTime     @default(now())
   reason        String
+  GroupPost     GroupPost?   @relation(fields: [groupPostId], references: [id])
+  groupPostId   Int?
+  UserPost      UserPost?    @relation(fields: [userPostId], references: [id])
+  userPostId    Int?
+}
+
+model Group {
+  Id          Int           @id @default(autoincrement())
+  name        String
+  createdAt   DateTime      @default(now())
+  GroupAdmin  GroupAdmin[]
+  GroupMember GroupMember[]
+}
+
+model GroupAdmin {
+  Id      Int    @id @default(autoincrement())
+  group   Group? @relation(fields: [groupId], references: [Id])
+  groupId Int?
+  user    User   @relation(fields: [userId], references: [id])
+  userId  Int
+}
+
+model GroupMember {
+  Id      Int    @id @default(autoincrement())
+  group   Group? @relation(fields: [groupId], references: [Id])
+  groupId Int?
+  user    User   @relation(fields: [userId], references: [id])
+  userId  Int
+}
+
+model GroupPost {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  title     String
+  text      String
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  Int
+  Report    Report[]
+  Like      Like[]
+  Dislike   Dislike[]
+}
+
+model UserPost {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  title     String
+  text      String
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  Int
+  Report    Report[]
+  Like      Like[]
+  Dislike   Dislike[]
 }
