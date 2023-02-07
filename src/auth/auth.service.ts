@@ -113,19 +113,18 @@ export class AuthService {
     return { msg: 'Successfully registered a new account!' };
   }
 
-  async login(dto: LoginDto, res: Response): Promise<Response> {
+  async login(dto: LoginDto): Promise<[string, string, object]> {
     const user = await this.prisma.user.findUniqueOrThrow({
       where: { email: dto.email },
     });
 
     if (sha512(dto.password) === user.passwordHash) {
-      res.cookie('test', 'value', { httpOnly: true });
-      return res;
+       return this.generateAuthCookie({ userId: user.id });
     }
     throw new ForbiddenException('Wrong credentials!');
   }
 
-  async verify(id: string, res: Response): Promise<Response> {
+  async verify(id: string): Promise<[string, string, object]> {
     const unverifiedUser = await this.prisma.unverifiedUser.findUniqueOrThrow({
       where: {
         tempId: id,
@@ -147,8 +146,7 @@ export class AuthService {
       },
     });
 
-    res.cookie('test', 'value', { httpOnly: true });
-    return res;
+    return this.generateAuthCookie({ userId: unverifiedUser.userId });
   }
 
   async generateAuthJwt(payload: JwtAuthDto): Promise<string> {

@@ -16,8 +16,7 @@ export class LoginController {
         currently this works as example
      *  We need to make real login route
      */
-    //return (await this.authService.login(dto, res)).send();
-    const jwt = await this.authService.generateAuthCookie({ userId: 2137 });
+    const jwt = await this.authService.login(dto);
     res.cookie(...jwt);
     res.send({ token: jwt[1] });
   }

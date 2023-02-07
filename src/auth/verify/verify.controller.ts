@@ -9,7 +9,9 @@ export class VerifyController {
   async verify(
     @Param('tempID') tempId: string,
     @Res() res: Response,
-  ): Promise<Response> {
-    return (await this.auth.verify(tempId, res)).send();
+  ) {
+    const jwt = await this.auth.verify(tempId);
+    res.cookie(...jwt);
+    res.send({ token: jwt[1] });
   }
 }
