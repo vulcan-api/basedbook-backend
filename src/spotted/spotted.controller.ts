@@ -8,9 +8,14 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { SpottedService } from './spotted.service';
-import { PostDto, UpdatePostDto } from './dto/post.dto';
+import { InsertPostDto } from './dto/insertPost.dto';
+import { UpdatePostDto } from './dto/updatePost.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../auth/getUser.decorator';
+import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 
 /*
  * TODO:
@@ -36,33 +41,53 @@ export class SpottedController {
     return this.spottedService.getPostById(parseInt(id));
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put('/post')
-  async addNewSpottedPost(@Body() body: PostDto): Promise<object> {
-    await this.spottedService.insertNewPost(body);
+  async addNewSpottedPost(
+    @Body() body: InsertPostDto,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    await this.spottedService.insertNewPost(body, user.userId);
     return { ok: true, statusCode: 200 };
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Patch('/post')
-  async changePostData(@Body() body: UpdatePostDto): Promise<object> {
-    await this.spottedService.changePostById(body);
+  async changePostData(
+    @Body() body: UpdatePostDto,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    await this.spottedService.changePostById(body, user.userId);
     return { ok: true, statusCode: 200 };
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete('/post')
-  async deletePost(@Body('id') id: number): Promise<object> {
-    await this.spottedService.deletePostById(id);
+  async deletePost(
+    @Body('id') id: number,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    await this.spottedService.deletePostById(id, user.userId);
     return { ok: true, statusCode: 200 };
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('/post/:id/like')
-  async giveALike(@Body('id') id: number): Promise<object> {
-    await this.spottedService.giveALike(id, 8);
+  async giveALike(
+    @Body('id') id: number,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    await this.spottedService.giveALike(id, user.userId);
     return { ok: true, statusCode: 200 };
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('/post/:id/dislike')
-  async giveADislike(@Body('id') id: number): Promise<object> {
-    await this.spottedService.giveADislike(id, 8);
+  async giveADislike(
+    @Body('id') postId: number,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    await this.spottedService.giveADislike(postId, user.userId);
     return { ok: true, statusCode: 200 };
   }
 }

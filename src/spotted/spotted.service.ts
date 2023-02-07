@@ -1,72 +1,87 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
-import { PostDto, UpdatePostDto } from './dto/post.dto';
+import { InsertPostDto } from './dto/insertPost.dto';
+import { UpdatePostDto } from './dto/updatePost.dto';
+import { postQueryTemplate } from './dto/postQuery.template';
 
 @Injectable()
 export class SpottedService {
   constructor(private readonly prisma: DbService) {}
 
-  private readonly spottedPostSelectTemplate = {
-    _count: {
-      select: {
-        Like: true,
-        Dislike: true,
-      },
-    },
-  };
+  processResponse(spottedPost: any): any {
+    if (spottedPost.isAnonymous) delete spottedPost.author;
 
-  getPostList(skip: number, take: number): Promise<any> {
-    return this.prisma.spottedPost.findMany({
+    spottedPost.likes = spottedPost._count.Like;
+    spottedPost.dislikes = spottedPost._count.Dislike;
+    delete spottedPost._count;
+
+    return spottedPost;
+  }
+
+  async getPostList(skip: number, take: number): Promise<any> {
+    const spottedPost = await this.prisma.spottedPost.findMany({
       orderBy: { createdAt: 'desc' },
       skip,
       take,
-      select: this.spottedPostSelectTemplate,
+      select: postQueryTemplate,
     });
+
+    return spottedPost.map(this.processResponse);
   }
 
-  getPostById(id: number): Promise<any> {
-    return this.prisma.spottedPost.findUnique({
+  async getPostById(id: number): Promise<any> {
+    const spottedPost = await this.prisma.spottedPost.findUnique({
       where: { id },
-      select: this.spottedPostSelectTemplate,
+      select: postQueryTemplate,
+    });
+    return this.processResponse(spottedPost);
+  }
+
+  async insertNewPost(postData: InsertPostDto, authorId: number) {
+    await this.prisma.spottedPost.create({
+      data: Object.assign(postData, { authorId }),
     });
   }
 
-  async insertNewPost(postData: PostDto) {
-    await this.prisma.spottedPost.create({ data: postData });
-  }
-
-  async changePostById(newPostData: UpdatePostDto) {
+  async changePostById(
+    newPostData: UpdatePostDto | { id?: number },
+    userId: number,
+  ) {
     console.log('newPostData: ', newPostData);
     const { id } = newPostData;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     delete newPostData.id;
-    await this.prisma.spottedPost.update({
+
+    await this.prisma.spottedPost.updateMany({
       data: newPostData,
-      where: { id },
-    });
-    return 'xd';
-  }
-
-  async deletePostById(id: number) {
-    await this.prisma.spottedPost.delete({ where: { id } });
-  }
-
-  async giveALike(id: number, userId: number) {
-    await this.prisma.like.create({
-      data: {
-        postId: id,
-        userId,
-      },
+      where: { id, authorId: userId },
     });
   }
 
-  async giveADislike(id: number, userId: number) {
-    await this.prisma.dislike.create({
-      data: {
-        postId: id,
-        userId,
-      },
+  async deletePostById(id: number, userId: number) {
+    await this.prisma.spottedPost.deleteMany({
+      where: { id, authorId: userId },
     });
+  }
+
+  async giveALike(postId: number, userId: number) {
+    await this.prisma.like.create({ data: { postId, userId } }).catch((err) => {
+      console.error(err);
+      throw new HttpException(
+        `CONFLICT: user nr. ${userId} already liked post with id: ${postId}`,
+        HttpStatus.CONFLICT,
+      );
+    });
+  }
+
+  async giveADislike(postId: number, userId: number) {
+    await this.prisma.dislike
+      .create({ data: { postId, userId } })
+      .catch((err) => {
+        console.error(err);
+        throw new HttpException(
+          `CONFLICT: user nr. ${userId} already liked post with id: ${postId}`,
+          HttpStatus.CONFLICT,
+        );
+      });
   }
 }

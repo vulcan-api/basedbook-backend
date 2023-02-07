@@ -8,7 +8,6 @@ import {
   registerAccount,
   VulcanHebe,
 } from 'vulcan-api-js';
-import { Response } from 'express';
 import { MailerService } from '@nestjs-modules/mailer';
 import { JwtAuthDto } from './dto/jwt-auth.dto';
 import { JwtService } from '@nestjs/jwt';
