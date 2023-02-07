@@ -11,12 +11,14 @@ import {
 import { Response } from 'express';
 import { MailerService } from '@nestjs-modules/mailer';
 import { JwtAuthDto } from './dto/jwt-auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: DbService,
     private readonly mailerService: MailerService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signup(dto: RegisterDto): Promise<object> {
@@ -123,11 +125,6 @@ export class AuthService {
     throw new ForbiddenException('Wrong credentials!');
   }
 
-  async generateAuthJwt(payload: JwtAuthDto): Promise<string> {
-    console.log('payload: ', payload);
-    return 'to be continued';
-  }
-
   async verify(id: string, res: Response): Promise<Response> {
     const unverifiedUser = await this.prisma.unverifiedUser.findUniqueOrThrow({
       where: {
@@ -152,5 +149,17 @@ export class AuthService {
 
     res.cookie('test', 'value', { httpOnly: true });
     return res;
+  }
+
+  async generateAuthJwt(payload: JwtAuthDto): Promise<string> {
+    console.log('payload: ', payload);
+    return this.jwtService.sign(payload);
+  }
+
+  async generateAuthCookie(
+    payload: JwtAuthDto,
+  ): Promise<[string, string, object]> {
+    const jwt = await this.generateAuthJwt(payload);
+    return ['jwt', jwt, { secure: true }];
   }
 }
