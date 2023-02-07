@@ -119,7 +119,7 @@ export class AuthService {
     });
 
     if (sha512(dto.password) === user.passwordHash) {
-       return this.generateAuthCookie({ userId: user.id });
+      return this.generateAuthCookie({ userId: user.id });
     }
     throw new ForbiddenException('Wrong credentials!');
   }

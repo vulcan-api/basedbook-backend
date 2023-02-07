@@ -12,10 +12,6 @@ export class LoginController {
   }
   @Post()
   async login(@Body() dto: LoginDto, @Res() res: Response) {
-    /* TODO:
-        currently this works as example
-     *  We need to make real login route
-     */
     const jwt = await this.authService.login(dto);
     res.cookie(...jwt);
     res.send({ token: jwt[1] });
