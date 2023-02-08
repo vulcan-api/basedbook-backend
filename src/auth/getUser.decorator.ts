@@ -4,7 +4,6 @@ import { JwtAuthDto } from './dto/jwt-auth.dto';
 export const GetUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): JwtAuthDto => {
     const req = ctx.switchToHttp().getRequest();
-    console.log('decorator: ', req);
     return req.user;
   },
 );
