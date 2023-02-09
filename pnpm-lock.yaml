@@ -10,7 +10,7 @@ specifiers:
   '@nestjs/passport': ^9.0.1
   '@nestjs/platform-express': ^9.0.0
   '@nestjs/schematics': ^9.0.0
-  '@nestjs/testing': ^9.0.0
+  '@nestjs/testing': ^9.2.1
   '@prisma/client': ^4.9.0
   '@types/bcrypt': ^5.0.0
   '@types/cookie-parser': ^1.4.3
