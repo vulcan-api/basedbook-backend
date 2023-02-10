@@ -17,8 +17,7 @@ export class SchoolController {
     @Query() query: GradesQueryDto,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
-    await this.schoolService.init(user);
-    return { grades: await this.schoolService.getGrades(query.last) };
+    return { grades: await this.schoolService.getGrades(query.last, user) };
   }
 
   @Get('lessons')
@@ -26,18 +25,15 @@ export class SchoolController {
     @Query() query: LessonsQueryDto,
     @GetUser() user: JwtAuthDto,
   ): Promise<{ lessons: Lesson[] }> {
-    await this.schoolService.init(user);
-    return this.schoolService.getLessons(query.from, query.to);
+    return this.schoolService.getLessons(query.from, query.to, user);
   }
 
   @Get('lucky-number')
   async getLuckyNumber(@GetUser() user: JwtAuthDto): Promise<LuckyNumber> {
-    await this.schoolService.init(user);
-    return this.schoolService.getLuckyNumber();
+    return this.schoolService.getLuckyNumber(user);
   }
   @Get('student')
   async getStudent(@GetUser() user: JwtAuthDto): Promise<Student> {
-    await this.schoolService.init(user);
-    return this.schoolService.getStudent();
+    return this.schoolService.getStudent(user);
   }
 }
