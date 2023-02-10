@@ -6,6 +6,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { DbModule } from '../db/db.module';
 
 const { SECRET: secret = 'secret' } = process.env;
 describe('SpottedController', () => {
@@ -15,6 +16,7 @@ describe('SpottedController', () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
+        DbModule,
         PassportModule.register({ defaultStrategy: 'jwt' }),
         JwtModule.register({
           secret,
@@ -45,5 +47,9 @@ describe('SpottedController', () => {
 
     authService = moduleRef.get<AuthService>(AuthService);
     authController = moduleRef.get<AuthController>(AuthController);
+  });
+
+  it('should be defined', () => {
+    expect(authController).toBeDefined();
   });
 });
