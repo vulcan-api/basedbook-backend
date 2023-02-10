@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from './getUser.decorator';
+import { GetUser } from './decorator/getUser.decorator';
 
 @Controller('/auth')
 export class AuthController {

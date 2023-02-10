@@ -14,7 +14,7 @@ import { SpottedService } from './spotted.service';
 import { InsertPostDto } from './dto/insertPost.dto';
 import { UpdatePostDto } from './dto/updatePost.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from '../auth/getUser.decorator';
+import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 
 /*

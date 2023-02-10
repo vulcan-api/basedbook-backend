@@ -1,7 +1,7 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-jwt';
 import { Injectable } from '@nestjs/common';
-import { JwtAuthDto } from './dto/jwt-auth.dto';
+import { JwtAuthDto } from '../dto/jwt-auth.dto';
 
 const { SECRET } = process.env;
 
