@@ -4,6 +4,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { ConfigModule } from '@nestjs/config';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 const { SECRET: secret = 'secret' } = process.env;
 describe('SpottedController', () => {
@@ -17,6 +19,24 @@ describe('SpottedController', () => {
         JwtModule.register({
           secret,
           signOptions: { expiresIn: 3600 * 24 * 30 },
+        }),
+        ConfigModule.forRoot({
+          isGlobal: true,
+        }),
+        MailerModule.forRootAsync({
+          useFactory: () => ({
+            transport: {
+              host: process.env.SMTP_HOST,
+              secure: false,
+              auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
+              },
+            },
+            defaults: {
+              from: 'Muj Elektryk',
+            },
+          }),
         }),
       ],
       controllers: [AuthController],
