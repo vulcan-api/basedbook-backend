@@ -11,7 +11,7 @@ specifiers:
   '@nestjs/platform-express': ^9.0.0
   '@nestjs/schematics': ^9.0.0
   '@nestjs/testing': ^9.2.1
-  '@prisma/client': ^4.9.0
+  '@prisma/client': ^4.10.1
   '@types/bcrypt': ^5.0.0
   '@types/cookie-parser': ^1.4.3
   '@types/express': ^4.17.16
@@ -37,7 +37,7 @@ specifiers:
   passport-jwt: ^4.0.1
   passport-local: ^1.0.0
   prettier: ^2.3.2
-  prisma: ^4.9.0
+  prisma: ^4.10.1
   reflect-metadata: ^0.1.13
   rimraf: ^4.1.2
   rxjs: ^7.2.0
@@ -77,7 +77,7 @@ devDependencies:
   '@nestjs/cli': 9.1.9
   '@nestjs/schematics': 9.0.4_typescript@4.9.4
   '@nestjs/testing': 9.2.1_wdbvfsxfdwzlwdfiyh2gynjl4m
-  '@prisma/client': 4.9.0_prisma@4.9.0
+  '@prisma/client': 4.10.1_prisma@4.10.1
   '@types/bcrypt': 5.0.0
   '@types/cookie-parser': 1.4.3
   '@types/express': 4.17.16
@@ -94,7 +94,7 @@ devDependencies:
   jest: 29.3.1_zfha7dvnw4nti6zkbsmhmn6xo4
   nodemon: 2.0.20
   prettier: 2.8.3
-  prisma: 4.9.0
+  prisma: 4.10.1
   rimraf: 4.1.2
   source-map-support: 0.5.21
   supertest: 6.3.3
@@ -1102,8 +1102,8 @@ packages:
     transitivePeerDependencies:
       - encoding
 
-  /@prisma/client/4.9.0_prisma@4.9.0:
-    resolution: {integrity: sha512-bz6QARw54sWcbyR1lLnF2QHvRW5R/Jxnbbmwh3u+969vUKXtBkXgSgjDA85nji31ZBlf7+FrHDy5x+5ydGyQDg==}
+  /@prisma/client/4.10.1_prisma@4.10.1:
+    resolution: {integrity: sha512-VonXLJZybdt8e5XZH5vnIGCRNnIh6OMX1FS3H/yzMGLT3STj5TJ/OkMcednrvELgk8PK89Vo3aSh51MWNO0axA==}
     engines: {node: '>=14.17'}
     requiresBuild: true
     peerDependencies:
@@ -1112,16 +1112,16 @@ packages:
       prisma:
         optional: true
     dependencies:
-      '@prisma/engines-version': 4.9.0-42.ceb5c99003b99c9ee2c1d2e618e359c14aef2ea5
-      prisma: 4.9.0
+      '@prisma/engines-version': 4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19
+      prisma: 4.10.1
     dev: true
 
-  /@prisma/engines-version/4.9.0-42.ceb5c99003b99c9ee2c1d2e618e359c14aef2ea5:
-    resolution: {integrity: sha512-M16aibbxi/FhW7z1sJCX8u+0DriyQYY5AyeTH7plQm9MLnURoiyn3CZBqAyIoQ+Z1pS77usCIibYJWSgleBMBA==}
+  /@prisma/engines-version/4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19:
+    resolution: {integrity: sha512-tsjTho7laDhf9EJ9EnDxAPEf7yrigSMDhniXeU4YoWc7azHAs4GPxRi2P9LTFonmHkJLMOLjR77J1oIP8Ife1w==}
     dev: true
 
-  /@prisma/engines/4.9.0:
-    resolution: {integrity: sha512-t1pt0Gsp+HcgPJrHFc+d/ZSAaKKWar2G/iakrE07yeKPNavDP3iVKPpfXP22OTCHZUWf7OelwKJxQgKAm5hkgw==}
+  /@prisma/engines/4.10.1:
+    resolution: {integrity: sha512-B3tcTxjx196nuAu1GOTKO9cGPUgTFHYRdkPkTS4m5ptb2cejyBlH9X7GOfSt3xlI7p4zAJDshJP4JJivCg9ouA==}
     requiresBuild: true
     dev: true
 
@@ -5458,13 +5458,13 @@ packages:
       - supports-color
     dev: false
 
-  /prisma/4.9.0:
-    resolution: {integrity: sha512-bS96oZ5oDFXYgoF2l7PJ3Mp1wWWfLOo8B/jAfbA2Pn0Wm5Z/owBHzaMQKS3i1CzVBDWWPVnOohmbJmjvkcHS5w==}
+  /prisma/4.10.1:
+    resolution: {integrity: sha512-0jDxgg+DruB1kHVNlcspXQB9au62IFfVg9drkhzXudszHNUAQn0lVuu+T8np0uC2z1nKD5S3qPeCyR8u5YFLnA==}
     engines: {node: '>=14.17'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@prisma/engines': 4.9.0
+      '@prisma/engines': 4.10.1
     dev: true
 
   /process-nextick-args/2.0.1:

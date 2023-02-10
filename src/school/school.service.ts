@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { JwtAuthDto } from 'src/auth/dto/jwt-auth.dto';
-import { DbService } from 'src/db/db.service';
 import { AccountTools, Keystore, VulcanHebe } from 'vulcan-api-js';
 import {
   Grade,
@@ -9,6 +7,8 @@ import {
   Period,
   Student,
 } from 'vulcan-api-js/lib/models';
+import { DbService } from '../db/db.service';
+import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 
 @Injectable()
 export class SchoolService {

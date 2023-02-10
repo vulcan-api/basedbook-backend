@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProjectController } from './project.controller';
 import { ProjectService } from './project.service';
-import { DbService } from '../db/db.service';
 import { DbModule } from '../db/db.module';
 import { ConfigModule } from '@nestjs/config';
 

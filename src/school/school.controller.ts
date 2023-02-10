@@ -1,11 +1,11 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { Lesson, LuckyNumber, Student } from 'vulcan-api-js/lib/models';
 import { SchoolService } from './school.service';
 import { GradesQueryDto } from './dto/gradesQuery.dto';
 import { LessonsQueryDto } from './dto/lessonsQuery.dto';
+import { GetUser } from '../auth/decorator/getUser.decorator';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('school')

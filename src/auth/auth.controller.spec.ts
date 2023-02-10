@@ -2,7 +2,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from './strategy/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
