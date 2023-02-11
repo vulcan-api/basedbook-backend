@@ -1,7 +1,6 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
-import { Lesson, LuckyNumber, Student } from 'vulcan-api-js/lib/models';
 import { SchoolService } from './school.service';
 import { GradesQueryDto } from './dto/gradesQuery.dto';
 import { LessonsQueryDto } from './dto/lessonsQuery.dto';
@@ -24,16 +23,16 @@ export class SchoolController {
   async getLessons(
     @Query() query: LessonsQueryDto,
     @GetUser() user: JwtAuthDto,
-  ): Promise<{ lessons: Lesson[] }> {
+  ): Promise<{ lessons: object[] }> {
     return this.schoolService.getLessons(query.from, query.to, user);
   }
 
   @Get('lucky-number')
-  async getLuckyNumber(@GetUser() user: JwtAuthDto): Promise<LuckyNumber> {
+  async getLuckyNumber(@GetUser() user: JwtAuthDto): Promise<object> {
     return this.schoolService.getLuckyNumber(user);
   }
   @Get('student')
-  async getStudent(@GetUser() user: JwtAuthDto): Promise<Student> {
+  async getStudent(@GetUser() user: JwtAuthDto): Promise<object> {
     return this.schoolService.getStudent(user);
   }
 }

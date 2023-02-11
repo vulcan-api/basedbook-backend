@@ -1,12 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { AccountTools, Keystore, VulcanHebe } from 'vulcan-api-js';
-import {
-  Grade,
-  Lesson,
-  LuckyNumber,
-  Period,
-  Student,
-} from 'vulcan-api-js/lib/models';
 import { DbService } from '../db/db.service';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 
@@ -61,12 +54,12 @@ export class SchoolService {
     return client;
   }
 
-  async getLastSemester(client: VulcanHebe): Promise<Period> {
+  async getLastSemester(client: VulcanHebe): Promise<any> {
     const students = await client.getStudents();
-    return students[0].periods.at(-1) ?? new Period();
+    return students[0].periods.at(-1) ?? {};
   }
 
-  async getGrades(last = 10, user: JwtAuthDto): Promise<Grade[]> {
+  async getGrades(last = 10, user: JwtAuthDto): Promise<object> {
     const client = await this.getClient(user);
     const lastSemester = await this.getLastSemester(client);
     return (await client.getGrades(lastSemester.start.Date)).slice(-last);
@@ -76,17 +69,17 @@ export class SchoolService {
     from: Date,
     to: Date,
     user: JwtAuthDto,
-  ): Promise<{ lessons: Lesson[] }> {
+  ): Promise<{ lessons: object[] }> {
     const client = await this.getClient(user);
     return { lessons: await client.getLessons(from, to) };
   }
 
-  async getLuckyNumber(user: JwtAuthDto): Promise<LuckyNumber> {
+  async getLuckyNumber(user: JwtAuthDto): Promise<object> {
     const client = await this.getClient(user);
     return client.getLuckyNumber();
   }
 
-  async getStudent(user: JwtAuthDto): Promise<Student> {
+  async getStudent(user: JwtAuthDto): Promise<object> {
     const client = await this.getClient(user);
     return (await client.getStudents())[0];
   }
