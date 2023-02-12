@@ -64,7 +64,7 @@ export class SpottedService {
   }
 
   async giveALike(postId: number, userId: number) {
-    await this.prisma.like.create({ data: { postId, userId } }).catch((err) => {
+    await this.prisma.like.create({ data: { postId, userId } }).catch((err : any) => {
       console.error(err);
       throw new HttpException(
         `CONFLICT: user nr. ${userId} already liked post with id: ${postId}`,
@@ -76,7 +76,7 @@ export class SpottedService {
   async giveADislike(postId: number, userId: number) {
     await this.prisma.dislike
       .create({ data: { postId, userId } })
-      .catch((err) => {
+      .catch((err : any) => {
         console.error(err);
         throw new HttpException(
           `CONFLICT: user nr. ${userId} already liked post with id: ${postId}`,
