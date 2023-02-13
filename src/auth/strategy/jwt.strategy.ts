@@ -3,7 +3,7 @@ import { Strategy } from 'passport-jwt';
 import { Injectable } from '@nestjs/common';
 import { JwtAuthDto } from '../dto/jwt-auth.dto';
 
-const { SECRET } = process.env;
+const { SECRET = 'secret' } = process.env;
 
 const extractFromCookie = (req: any): string | null => {
   console.log(req.cookies);
