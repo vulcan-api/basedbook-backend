@@ -4,11 +4,6 @@ export const postQueryTemplate = {
   title: true,
   text: true,
   isAnonymous: true,
-  include: {
-    _count: {
-      select: { SpottedLikes: true },
-    },
-  },
   author: {
     select: {
       username: true,

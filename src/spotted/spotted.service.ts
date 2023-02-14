@@ -12,8 +12,7 @@ export class SpottedService {
   processResponse(spottedPost: any): any {
     if (spottedPost.isAnonymous) delete spottedPost.author;
 
-    spottedPost.likes = spottedPost._count.Like;
-    spottedPost.dislikes = spottedPost._count.Dislike;
+    spottedPost.likes = spottedPost._count.SpottedLikes;
     delete spottedPost._count;
 
     return spottedPost;
@@ -31,28 +30,29 @@ export class SpottedService {
     });
   }
 
-  async getPostList(skip: number, take: number, userId: number): Promise<any> {
+  async getPostList(
+    skip: number,
+    take: number,
+    userId: number,
+  ): Promise<any[]> {
     const { prisma } = this;
 
-    const spottedPost = await prisma.spottedPost.findMany({
-      orderBy: { createdAt: 'desc' },
-      skip,
-      take,
-      select: {
-        ...postQueryTemplate,
-      },
+    const spottedPosts: any[] = await prisma.$queryRaw`SELECT s.id,
+       "createdAt",
+       title,
+       text,
+       "authorId",
+       "isAnonymous",
+       (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id) AS "likes",
+       (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id AND l."userId" = ${userId}) AS "isLiked"
+            FROM "SpottedPost" s LEFT JOIN "SpottedLikes" l ON s.id = l."postId" 
+            ORDER BY s."createdAt" desc`;
+
+    return spottedPosts.map((post: any) => {
+      post.likes = parseInt(post.likes);
+      post.isLiked = Boolean(parseInt(post.isLiked));
+      return post;
     });
-
-    const userLikes = await prisma.user.findMany({
-      where: { id: userId },
-      select: {
-        SpottedLikes: true,
-      },
-    });
-
-    return userLikes;
-
-    return spottedPost.map(this.processResponse);
   }
 
   async getPostById(id: number, userId: number): Promise<any> {
