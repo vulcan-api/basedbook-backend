@@ -17,28 +17,31 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 
-/*
- * TODO:
- *  All of endpoints bellow are very unsecure
- *  There is no ownership validation and this will be changed
- *  when jwt validation middleware will be done
- * */
-
 @Controller('spotted')
 export class SpottedController {
   constructor(private readonly spottedService: SpottedService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('/post')
   getAllPosts(
     @Query('skip') skip = '0',
     @Query('take') take = '10',
+    @GetUser() user: JwtAuthDto,
   ): Promise<object> {
-    return this.spottedService.getPostList(parseInt(skip), parseInt(take));
+    return this.spottedService.getPostList(
+      parseInt(skip),
+      parseInt(take),
+      user.userId,
+    );
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('/post/:id')
-  getSpecificPost(@Param('id') id: string): object {
-    return this.spottedService.getPostById(parseInt(id));
+  getSpecificPost(
+    @Param('id') id: string,
+    @GetUser() user: JwtAuthDto,
+  ): object {
+    return this.spottedService.getPostById(parseInt(id), user.userId);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -81,6 +84,7 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
+  /*
   @UseGuards(AuthGuard('jwt'))
   @Post('/post/:id/dislike')
   async giveADislike(
@@ -90,4 +94,5 @@ export class SpottedController {
     await this.spottedService.giveADislike(postId, user.userId);
     return { ok: true, statusCode: 200 };
   }
+   */
 }

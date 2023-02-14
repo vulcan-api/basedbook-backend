@@ -35,14 +35,13 @@ model User {
   report          Report[]
   UserProject     UserProject?     @relation(fields: [userProjectId], references: [id])
   userProjectId   Int?
-  Like            Like[]
-  Dislike         Dislike[]
   isVerified      Boolean          @default(false)
   UnverifiedUser  UnverifiedUser[]
   GroupAdmin      GroupAdmin[]
   GroupMember     GroupMember[]
   GroupPost       GroupPost[]
   UserPost        UserPost[]
+  SpottedLikes    SpottedLikes[]
 }
 
 model UnverifiedUser {
@@ -58,42 +57,51 @@ model RestURL {
 }
 
 model SpottedPost {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  title       String
-  text        String
-  author      User      @relation(fields: [authorId], references: [id])
-  authorId    Int
-  isAnonymous Boolean
-  Report      Report[]
-  Like        Like[]
-  Dislike     Dislike[]
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  title        String
+  text         String
+  author       User           @relation(fields: [authorId], references: [id])
+  authorId     Int
+  isAnonymous  Boolean
+  Report       Report[]
+  SpottedLikes SpottedLikes[]
 }
 
-model Like {
-  id          Int         @id @default(autoincrement())
-  post        SpottedPost @relation(fields: [postId], references: [id])
-  postId      Int
-  user        User        @relation(fields: [userId], references: [id])
-  userId      Int
-  GroupPost   GroupPost?  @relation(fields: [groupPostId], references: [id])
-  groupPostId Int?
-  UserPost    UserPost?   @relation(fields: [userPostId], references: [id])
-  userPostId  Int?
+// model Like {
+//  id          Int         @id @default(autoincrement())
+//  post        SpottedPost @relation(fields: [postId], references: [id])
+//  postId      Int
+//  user        User        @relation(fields: [userId], references: [id])
+//  userId      Int
+//  GroupPost   GroupPost?  @relation(fields: [groupPostId], references: [id])
+//  groupPostId Int?
+//  UserPost    UserPost?   @relation(fields: [userPostId], references: [id])
+//  userPostId  Int?
+//
+//  @@unique([userId, postId])
+//}
+//
+// model Dislike {
+//  id          Int         @id @default(autoincrement())
+//  post        SpottedPost @relation(fields: [postId], references: [id])
+//  postId      Int
+//  user        User        @relation(fields: [userId], references: [id])
+//  userId      Int
+//  GroupPost   GroupPost?  @relation(fields: [groupPostId], references: [id])
+//  groupPostId Int?
+//  UserPost    UserPost?   @relation(fields: [userPostId], references: [id])
+//  userPostId  Int?
+//
+//  @@unique([userId, postId])
+//}
 
-  @@unique([userId, postId])
-}
-
-model Dislike {
-  id          Int         @id @default(autoincrement())
-  post        SpottedPost @relation(fields: [postId], references: [id])
-  postId      Int
-  user        User        @relation(fields: [userId], references: [id])
-  userId      Int
-  GroupPost   GroupPost?  @relation(fields: [groupPostId], references: [id])
-  groupPostId Int?
-  UserPost    UserPost?   @relation(fields: [userPostId], references: [id])
-  userPostId  Int?
+model SpottedLikes {
+  id     Int         @id @default(autoincrement())
+  post   SpottedPost @relation(fields: [postId], references: [id])
+  postId Int
+  user   User        @relation(fields: [userId], references: [id])
+  userId Int
 
   @@unique([userId, postId])
 }
@@ -157,25 +165,21 @@ model GroupMember {
 }
 
 model GroupPost {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
   title     String
   text      String
-  author    User      @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
   Report    Report[]
-  Like      Like[]
-  Dislike   Dislike[]
 }
 
 model UserPost {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
   title     String
   text      String
-  author    User      @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
   Report    Report[]
-  Like      Like[]
-  Dislike   Dislike[]
 }
