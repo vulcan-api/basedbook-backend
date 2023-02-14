@@ -6,7 +6,7 @@ import * as cookieParser from 'cookie-parser';
 import { PrismaExceptionFilter } from './db/exception/prismaException.filter';
 
 dotenv.config();
-const { PORT = 5000 } = process.env;
+const { PORT = 3000 } = process.env;
 
 (async function () {
   const app = await NestFactory.create(AppModule);
