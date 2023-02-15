@@ -99,7 +99,7 @@ export class SpottedService {
   async giveALike(postId: number, userId: number) {
     await this.prisma.spottedLikes
       .create({ data: { postId, userId } })
-      .catch((err) => {
+      .catch((err : any) => {
         console.error(err);
         throw new HttpException(
           `CONFLICT: user nr. ${userId} already liked post with id: ${postId}`,
