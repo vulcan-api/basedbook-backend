@@ -73,10 +73,14 @@ export class SpottedService {
     return this.processResponse(spottedPost);
   }
 
-  async insertNewPost(postData: InsertPostDto, authorId: number) {
+  async insertNewPost(
+    postData: InsertPostDto,
+    authorId: number,
+  ): Promise<object> {
     await this.prisma.spottedPost.create({
       data: Object.assign(postData, { authorId }),
     });
+    return { statusCode: 200, message: 'Post created' };
   }
 
   async changePostById(
@@ -102,7 +106,7 @@ export class SpottedService {
   async giveALike(postId: number, userId: number) {
     await this.prisma.spottedLikes
       .create({ data: { postId, userId } })
-      .catch((err : any) => {
+      .catch((err: any) => {
         console.error(err);
         throw new HttpException(
           `CONFLICT: user nr. ${userId} already liked post with id: ${postId}`,
