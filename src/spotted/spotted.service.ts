@@ -44,9 +44,11 @@ export class SpottedService {
        text,
        "authorId",
        "isAnonymous",
+       "username",
        (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id) AS "likes",
        (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id AND l."userId" = ${userId}) AS "isLiked"
-            FROM "SpottedPost" s LEFT JOIN "SpottedLikes" l ON s.id = l."postId" 
+            FROM "SpottedPost" s LEFT JOIN "SpottedLikes" l ON s.id = l."postId"
+            JOIN "User" u ON s."authorId" = u.id
             ORDER BY s."createdAt" desc`;
 
     return spottedPosts.map((post: any) => {
