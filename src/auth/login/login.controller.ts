@@ -23,6 +23,10 @@ export class LoginController {
   async login(@Body() dto: LoginDto, @Res() res: Response) {
     const jwt = await this.authService.login(dto);
     res.cookie(...jwt);
+    res.cookie(
+      'user_info',
+      JSON.stringify(await this.authService.getUserPublicInfo(dto.email)),
+    );
     res.send({ token: jwt[1] });
   }
 }

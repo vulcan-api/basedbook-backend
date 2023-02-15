@@ -159,4 +159,21 @@ export class AuthService {
     const jwt = await this.generateAuthJwt(payload);
     return ['jwt', jwt, { secure: true }];
   }
+
+  getUserPublicInfo(email: string): Promise<object | null> {
+    const { prisma } = this;
+    return prisma.user.findUnique({
+      where: {
+        email,
+      },
+      select: {
+        id: true,
+        name: true,
+        surname: true,
+        username: true,
+        class_name: true,
+        profileDesc: true,
+      },
+    });
+  }
 }
