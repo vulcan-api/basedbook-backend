@@ -2,12 +2,6 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { LoginDto, RegisterDto } from './dto';
 import { DbService } from '../db/db.service';
 import { sha512 } from 'js-sha512';
-import {
-  AccountTools,
-  Keystore,
-  registerAccount,
-  VulcanHebe,
-} from 'vulcan-api-js';
 import { MailerService } from '@nestjs-modules/mailer';
 import { JwtAuthDto } from './dto/jwt-auth.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -35,57 +29,25 @@ export class AuthService {
     });
     if (sampleUser) throw new ForbiddenException('Credentials taken!');
 
-    const keystore = new Keystore();
-    await keystore.init('Muj Elektryk');
-
-    const vulcanAccount = await registerAccount(
-      keystore,
-      dto.token,
-      dto.symbol,
-      dto.pin,
-    );
-    const vulcanClient = new VulcanHebe(
-      keystore,
-      AccountTools.loadFromObject(vulcanAccount),
-    );
-    await vulcanClient.selectStudent();
-
-    const student = (await vulcanClient.getStudents())[0];
-    const lesson = (await vulcanClient.getLessons(new Date('2022-09-02')))[0];
-    const classNumber = student.periods.at(-1)?.level;
-
-    const restURL = await this.prisma.restURL.upsert({
-      create: {
-        url: vulcanAccount.restUrl,
-      },
-      where: {
-        url: vulcanAccount.restUrl,
-      },
-      update: {},
-    });
-
     const user = await this.prisma.user.create({
       data: {
-        name: student.pupil.firstName,
+        name: undefined,
         username: dto.username,
-        surname: student.pupil.surname,
-        class_name:
-          classNumber && lesson.class?.symbol
-            ? classNumber + lesson.class.symbol
-            : '',
+        surname: undefined,
+        class_name: undefined,
         passwordHash: sha512(dto.password),
         profileDesc: '',
         avatar: '',
         postsProjects: '',
         skills: '',
         profileSettings: '',
-        restURLId: restURL.id,
-        loginID: vulcanAccount.loginId,
+        restURLId: undefined,
+        loginID: undefined,
         email: dto.email,
-        certificate: keystore.certificate ?? '',
-        fingerprint: keystore.fingerprint ?? '',
-        privateKey: keystore.privateKey ?? '',
-        firebaseToken: keystore.firebaseToken ?? '',
+        certificate: undefined,
+        fingerprint: undefined,
+        privateKey: undefined,
+        firebaseToken: undefined,
       },
     });
 

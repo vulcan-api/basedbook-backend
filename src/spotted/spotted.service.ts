@@ -4,7 +4,6 @@ import { InsertPostDto } from './dto/insertPost.dto';
 import { UpdatePostDto } from './dto/updatePost.dto';
 import { postQueryTemplate } from './dto/postQuery.template';
 import { Prisma } from '@prisma/client/scripts/default-index';
-import { async } from 'rxjs';
 
 @Injectable()
 export class SpottedService {
@@ -44,11 +43,9 @@ export class SpottedService {
        text,
        "authorId",
        "isAnonymous",
-       "username",
        (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id) AS "likes",
        (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id AND l."userId" = ${userId}) AS "isLiked"
-            FROM "SpottedPost" s LEFT JOIN "SpottedLikes" l ON s.id = l."postId"
-            JOIN "User" u ON s."authorId" = u.id
+            FROM "SpottedPost" s LEFT JOIN "SpottedLikes" l ON s.id = l."postId" 
             ORDER BY s."createdAt" desc`;
 
     return spottedPosts.map((post: any) => {
@@ -73,14 +70,10 @@ export class SpottedService {
     return this.processResponse(spottedPost);
   }
 
-  async insertNewPost(
-    postData: InsertPostDto,
-    authorId: number,
-  ): Promise<object> {
+  async insertNewPost(postData: InsertPostDto, authorId: number) {
     await this.prisma.spottedPost.create({
       data: Object.assign(postData, { authorId }),
     });
-    return { statusCode: 200, message: 'Post created' };
   }
 
   async changePostById(
@@ -106,7 +99,7 @@ export class SpottedService {
   async giveALike(postId: number, userId: number) {
     await this.prisma.spottedLikes
       .create({ data: { postId, userId } })
-      .catch((err: any) => {
+      .catch((err) => {
         console.error(err);
         throw new HttpException(
           `CONFLICT: user nr. ${userId} already liked post with id: ${postId}`,

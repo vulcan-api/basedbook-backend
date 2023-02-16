@@ -19,16 +19,7 @@ const { PORT = 3000 } = process.env;
   );
   app.use(cookieParser());
   app.useGlobalFilters(new PrismaExceptionFilter());
-  app.enableCors({
-    origin: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: [
-      'X-Requested-With,Content-Type',
-      'Access-Control-Allow-Origin',
-      'Origin',
-    ],
-    credentials: true,
-  });
+  app.enableCors();
   await app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}...`);
   });
