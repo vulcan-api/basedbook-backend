@@ -148,6 +148,22 @@ export class AuthService {
     return this.generateAuthCookie({ userId: unverifiedUser.userId });
   }
 
+  async isTaken(username: string, email: string): Promise<boolean> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            username,
+          },
+          {
+            email,
+          },
+        ],
+      },
+    });
+    return Boolean(user);
+  }
+
   async generateAuthJwt(payload: JwtAuthDto): Promise<string> {
     console.log('payload: ', payload);
     return this.jwtService.sign(payload);

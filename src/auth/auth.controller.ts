@@ -1,16 +1,15 @@
-import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from './decorator/getUser.decorator';
+import { Controller, Get, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
+import { IsTakenDto } from './dto/is-taken.dto';
+import { AuthService } from './auth.service';
 
 @Controller('/auth')
 export class AuthController {
-  // Route bellow is only for testing reasons
-  @UseGuards(AuthGuard('jwt'))
-  @Get()
-  async indexResponse(@GetUser() user: any): Promise<string> {
-    console.log('req.user: ', user);
-    return user;
+  constructor(private readonly authService: AuthService) {}
+
+  @Get('isTaken')
+  async isTaken(dto: IsTakenDto): Promise<boolean> {
+    return this.authService.isTaken(dto.username, dto.email);
   }
 
   @Post('logout')
