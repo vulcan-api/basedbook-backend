@@ -42,6 +42,7 @@ model User {
   GroupPost       GroupPost[]
   UserPost        UserPost[]
   SpottedLikes    SpottedLikes[]
+  Comment         SpottedComment[]
 }
 
 model UnverifiedUser {
@@ -57,44 +58,17 @@ model RestURL {
 }
 
 model SpottedPost {
-  id           Int            @id @default(autoincrement())
-  createdAt    DateTime       @default(now())
-  title        String
-  text         String
-  author       User           @relation(fields: [authorId], references: [id])
-  authorId     Int
-  isAnonymous  Boolean
-  Report       Report[]
-  SpottedLikes SpottedLikes[]
+  id             Int              @id @default(autoincrement())
+  createdAt      DateTime         @default(now())
+  title          String
+  text           String
+  author         User             @relation(fields: [authorId], references: [id])
+  authorId       Int
+  isAnonymous    Boolean
+  Report         Report[]
+  SpottedLikes   SpottedLikes[]
+  SpottedComment SpottedComment[]
 }
-
-// model Like {
-//  id          Int         @id @default(autoincrement())
-//  post        SpottedPost @relation(fields: [postId], references: [id])
-//  postId      Int
-//  user        User        @relation(fields: [userId], references: [id])
-//  userId      Int
-//  GroupPost   GroupPost?  @relation(fields: [groupPostId], references: [id])
-//  groupPostId Int?
-//  UserPost    UserPost?   @relation(fields: [userPostId], references: [id])
-//  userPostId  Int?
-//
-//  @@unique([userId, postId])
-//}
-//
-// model Dislike {
-//  id          Int         @id @default(autoincrement())
-//  post        SpottedPost @relation(fields: [postId], references: [id])
-//  postId      Int
-//  user        User        @relation(fields: [userId], references: [id])
-//  userId      Int
-//  GroupPost   GroupPost?  @relation(fields: [groupPostId], references: [id])
-//  groupPostId Int?
-//  UserPost    UserPost?   @relation(fields: [userPostId], references: [id])
-//  userPostId  Int?
-//
-//  @@unique([userId, postId])
-//}
 
 model SpottedLikes {
   id     Int         @id @default(autoincrement())
@@ -138,6 +112,15 @@ model Report {
   groupPostId   Int?
   UserPost      UserPost?    @relation(fields: [userPostId], references: [id])
   userPostId    Int?
+}
+
+model SpottedComment {
+  Id            Int          @id @default(autoincrement())
+  user          User         @relation(fields: [userId], references: [id])
+  userId        Int
+  spottedPost   SpottedPost? @relation(fields: [spottedPostId], references: [id])
+  spottedPostId Int?
+  createdAt     DateTime     @default(now())
 }
 
 model Group {
