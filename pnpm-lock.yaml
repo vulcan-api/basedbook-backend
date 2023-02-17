@@ -14,6 +14,7 @@ specifiers:
   '@prisma/client': ^4.10.1
   '@types/bcrypt': ^5.0.0
   '@types/cookie-parser': ^1.4.3
+  '@types/dateformat': ^5.0.0
   '@types/express': ^4.17.16
   '@types/jest': 29.2.4
   '@types/node': 18.11.18
@@ -26,6 +27,7 @@ specifiers:
   class-transformer: ^0.5.1
   class-validator: ^0.14.0
   cookie-parser: ^1.4.6
+  dateformat: ^5.0.3
   dotenv: ^16.0.3
   eslint: ^8.0.1
   eslint-config-prettier: ^8.3.0
@@ -66,6 +68,7 @@ dependencies:
   class-transformer: 0.5.1
   class-validator: 0.14.0
   cookie-parser: 1.4.6
+  dateformat: 5.0.3
   dotenv: 16.0.3
   js-sha512: 0.8.0
   node-forge: 1.3.1
@@ -85,6 +88,7 @@ devDependencies:
   '@prisma/client': 4.10.1_prisma@4.10.1
   '@types/bcrypt': 5.0.0
   '@types/cookie-parser': 1.4.3
+  '@types/dateformat': 5.0.0
   '@types/express': 4.17.16
   '@types/jest': 29.2.4
   '@types/node': 18.11.18
@@ -1716,6 +1720,10 @@ packages:
     resolution: {integrity: sha512-t73xJJrvdTjXrn4jLS9VSGRbz0nUY3cl2DMGDU48lKl+HR9dbbjW2A9r3g40VA++mQpy6uuHg33gy7du2BKpog==}
     dev: true
 
+  /@types/dateformat/5.0.0:
+    resolution: {integrity: sha512-SZg4JdHIWHQGEokbYGZSDvo5wA4TLYPXaqhigs/wH+REDOejcJzgH+qyY+HtEUtWOZxEUkbhbdYPqQDiEgrXeA==}
+    dev: true
+
   /@types/ejs/3.1.1:
     resolution: {integrity: sha512-RQul5wEfY7BjWm0sYY86cmUN/pcXWGyVxWX93DFFJvcrxax5zKlieLwA3T77xJGwNcZW0YW6CYG70p1m8xPFmA==}
     requiresBuild: true
@@ -3079,6 +3087,11 @@ packages:
 
   /dateformat/4.6.3:
     resolution: {integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==}
+    dev: false
+
+  /dateformat/5.0.3:
+    resolution: {integrity: sha512-Kvr6HmPXUMerlLcLF+Pwq3K7apHpYmGDVqrxcDasBg86UcKeTSNWbEzU8bwdXnxnR44FtMhJAxI4Bov6Y/KUfA==}
+    engines: {node: '>=12.20'}
     dev: false
 
   /dayjs/1.11.7:

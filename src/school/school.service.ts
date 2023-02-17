@@ -226,7 +226,10 @@ export class SchoolService {
         mailboxId = jsonResponse['Envelope']['GlobalKey'];
       });
 
-    canonicalPath = `/api/mobile/messagebox/message/byBox?box=${mailboxId}`;
+    canonicalPath = `/api/mobile/messagebox/message/byBox`;
+    /*    canonicalPath += `?box=${mailboxId}&folder=1&lastId=-2147483648&pageSize=500&lastSyncDate=${
+      (dateFormat(new Date('1970')), 'yyyy-mm-dd HH:MM:ss')
+    }`; */
     requestUrl = url + `${student.unit.symbol}${canonicalPath}`;
 
     await fetch(requestUrl, {
