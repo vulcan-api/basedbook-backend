@@ -1,4 +1,11 @@
 # BasedBook backend
+![](https://img.shields.io/github/languages/top/Muj-Elektryk/basedbook-backend)
+![](https://img.shields.io/tokei/lines/github/Muj-Elektryk/basedbook-backend)
+![](https://img.shields.io/github/license/Muj-Elektryk/basedbook-backend)
+![](https://img.shields.io/github/package-json/v/Muj-Elektryk/basedbook-backend)
+![](https://img.shields.io/github/commit-activity/w/Muj-Elektryk/basedbook-backend)
+![](https://img.shields.io/github/stars/Muj-Elektryk/basedbook-backend?style=social)
+
 
 An innovative educational social platform backend.
 
@@ -47,3 +54,10 @@ BasedBook lets you share your ideas and projects with other people in your schoo
 ``` pnpm build:prod ```
 
 ### We highly recommend to use prepared commands. You can add or/and check other commands in package.json file
+
+# BasedBook's developers
++ [Bartłomiej Strama](https://github.com/BaderBC)
++ [Seweryn Pajor](https://github.com/sewe2000)
++ [Tomasz Kulig](https://github.com/cooligus)
++ [Maksymilian Gala](https://github.com/maxidragon)
++ [Tomasz Mamala](https://github.com/Majkipl27)
