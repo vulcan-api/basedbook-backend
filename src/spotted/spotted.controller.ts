@@ -77,7 +77,7 @@ export class SpottedController {
   @UseGuards(AuthGuard('jwt'))
   @Post('/post/:id/like')
   async giveALike(
-    @Body('id') id: number,
+    @Param('id') id: number,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
     await this.spottedService.giveALike(id, user.userId);
