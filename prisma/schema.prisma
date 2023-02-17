@@ -12,24 +12,24 @@ datasource db {
 
 model User {
   id              Int              @id @default(autoincrement())
-  name            String
+  name            String?
   username        String           @unique
-  surname         String
-  class_name      String
+  surname         String?
+  class_name      String?
   passwordHash    String
   profileDesc     String
   avatar          String
   postsProjects   String
   skills          String
   profileSettings String
-  loginID         Int
+  loginID         Int?
   email           String           @unique
-  restURL         RestURL          @relation(fields: [restURLId], references: [id])
-  restURLId       Int
-  certificate     String
-  fingerprint     String
-  privateKey      String
-  firebaseToken   String
+  restURL         RestURL?         @relation(fields: [restURLId], references: [id])
+  restURLId       Int?
+  certificate     String?
+  fingerprint     String?
+  privateKey      String?
+  firebaseToken   String?
   spottedPost     SpottedPost[]
   project         Project[]
   report          Report[]
