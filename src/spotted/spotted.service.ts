@@ -108,17 +108,9 @@ export class SpottedService {
       });
   }
 
-  /*
-  async giveADislike(postId: number, userId: number) {
-    await this.prisma.dislike
-      .create({ data: { postId, userId } })
-      .catch((err : any) => {
-        console.error(err);
-        throw new HttpException(
-          `CONFLICT: user nr. ${userId} already liked post with id: ${postId}`,
-          HttpStatus.CONFLICT,
-        );
-      });
+  async removeLike(postId: number, userId: number) {
+    await this.prisma.spottedLikes.deleteMany({
+      where: { postId, userId },
+    });
   }
-  */
 }

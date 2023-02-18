@@ -84,15 +84,13 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
-  /*
   @UseGuards(AuthGuard('jwt'))
   @Post('/post/:id/dislike')
-  async giveADislike(
+  async removeLike(
     @Body('id') postId: number,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
-    await this.spottedService.giveADislike(postId, user.userId);
+    await this.spottedService.removeLike(postId, user.userId);
     return { ok: true, statusCode: 200 };
   }
-   */
 }
