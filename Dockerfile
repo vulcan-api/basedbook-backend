@@ -12,7 +12,7 @@ RUN pnpm build
 COPY . .
 
 
-ENV DATABASE_URL="postgresql://elektryk:%26DZWspN5r2~fLoc@193.46.243.109:5432/muj_elektryk"
+ENV DATABASE_URL="postgresql://elektryk:nie_zgadniesz_hasla@193.46.243.109:5432/muj_elektryk"
 # TODO: set SMTP_* env
 ENV SMTP_HOST=""
 ENV SMTP_USER=""
