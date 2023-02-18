@@ -85,7 +85,7 @@ export class SpottedController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Post('/post/:id/dislike')
+  @Post('/post/:id/unlike')
   async removeLike(
     @Body('id') postId: number,
     @GetUser() user: JwtAuthDto,
