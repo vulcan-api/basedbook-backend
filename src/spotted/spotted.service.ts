@@ -2,33 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { InsertPostDto } from './dto/insertPost.dto';
 import { UpdatePostDto } from './dto/updatePost.dto';
-import { postQueryTemplate } from './dto/postQuery.template';
-import { Prisma } from '@prisma/client/scripts/default-index';
 
 @Injectable()
 export class SpottedService {
   constructor(private readonly prisma: DbService) {}
-
-  processResponse(spottedPost: any): any {
-    if (spottedPost.isAnonymous) delete spottedPost.author;
-
-    spottedPost.likes = spottedPost._count.SpottedLikes;
-    delete spottedPost._count;
-
-    return spottedPost;
-  }
-
-  doesUserLikedPost(
-    userId: number,
-    postId: number,
-  ): Prisma.PrismaPromise<number> {
-    return this.prisma.spottedLikes.count({
-      where: {
-        userId,
-        postId,
-      },
-    });
-  }
 
   async getPostList(
     skip: number,
@@ -37,7 +14,8 @@ export class SpottedService {
   ): Promise<any[]> {
     const { prisma } = this;
 
-    const spottedPosts: any[] = await prisma.$queryRaw`SELECT s.id,
+    const spottedPosts: any[] = await prisma.$queryRaw`
+        SELECT s.id,
        "createdAt",
        title,
        text,
@@ -46,7 +24,8 @@ export class SpottedService {
        (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id) AS "likes",
        (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id AND l."userId" = ${userId}) AS "isLiked"
             FROM "SpottedPost" s LEFT JOIN "SpottedLikes" l ON s.id = l."postId" 
-            ORDER BY s."createdAt" desc`;
+            ORDER BY s."createdAt" desc
+            OFFSET ${skip} LIMIT ${take}`;
 
     return spottedPosts.map((post: any) => {
       post.likes = parseInt(post.likes);
@@ -55,19 +34,27 @@ export class SpottedService {
     });
   }
 
-  async getPostById(id: number, userId: number): Promise<any> {
+  async getPostById(postId: number, userId: number): Promise<any> {
     const { prisma } = this;
 
-    const [spottedPost, isLiked] = await prisma.$transaction([
-      prisma.spottedPost.findUniqueOrThrow({
-        where: { id },
-        select: postQueryTemplate,
-      }),
-      this.doesUserLikedPost(userId, id),
-    ]);
-    Object.assign(spottedPost, isLiked);
+    const spottedPosts: any[] = await prisma.$queryRaw`
+        SELECT s.id,
+       "createdAt",
+       title,
+       text,
+       "authorId",
+       "isAnonymous",
+       (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id) AS "likes",
+       (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id AND l."userId" = ${userId}) AS "isLiked"
+            FROM "SpottedPost" s LEFT JOIN "SpottedLikes" l ON s.id = l."postId"
+            WHERE s.id = ${postId}
+            ORDER BY s."createdAt" desc`;
 
-    return this.processResponse(spottedPost);
+    return spottedPosts.map((post: any) => {
+      post.likes = parseInt(post.likes);
+      post.isLiked = Boolean(parseInt(post.isLiked));
+      return post;
+    })[0];
   }
 
   async insertNewPost(postData: InsertPostDto, authorId: number) {
