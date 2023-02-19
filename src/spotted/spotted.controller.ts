@@ -84,10 +84,10 @@ export class SpottedController {
 
   @Post('/post/:id/unlike')
   async removeLike(
-    @Param('id') id: number,
+    @Param('id') postId: number,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
-    await this.spottedService.removeLike(id, user.userId);
+    await this.spottedService.removeLike(postId, user.userId);
     return { ok: true, statusCode: 200 };
   }
 
