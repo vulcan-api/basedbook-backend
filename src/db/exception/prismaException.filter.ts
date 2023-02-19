@@ -18,6 +18,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
         break;
       default:
         response.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        console.error(exception.message);
     }
     response.json({
       statusCode: response.statusCode,
