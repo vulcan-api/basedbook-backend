@@ -90,7 +90,7 @@ export class SpottedController {
     @Param('id') id: number,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
-    await this.spottedService.removeLike(postId, user.userId);
+    await this.spottedService.removeLike(id, user.userId);
     return { ok: true, statusCode: 200 };
   }
 }
