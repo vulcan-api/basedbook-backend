@@ -87,7 +87,7 @@ export class SpottedController {
   @UseGuards(AuthGuard('jwt'))
   @Post('/post/:id/unlike')
   async removeLike(
-    @Body('id') postId: number,
+    @Param('id') id: number,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
     await this.spottedService.removeLike(postId, user.userId);
