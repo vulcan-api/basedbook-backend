@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -16,12 +18,13 @@ import { UpdatePostDto } from './dto/updatePost.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
+import { ReportDto } from './dto/report.dto';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('spotted')
 export class SpottedController {
   constructor(private readonly spottedService: SpottedService) {}
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('/post')
   getAllPosts(
     @Query('skip') skip = '0',
@@ -35,7 +38,6 @@ export class SpottedController {
     );
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('/post/:id')
   getSpecificPost(
     @Param('id') id: string,
@@ -44,7 +46,6 @@ export class SpottedController {
     return this.spottedService.getPostById(parseInt(id), user.userId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Put('/post')
   async addNewSpottedPost(
     @Body() body: InsertPostDto,
@@ -54,7 +55,6 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Patch('/post')
   async changePostData(
     @Body() body: UpdatePostDto,
@@ -64,7 +64,6 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Delete('/post')
   async deletePost(
     @Body('id') id: number,
@@ -74,7 +73,6 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Post('/post/:id/like')
   async giveALike(
     @Param('id') id: number,
@@ -84,7 +82,6 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Post('/post/:id/unlike')
   async removeLike(
     @Param('id') id: number,
@@ -92,5 +89,14 @@ export class SpottedController {
   ): Promise<object> {
     await this.spottedService.removeLike(id, user.userId);
     return { ok: true, statusCode: 200 };
+  }
+
+  @Post('/report')
+  @HttpCode(HttpStatus.CREATED)
+  async reportPost(
+    @Body() dto: ReportDto,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    return this.spottedService.report(dto.postId, user.userId, dto.reason);
   }
 }

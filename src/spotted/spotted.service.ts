@@ -102,4 +102,19 @@ export class SpottedService {
       where: { postId, userId },
     });
   }
+
+  async report(
+    postId: number,
+    userId: number,
+    reason: string,
+  ): Promise<object> {
+    await this.prisma.report.create({
+      data: {
+        userId,
+        spottedPostId: postId,
+        reason,
+      },
+    });
+    return { msg: 'Successfully reported the post' };
+  }
 }
