@@ -47,9 +47,8 @@ model User {
 
 model UserSkils {
   id      Int    @id @default(autoincrement())
-  name    String
-  usersId Int
-  user    User   @relation(fields: [usersId], references: [id])
+  userId  Int
+  user    User   @relation(fields: [userId], references: [id])
   skillId Int
   skill   Skills @relation(fields: [skillId], references: [id])
 }
