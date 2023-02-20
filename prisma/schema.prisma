@@ -20,7 +20,6 @@ model User {
   profileDesc     String
   avatar          String
   postsProjects   String
-  skills          String
   profileSettings String
   loginID         Int?
   email           String           @unique
@@ -43,6 +42,22 @@ model User {
   UserPost        UserPost[]
   SpottedLikes    SpottedLikes[]
   Comment         SpottedComment[]
+  userSkills      UserSkils[]
+}
+
+model UserSkils {
+  id      Int    @id @default(autoincrement())
+  name    String
+  usersId Int
+  user    User   @relation(fields: [usersId], references: [id])
+  skillId Int
+  skill   Skills @relation(fields: [skillId], references: [id])
+}
+
+model Skills {
+  id         Int         @id @default(autoincrement())
+  name       String
+  userSkills UserSkils[]
 }
 
 model UnverifiedUser {

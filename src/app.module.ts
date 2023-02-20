@@ -7,6 +7,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { ProjectModule } from './project/project.module';
 import * as process from 'process';
 import { SchoolModule } from './school/school.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { SchoolModule } from './school/school.module';
     }),
     ProjectModule,
     SchoolModule,
+    UserModule,
   ],
 })
 export class AppModule {}
