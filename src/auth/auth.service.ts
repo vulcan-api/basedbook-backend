@@ -39,7 +39,6 @@ export class AuthService {
         profileDesc: '',
         avatar: '',
         postsProjects: '',
-        skills: '',
         profileSettings: '',
         restURLId: undefined,
         loginID: undefined,
