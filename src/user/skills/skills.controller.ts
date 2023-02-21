@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { SkillsService } from './skills.service';
 import { GetUser } from '../../auth/decorator/getUser.decorator';
@@ -15,7 +23,7 @@ export class SkillsController {
     return await this.skillsService.getSkills(userId);
   }
 
-  @Post('add')
+  @Put()
   async addSkill(
     @GetUser() user: JwtAuthDto,
     @Body() body: AddSkillDto,
@@ -25,5 +33,13 @@ export class SkillsController {
       body.skillId,
       body.skillLvl,
     );
+  }
+
+  @Delete(':userSkillId')
+  async deleteSkill(
+    @GetUser() user: JwtAuthDto,
+    @Param('userSkillId') userSkillId: number,
+  ): Promise<object> {
+    return await this.skillsService.deleteSkill(user.userId, userSkillId);
   }
 }

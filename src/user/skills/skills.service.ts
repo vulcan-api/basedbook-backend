@@ -29,4 +29,10 @@ export class SkillsService {
       include: { skill: true },
     });
   }
+
+  async deleteSkill(userId: number, userSkillId: number): Promise<object> {
+    const { prisma } = this;
+    await prisma.userSkils.deleteMany({ where: { userId, id: userSkillId } });
+    return { statusCode: 200, message: 'Skill deleted' };
+  }
 }
