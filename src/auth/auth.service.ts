@@ -31,22 +31,13 @@ export class AuthService {
 
     const user = await this.prisma.user.create({
       data: {
-        name: undefined,
         username: dto.username,
-        surname: undefined,
-        class_name: undefined,
         passwordHash: sha512(dto.password),
         profileDesc: '',
         avatar: '',
         postsProjects: '',
         profileSettings: '',
-        restURLId: undefined,
-        loginID: undefined,
         email: dto.email,
-        certificate: undefined,
-        fingerprint: undefined,
-        privateKey: undefined,
-        firebaseToken: undefined,
       },
     });
 
