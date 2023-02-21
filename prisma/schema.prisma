@@ -46,11 +46,18 @@ model User {
 }
 
 model UserSkils {
-  id      Int    @id @default(autoincrement())
-  userId  Int
-  user    User   @relation(fields: [userId], references: [id])
-  skillId Int
-  skill   Skills @relation(fields: [skillId], references: [id])
+  id       Int          @id @default(autoincrement())
+  userId   Int
+  skillId  Int
+  skillLvl enumSkillLvl
+  user     User         @relation(fields: [userId], references: [id])
+  skill    Skills       @relation(fields: [skillId], references: [id])
+}
+
+enum enumSkillLvl {
+  beginner
+  intermediate
+  advanced
 }
 
 model Skills {
