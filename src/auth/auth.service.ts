@@ -17,14 +17,7 @@ export class AuthService {
   async signup(dto: RegisterDto): Promise<object> {
     const sampleUser = await this.prisma.user.findFirst({
       where: {
-        OR: [
-          {
-            username: dto.username,
-          },
-          {
-            email: dto.email,
-          },
-        ],
+        OR: [{ username: dto.username }, { email: dto.email }],
       },
     });
     if (sampleUser) throw new ForbiddenException('Credentials taken!');
@@ -32,6 +25,8 @@ export class AuthService {
     const user = await this.prisma.user.create({
       data: {
         username: dto.username,
+        name: dto.name,
+        surname: dto.surname,
         passwordHash: sha512(dto.password),
         profileDesc: '',
         postsProjects: '',
@@ -76,24 +71,16 @@ export class AuthService {
 
   async verify(id: string): Promise<[string, string, object]> {
     const unverifiedUser = await this.prisma.unverifiedUser.findUniqueOrThrow({
-      where: {
-        tempId: id,
-      },
+      where: { tempId: id },
     });
 
     await this.prisma.user.update({
-      where: {
-        id: unverifiedUser.userId,
-      },
-      data: {
-        isVerified: true,
-      },
+      where: { id: unverifiedUser.userId },
+      data: { isVerified: true },
     });
 
     await this.prisma.unverifiedUser.delete({
-      where: {
-        tempId: id,
-      },
+      where: { tempId: id },
     });
 
     return this.generateAuthCookie({ userId: unverifiedUser.userId });
@@ -102,14 +89,7 @@ export class AuthService {
   async isTaken(username: string, email: string): Promise<boolean> {
     const user = await this.prisma.user.findFirst({
       where: {
-        OR: [
-          {
-            username,
-          },
-          {
-            email,
-          },
-        ],
+        OR: [{ username }, { email }],
       },
     });
     return Boolean(user);
