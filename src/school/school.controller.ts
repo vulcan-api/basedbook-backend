@@ -7,6 +7,7 @@ import { LessonsQueryDto } from './dto/lessonsQuery.dto';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { VulcanDto } from './dto/vulcanDto';
 import { VulcanGuard } from './vulcan.guard';
+import { Exam, Homework, Lesson } from 'vulcan-api-js';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('school')
@@ -19,7 +20,9 @@ export class SchoolController {
     @Query() query: GradesQueryDto,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
-    return { grades: await this.schoolService.getGrades(query.last, user) };
+    return {
+      grades: await this.schoolService.getGrades(query.last, user.userId),
+    };
   }
 
   @UseGuards(VulcanGuard)
@@ -27,24 +30,45 @@ export class SchoolController {
   async getLessons(
     @Query() query: LessonsQueryDto,
     @GetUser() user: JwtAuthDto,
-  ): Promise<{ lessons: object[] }> {
-    return this.schoolService.getLessons(query.from, query.to, user);
+  ): Promise<Lesson[]> {
+    return this.schoolService.getLessons(query.from, query.to, user.userId);
   }
 
   @UseGuards(VulcanGuard)
   @Get('lucky-number')
   async getLuckyNumber(@GetUser() user: JwtAuthDto): Promise<object> {
-    return this.schoolService.getLuckyNumber(user);
+    return this.schoolService.getLuckyNumber(user.userId);
   }
   @UseGuards(VulcanGuard)
   @Get('student')
   async getStudent(@GetUser() user: JwtAuthDto): Promise<object> {
-    return this.schoolService.getStudent(user);
+    return this.schoolService.getStudent(user.userId);
   }
   @UseGuards(VulcanGuard)
   @Get('messages-received')
   async getReceivedMessages(@GetUser() user: JwtAuthDto): Promise<object> {
-    return this.schoolService.getMessages(user);
+    return this.schoolService.getMessages(user.userId);
+  }
+
+  @UseGuards(VulcanGuard)
+  @Get('homework')
+  async getHomework(@GetUser() user: JwtAuthDto): Promise<Homework[]> {
+    return this.schoolService.getHomework(user.userId);
+  }
+
+  @UseGuards(VulcanGuard)
+  @Get('exams')
+  async getExams(@GetUser() user: JwtAuthDto): Promise<Exam[]> {
+    return this.schoolService.getExams(user.userId);
+  }
+
+  @UseGuards(VulcanGuard)
+  @Get('attendance')
+  async getAttendance(
+    @Query() query: LessonsQueryDto,
+    @GetUser() user: JwtAuthDto,
+  ) {
+    return this.schoolService.getAttendance(user.userId, query.from, query.to);
   }
 
   @Post('register')
