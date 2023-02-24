@@ -5,7 +5,4 @@ export class CreateProjectDto {
   title: string;
   @IsNotEmpty()
   text: string;
-  @IsNotEmpty()
-  @IsInt()
-  authorId: number;
 }
