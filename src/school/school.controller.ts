@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { SchoolService } from './school.service';
@@ -71,6 +81,12 @@ export class SchoolController {
     return this.schoolService.getAttendance(user.userId, query.from, query.to);
   }
 
+  @UseGuards(VulcanGuard)
+  @Delete('remove')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeVulcanAccount(@GetUser() user: JwtAuthDto): Promise<void> {
+    return this.schoolService.deleteVulcanAccount(user.userId);
+  }
   @Post('register')
   async register(
     @GetUser() user: JwtAuthDto,

@@ -123,6 +123,23 @@ export class SchoolService {
     };
   }
 
+  async deleteVulcanAccount(userId: number): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        name: null,
+        surname: null,
+        class_name: null,
+        loginID: null,
+        restURLId: null,
+        certificate: null,
+        fingerprint: null,
+        privateKey: null,
+        firebaseToken: null,
+      },
+    });
+  }
+
   async getLastSemester(client: VulcanHebe): Promise<Period> {
     const students = await client.getStudents();
     return students[0].periods.at(-1) ?? new Period();
