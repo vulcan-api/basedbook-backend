@@ -16,8 +16,10 @@ export class ProjectService {
   getProjectById(id: number): Promise<any> {
     return this.prisma.project.findUnique({ where: { id } });
   }
-  async addProject(projectData: CreateProjectDto) {
-    await this.prisma.project.create({ data: projectData });
+  async addProject(projectData: CreateProjectDto, authorId: number) {
+    await this.prisma.project.create({
+      data: Object.assign(projectData, { authorId }),
+    });
   }
   async updateProjectById(projectData: UpdateProjectDto) {
     const { id } = projectData;

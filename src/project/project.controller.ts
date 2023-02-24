@@ -6,14 +6,15 @@ import {
   Param,
   Patch,
   Post,
-  Query, UseGuards,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project-dto';
 import { AuthGuard } from '@nestjs/passport';
-import {GetUser} from "../auth/decorator/getUser.decorator";
-import {JwtAuthDto} from "../auth/dto/jwt-auth.dto";
+import { GetUser } from '../auth/decorator/getUser.decorator';
+import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('project')
@@ -32,12 +33,18 @@ export class ProjectController {
     return this.projectService.getProjectById(parseInt(id));
   }
   @Post()
-  async addProject(@Body() body: CreateProjectDto, @GetUser() user: JwtAuthDto): Promise<object> {
-    await this.projectService.addProject(body);
+  async addProject(
+    @Body() body: CreateProjectDto,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    await this.projectService.addProject(body, user.userId);
     return { body, statusCode: 201 };
   }
   @Patch()
-  async updateProject(@Body() body: UpdateProjectDto, @GetUser() user: JwtAuthDto): Promise<object> {
+  async updateProject(
+    @Body() body: UpdateProjectDto,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
     await this.projectService.updateProjectById(body);
     return { body, statusCode: 200 };
   }
