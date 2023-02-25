@@ -47,6 +47,7 @@ model User {
   youtube         String?
   website         String?
   darkTheme       Boolean          @default(false)
+  Olympics        Olympics[]
 }
 
 model UserSkils {
