@@ -45,4 +45,13 @@ export class ProjectService {
     });
     return { msg: 'Successfully reported the post' };
   }
+  async apply(projectId: number, userId: number): Promise<object> {
+    await this.prisma.userProject.create({
+      data: {
+        projectId: projectId,
+        userId,
+      },
+    });
+    return { msg: 'Successfully applied to the project' };
+  }
 }

@@ -16,6 +16,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { ReportDto } from './dto/report.dto';
+import { ApplyToProjectDto } from './dto/apply.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('project')
@@ -60,5 +61,13 @@ export class ProjectController {
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
     return this.projectService.report(dto.projectId, user.userId, dto.reason);
+  }
+  @Post('/apply')
+  @HttpCode(HttpStatus.CREATED)
+  async applyToProject(
+    @Body() dto: ApplyToProjectDto,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    return this.projectService.apply(dto.projectId, user.userId);
   }
 }

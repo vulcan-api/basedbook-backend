@@ -32,8 +32,6 @@ model User {
   spottedPost     SpottedPost[]
   project         Project[]
   report          Report[]
-  UserProject     UserProject?     @relation(fields: [userProjectId], references: [id])
-  userProjectId   Int?
   isVerified      Boolean          @default(false)
   UnverifiedUser  UnverifiedUser[]
   GroupAdmin      GroupAdmin[]
@@ -43,6 +41,7 @@ model User {
   SpottedLikes    SpottedLikes[]
   Comment         SpottedComment[]
   userSkills      UserSkils[]
+  UserProject     UserProject[]
 }
 
 model UserSkils {
@@ -116,7 +115,8 @@ model UserProject {
   id        Int      @id @default(autoincrement())
   project   Project? @relation(fields: [projectId], references: [id])
   projectId Int?
-  Users     User[]   @relation()
+  user      User?     @relation(fields: [userId], references: [id])
+  userId    Int?
 }
 
 model Report {
