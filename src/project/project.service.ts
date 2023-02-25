@@ -31,4 +31,18 @@ export class ProjectService {
   async deleteProjectById(id: number) {
     await this.prisma.project.delete({ where: { id } });
   }
+  async report(
+    projectId: number,
+    userId: number,
+    reason: string,
+  ): Promise<object> {
+    await this.prisma.report.create({
+      data: {
+        userId,
+        projectId: projectId,
+        reason,
+      },
+    });
+    return { msg: 'Successfully reported the post' };
+  }
 }

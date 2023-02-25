@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
+  Get, HttpCode, HttpStatus,
   Param,
   Patch,
   Post,
@@ -15,6 +15,7 @@ import { UpdateProjectDto } from './dto/update-project-dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
+import { ReportDto } from './dto/report.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('project')
@@ -51,5 +52,13 @@ export class ProjectController {
   @Delete()
   async deleteProject(@Body('id') id: number, @GetUser() user: JwtAuthDto) {
     await this.projectService.deleteProjectById(id);
+  }
+  @Post('/report')
+  @HttpCode(HttpStatus.CREATED)
+  async reportPost(
+    @Body() dto: ReportDto,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    return this.projectService.report(dto.projectId, user.userId, dto.reason);
   }
 }
