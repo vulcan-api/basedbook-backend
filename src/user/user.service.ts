@@ -21,9 +21,19 @@ export class UserService {
   async findUsersByUserName(name: string): Promise<object[]> {
     return this.prisma.user.findMany({
       where: {
-        username: {
-          contains: name,
-        },
+        OR: [
+          {
+            username: {
+              search: name,
+            },
+          },
+          {
+            name: { search: name },
+          },
+          {
+            surname: { search: name },
+          },
+        ],
       },
       select: {
         id: true,
