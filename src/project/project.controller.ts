@@ -24,6 +24,7 @@ import { ApplyToProjectDto } from './dto/apply.dto';
 @Controller('project')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
+
   @Get()
   getAllProjects(
     @Query('skip') skip = '0',
@@ -32,10 +33,12 @@ export class ProjectController {
   ): Promise<object> {
     return this.projectService.getAllProjects(parseInt(skip), parseInt(take));
   }
+
   @Get('/:id')
   getProject(@Param('id') id: string, @GetUser() user: JwtAuthDto): object {
     return this.projectService.getProjectById(parseInt(id));
   }
+
   @Get('/:id/participants')
   getProjectParticipants(
     @Query('skip') skip = '0',
@@ -49,6 +52,7 @@ export class ProjectController {
       parseInt(id),
     );
   }
+
   @Post()
   async addProject(
     @Body() body: CreateProjectDto,
@@ -57,6 +61,7 @@ export class ProjectController {
     await this.projectService.addProject(body, user.userId);
     return { body, statusCode: 201 };
   }
+
   @Patch()
   async updateProject(
     @Body() body: UpdateProjectDto,
@@ -65,10 +70,12 @@ export class ProjectController {
     await this.projectService.updateProjectById(body);
     return { body, statusCode: 200 };
   }
+
   @Delete()
   async deleteProject(@Body('id') id: number, @GetUser() user: JwtAuthDto) {
     await this.projectService.deleteProjectById(id);
   }
+
   @Post('/report')
   @HttpCode(HttpStatus.CREATED)
   async reportPost(
@@ -77,6 +84,7 @@ export class ProjectController {
   ): Promise<object> {
     return this.projectService.report(dto.projectId, user.userId, dto.reason);
   }
+
   @Post('/apply')
   @HttpCode(HttpStatus.CREATED)
   async applyToProject(
@@ -84,6 +92,6 @@ export class ProjectController {
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
     await this.projectService.apply(dto.projectId, user.userId);
-	return {statusCode: 200 };
+    return { statusCode: 200 };
   }
 }

@@ -48,6 +48,19 @@ model User {
   website         String?
   darkTheme       Boolean          @default(false)
   Olympics        Olympics[]
+  userId          Int?
+  Friends         Friends[]        @relation("Friends")
+  FriendsRel      Friends[]        @relation("FriendsRel")
+}
+
+model Friends {
+  friend      User    @relation("Friends", fields: [friendId], references: [id])
+  friendRel   User    @relation("FriendsRel", fields: [friendRelId], references: [id])
+  friendId    Int
+  friendRelId Int
+  isAccepted  Boolean @default(false)
+
+  @@id([friendId, friendRelId])
 }
 
 model UserSkils {

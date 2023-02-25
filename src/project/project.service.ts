@@ -6,33 +6,32 @@ import { UpdateProjectDto } from './dto/update-project-dto';
 @Injectable()
 export class ProjectService {
   constructor(private readonly prisma: DbService) {}
-async getAllProjects(skip: number, take: number): Promise<any> {
-  const projects = await this.prisma.project.findMany({
-    orderBy: { createdAt: 'desc' },
-    skip,
-    take,
-    select: {
-      id: true,
-      createdAt: true,
-      title: true,
-      text: true,
-      author: {
-        select: {
-          name: true,
-          surname: true,
+  async getAllProjects(skip: number, take: number): Promise<any> {
+    const projects = await this.prisma.project.findMany({
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take,
+      select: {
+        id: true,
+        createdAt: true,
+        title: true,
+        text: true,
+        author: {
+          select: {
+            name: true,
+            surname: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  const formattedProjects = projects.map((project) => ({
-    ...project,
-    username: `${project.author.name} ${project.author.surname}`,
-  }));
+    const formattedProjects = projects.map((project) => ({
+      ...project,
+      username: `${project.author.name} ${project.author.surname}`,
+    }));
 
-  return formattedProjects;
-}
-
+    return formattedProjects;
+  }
 
   getProjectParticipants(
     skip: number,
