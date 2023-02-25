@@ -24,14 +24,21 @@ export class UserService {
         OR: [
           {
             username: {
-              search: name,
+              contains: name,
+              mode: 'insensitive',
             },
           },
           {
-            name: { search: name },
+            name: {
+              contains: name,
+              mode: 'insensitive',
+            },
           },
           {
-            surname: { search: name },
+            surname: {
+              contains: name,
+              mode: 'insensitive',
+            },
           },
         ],
       },
