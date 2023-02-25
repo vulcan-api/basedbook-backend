@@ -42,6 +42,7 @@ model User {
   Comment         SpottedComment[]
   userSkills      UserSkils[]
   UserProject     UserProject[]
+  Olympics        Olympics[]
 }
 
 model UserSkils {
@@ -186,4 +187,16 @@ model UserPost {
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
   Report    Report[]
+}
+
+model Olympics {
+  id              Int      @id @default(autoincrement())
+  registrationEnd DateTime
+  startsAt        DateTime
+  endsAt          DateTime
+  title           String
+  description     String
+  prizePool       Int
+  participants    User[]
+  organisators    String[]
 }
