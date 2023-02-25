@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Delete,
-  Get, HttpCode, HttpStatus,
+  Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -33,6 +35,19 @@ export class ProjectController {
   @Get('/:id')
   getProject(@Param('id') id: string, @GetUser() user: JwtAuthDto): object {
     return this.projectService.getProjectById(parseInt(id));
+  }
+  @Get('/:id/participants')
+  getProjectParticipants(
+    @Query('skip') skip = '0',
+    @Query('take') take = '10',
+    @Param('id') id: string,
+    @GetUser() user: JwtAuthDto,
+  ): object {
+    return this.projectService.getProjectParticipants(
+      parseInt(skip),
+      parseInt(take),
+      parseInt(id),
+    );
   }
   @Post()
   async addProject(
@@ -68,6 +83,7 @@ export class ProjectController {
     @Body() dto: ApplyToProjectDto,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
-    return this.projectService.apply(dto.projectId, user.userId);
+    await this.projectService.apply(dto.projectId, user.userId);
+	return {statusCode: 200 };
   }
 }
