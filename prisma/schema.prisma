@@ -42,6 +42,11 @@ model User {
   Comment         SpottedComment[]
   userSkills      UserSkils[]
   UserProject     UserProject[]
+  facebook        String?
+  instagram       String?
+  youtube         String?
+  website         String?
+  darkTheme       Boolean          @default(false)
 }
 
 model UserSkils {
