@@ -195,3 +195,15 @@ model UserPost {
   authorId  Int
   Report    Report[]
 }
+
+model Olympics {
+  id              Int      @id @default(autoincrement())
+  registrationEnd DateTime
+  startsAt        DateTime
+  endsAt          DateTime
+  title           String
+  description     String
+  prizePool       Int
+  participants    User[]
+  organisators    String[]
+}
