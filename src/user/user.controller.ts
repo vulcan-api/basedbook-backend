@@ -20,6 +20,6 @@ export class UserController {
 
   @Get('/:userId/spottedPosts')
   async getSpottedPosts(@Param('userId') userId: string) {
-    return this.spottedService.getPostList(0, 999, parseInt(userId));
+    return this.spottedService.getUsersPosts(0, 999, parseInt(userId));
   }
 }

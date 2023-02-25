@@ -25,7 +25,32 @@ export class SpottedService {
        (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id AND l."userId" = ${userId}) AS "isLiked"
             FROM "SpottedPost" s 
             LEFT JOIN "SpottedLikes" l ON s.id = l."postId" 
-            LEFT JOIN "User" u ON s."authorId" = u.id
+            LEFT JOIN "User" u ON s."authorId" = u.id 
+            ORDER BY s."createdAt" desc
+            OFFSET ${skip} LIMIT ${take}`;
+
+    return spottedPosts.map((post: any) => {
+      post.likes = parseInt(post.likes);
+      post.isLiked = Boolean(parseInt(post.isLiked));
+      return post;
+    });
+  }
+  async getUsersPosts(skip: number, take: number, userId: number) {
+    const { prisma } = this;
+
+    const spottedPosts: any[] = await prisma.$queryRaw`
+        SELECT s.id,
+       "createdAt",
+       title,
+       text,
+       u.username,
+       "isAnonymous",
+       (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id) AS "likes",
+       (SELECT count(l) FROM "SpottedLikes" l WHERE l."postId" = s.id AND l."userId" = ${userId}) AS "isLiked"
+            FROM "SpottedPost" s 
+            LEFT JOIN "SpottedLikes" l ON s.id = l."postId" 
+            LEFT JOIN "User" u ON s."authorId" = u.id 
+            WHERE "isAnonymous" = false AND s."authorId" = ${userId}
             ORDER BY s."createdAt" desc
             OFFSET ${skip} LIMIT ${take}`;
 
