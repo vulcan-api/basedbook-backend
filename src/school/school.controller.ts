@@ -68,8 +68,11 @@ export class SchoolController {
 
   @UseGuards(VulcanGuard)
   @Get('exams')
-  async getExams(@GetUser() user: JwtAuthDto): Promise<Exam[]> {
-    return this.schoolService.getExams(user.userId);
+  async getExams(
+    @GetUser() user: JwtAuthDto,
+    @Query('last') last: number,
+  ): Promise<Exam[]> {
+    return this.schoolService.getExams(user.userId, last);
   }
 
   @UseGuards(VulcanGuard)
