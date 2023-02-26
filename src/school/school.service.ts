@@ -90,8 +90,8 @@ export class SchoolService {
     await vulcanClient.selectStudent();
 
     const student = (await vulcanClient.getStudents())[0];
-    const lastSemester = student.periods.slice(-1);
-    const lesson = (await vulcanClient.getLessons(lastSemester.start.Date))[0];
+    const lastSemester = student.periods.at(-1);
+    const lesson = (await vulcanClient.getLessons(lastSemester?.start.Date))[0];
 
     const restURL = await this.prisma.restURL.upsert({
       create: {
@@ -201,6 +201,7 @@ export class SchoolService {
         deadline: exam.deadline.dateDisplay,
         description: exam.topic,
         teacherName: exam.creator.displayName,
+        type: exam.type,
       };
     });
   }
