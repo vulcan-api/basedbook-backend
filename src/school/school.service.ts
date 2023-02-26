@@ -197,6 +197,7 @@ export class SchoolService {
 
     return exams.map((exam: Exam) => {
       return {
+        id: exam.id,
         subject: exam.subject.name,
         deadline: exam.deadline.dateDisplay,
         description: exam.topic,
