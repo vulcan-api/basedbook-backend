@@ -90,7 +90,7 @@ export class SchoolService {
     await vulcanClient.selectStudent();
 
     const student = (await vulcanClient.getStudents())[0];
-    const lastSemester = await this.getLastSemester(vulcanClient);
+    const lastSemester = student.periods.slice(-1);
     const lesson = (await vulcanClient.getLessons(lastSemester.start.Date))[0];
 
     const restURL = await this.prisma.restURL.upsert({
@@ -139,15 +139,19 @@ export class SchoolService {
       },
     });
   }
-
-  async getLastSemester(client: VulcanHebe): Promise<Period> {
-    const students = await client.getStudents();
-    return students[0].periods.at(-1) ?? new Period();
+  async getSemester(
+    client: VulcanHebe,
+    semesterNumber: number,
+  ): Promise<Period> {
+    if (semesterNumber > 2 || semesterNumber < 1)
+      throw Error('Semester number must be 1 or 2');
+    const student = (await client.getStudents())[0];
+    return student.periods.at(semesterNumber === 1 ? -2 : -1) ?? new Period();
   }
 
   async getGrades(last = 10, userId: number): Promise<Grade[]> {
     const client = await this.getClient(userId);
-    const lastSemester = await this.getLastSemester(client);
+    const lastSemester = await this.getSemester(client, 2);
     return (
       await client.getGrades(lastSemester.start.Date ?? new Date())
     ).slice(-last);
@@ -178,9 +182,27 @@ export class SchoolService {
     const client = await this.getClient(userId);
     return client.getHomework();
   }
-  async getExams(userId: number): Promise<Exam[]> {
+  async getExams(userId: number, last?: number): Promise<any[]> {
     const client = await this.getClient(userId);
-    return client.getExams();
+    let exams = (await client.getExams())
+      .filter((exam) => new Date(exam.deadline.date) >= new Date())
+      .sort((a, b) => {
+        const dateA = new Date(a.deadline.date);
+        const dateB = new Date(b.deadline.date);
+        if (dateA < dateB) return -1;
+        if (dateA > dateB) return 1;
+        return 0;
+      });
+    if (last) exams = exams.slice(-last);
+
+    return exams.map((exam: Exam) => {
+      return {
+        subject: exam.subject.name,
+        deadline: exam.deadline.dateDisplay,
+        description: exam.topic,
+        teacherName: exam.creator.displayName,
+      };
+    });
   }
 
   async getAttendance(
