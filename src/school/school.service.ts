@@ -11,14 +11,7 @@ import {
 import { DbService } from '../db/db.service';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { VulcanDto } from './dto/vulcanDto';
-import {
-  Grade,
-  Lesson,
-  LuckyNumber,
-  Period,
-  Student,
-  Message,
-} from 'vulcan-api-js';
+import { Lesson, LuckyNumber, Period, Student, Message } from 'vulcan-api-js';
 
 @Injectable()
 export class SchoolService {
@@ -149,12 +142,25 @@ export class SchoolService {
     return student.periods.at(semesterNumber === 1 ? -2 : -1) ?? new Period();
   }
 
-  async getGrades(last = 10, userId: number): Promise<Grade[]> {
+  async getGrades(userId: number, last?: number): Promise<object> {
     const client = await this.getClient(userId);
-    const lastSemester = await this.getSemester(client, 2);
-    return (
-      await client.getGrades(lastSemester.start.Date ?? new Date())
-    ).slice(-last);
+    const grades = (await client.getGrades(new Date('1970'))).slice(
+      last ? -last : 0,
+    );
+    const returnObject: { [key: string]: object[] } = {};
+    grades.forEach((grade) => {
+      const key = grade.column.subject.name;
+      if (!returnObject[key]) returnObject[key] = [];
+      returnObject[key].push({
+        id: grade.id,
+        grade: grade.value,
+        teacher: grade.creator.displayName,
+        dateCreated: grade.dateCreated.dateDisplay,
+        weight: grade.column.weight,
+        name: grade.column.name,
+      });
+    });
+    return returnObject;
   }
 
   async getLessons(from: Date, to: Date, userId: number): Promise<Lesson[]> {
