@@ -4,10 +4,10 @@ import { SettingsModule } from './settings/settings.module';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { SpottedService } from '../spotted/spotted.service';
-import { FriendsModule } from './friends/friends.module';
+import { FollowModule } from './follow/follow.module';
 
 @Module({
-  imports: [SkillsModule, SettingsModule, FriendsModule],
+  imports: [SkillsModule, SettingsModule, FollowModule],
   controllers: [UserController],
   providers: [UserService, SpottedService],
 })
