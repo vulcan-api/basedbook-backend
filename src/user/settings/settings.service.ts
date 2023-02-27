@@ -22,8 +22,8 @@ export class SettingsService {
         instagram: settings.instagram,
         youtube: settings.youtube,
         website: settings.website,
-        profileDesc: settings.description,
-        darkTheme: settings.theme,
+        profileDesc: settings.profileDesc,
+        darkTheme: settings.darkTheme,
       },
     });
   }
@@ -35,6 +35,24 @@ export class SettingsService {
     await this.prisma.user.update({
       where: { id: userId },
       data: { avatar: avatarFile.buffer },
+    });
+  }
+
+  async getSettings(userId: number): Promise<object> {
+    return this.prisma.user.findUniqueOrThrow({
+      where: { id: userId },
+      select: {
+        username: true,
+        email: true,
+        name: true,
+        surname: true,
+        facebook: true,
+        instagram: true,
+        youtube: true,
+        website: true,
+        profileDesc: true,
+        darkTheme: true,
+      },
     });
   }
 }

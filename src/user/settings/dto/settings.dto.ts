@@ -47,8 +47,8 @@ export class SettingsDto {
   website?: string;
   @IsOptional()
   @IsNotEmpty()
-  description?: string;
+  profileDesc?: string;
   @IsOptional()
   @IsBoolean()
-  theme?: boolean;
+  darkTheme?: boolean;
 }
