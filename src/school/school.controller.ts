@@ -30,9 +30,7 @@ export class SchoolController {
     @Query() query: GradesQueryDto,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
-    return {
-      grades: await this.schoolService.getGrades(query.last, user.userId),
-    };
+    return await this.schoolService.getGrades(user.userId, query.last);
   }
 
   @UseGuards(VulcanGuard)
