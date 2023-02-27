@@ -13,6 +13,7 @@ export class UserController {
     if (name) return this.userService.findUsersByUserName(name);
     return [];
   }
+
   @Get('/:userId')
   async getPublicInformation(@Param('userId') userId: string) {
     return this.userService.getPublicInformation(parseInt(userId));

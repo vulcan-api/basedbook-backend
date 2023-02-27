@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   FileTypeValidator,
+  Get,
   HttpCode,
   HttpStatus,
   MaxFileSizeValidator,
@@ -21,7 +22,7 @@ import { SettingsDto } from './dto/settings.dto';
 @Controller('user/settings')
 @UseGuards(AuthGuard('jwt'))
 export class SettingsController {
-  constructor(private readonly settingService: SettingsService) {}
+  constructor(private readonly settingsService: SettingsService) {}
   @Patch()
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseInterceptors(FileInterceptor('avatar'))
@@ -39,6 +40,10 @@ export class SettingsController {
     )
     avatar?: Express.Multer.File,
   ): Promise<void> {
-    await this.settingService.updateSettings(avatar, user.userId, settings);
+    await this.settingsService.updateSettings(avatar, user.userId, settings);
+  }
+  @Get('get')
+  async getSettings(@GetUser() user: JwtAuthDto): Promise<object> {
+    return await this.settingsService.getSettings(user.userId);
   }
 }
