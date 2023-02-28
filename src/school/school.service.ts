@@ -153,11 +153,12 @@ export class SchoolService {
       if (!returnObject[key]) returnObject[key] = [];
       returnObject[key].push({
         id: grade.id,
-        grade: grade.value,
+        grade: grade.content,
         teacher: grade.creator.displayName,
         dateCreated: grade.dateCreated.dateDisplay,
         weight: grade.column.weight,
         name: grade.column.name,
+        type: grade.column.category?.name,
       });
     });
     return returnObject;
