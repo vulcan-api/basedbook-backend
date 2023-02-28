@@ -14,10 +14,7 @@ import { Response } from 'express';
 @Controller('auth/login')
 export class LoginController {
   constructor(private readonly authService: AuthService) {}
-  @Get()
-  handleGetRequest(): string {
-    return 'If you want to get login page, you should use our React app instead of nestjs API ;)';
-  }
+
   @Post()
   @HttpCode(HttpStatus.OK)
   async login(@Body() dto: LoginDto, @Res() res: Response) {
