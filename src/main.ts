@@ -21,7 +21,7 @@ const { PORT = 3000 } = process.env;
   app.useGlobalFilters(new PrismaExceptionFilter());
   app.enableCors({
     origin: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: [
       'X-Requested-With,Content-Type',
       'Access-Control-Allow-Origin',
