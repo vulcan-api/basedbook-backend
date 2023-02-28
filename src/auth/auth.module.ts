@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { VerifyModule } from './verify/verify.module';
 import { JwtModule } from '@nestjs/jwt';
+import { ResetModule } from './reset/reset.module';
 
 const { SECRET: secret = 'secret' } = process.env;
 
@@ -15,6 +16,7 @@ const { SECRET: secret = 'secret' } = process.env;
     forwardRef(() => LoginModule),
     forwardRef(() => RegisterModule),
     forwardRef(() => VerifyModule),
+    forwardRef(() => ResetModule),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret,

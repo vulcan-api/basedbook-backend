@@ -50,8 +50,8 @@ export class AuthService {
     /* sending confirmation email */
     await this.mailerService.sendMail({
       to: dto.email,
-      from: 'noreply@muj-elektryk.com',
-      subject: 'Potwierdzenie adresu email w serwisie Muj Elektryk',
+      from: 'noreply@basedbook.com',
+      subject: 'Potwierdzenie adresu email w serwisie BasedBook',
       html: emailHTML,
     });
 
@@ -120,6 +120,34 @@ export class AuthService {
         username: true,
         class_name: true,
         profileDesc: true,
+      },
+    });
+  }
+  async sendResetEmail(email: string): Promise<void> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!user) return;
+    const emailContent = `
+      <h1>Aby zresetować hasło kliknij w poniższy link</h1> 
+      <a href="http://localhost:3000/auth/reset/${user.email}">Zresetuj hasło</a>
+    `;
+    await this.mailerService.sendMail({
+      to: email,
+      from: 'noreply@basedbook.com',
+      subject: 'Zmiana hasła w serwisie BasedBook',
+      html: emailContent,
+    });
+  }
+  async resetPassword(newPassword: string, email: string): Promise<void> {
+    await this.prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        passwordHash: sha512(newPassword),
       },
     });
   }
