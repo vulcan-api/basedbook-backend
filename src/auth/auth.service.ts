@@ -107,9 +107,9 @@ export class AuthService {
     return ['jwt', jwt, { secure: true }];
   }
 
-  getUserPublicInfo(email: string): Promise<object | null> {
+  async getUserPublicInfo(email: string): Promise<object | null> {
     const { prisma } = this;
-    return prisma.user.findUnique({
+    const userPublicInfo: any = await prisma.user.findUnique({
       where: {
         email,
       },
@@ -120,9 +120,22 @@ export class AuthService {
         username: true,
         class_name: true,
         profileDesc: true,
+        _count: {
+          select: {
+            Followers: true,
+            Following: true,
+          },
+        },
       },
     });
+    if (!userPublicInfo) return null;
+    userPublicInfo.followers = userPublicInfo._count.Followers;
+    userPublicInfo.following = userPublicInfo._count.Following;
+    delete userPublicInfo._count;
+
+    return userPublicInfo;
   }
+
   async sendResetEmail(email: string): Promise<void> {
     const user = await this.prisma.user.findUnique({
       where: {
@@ -141,6 +154,7 @@ export class AuthService {
       html: emailContent,
     });
   }
+
   async resetPassword(newPassword: string, email: string): Promise<void> {
     await this.prisma.user.update({
       where: {
