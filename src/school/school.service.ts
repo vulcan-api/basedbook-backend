@@ -192,7 +192,11 @@ export class SchoolService {
   async getExams(userId: number, last?: number): Promise<any[]> {
     const client = await this.getClient(userId);
     let exams = (await client.getExams())
-      .filter((exam) => new Date(exam.deadline.date) >= new Date())
+      .filter((exam) => {
+        const timeNow = new Date();
+        timeNow.setHours(0, 0, 0, 0);
+        return new Date(exam.deadline.date) >= timeNow;
+      })
       .sort((a, b) => {
         const dateA = new Date(a.deadline.date);
         const dateB = new Date(b.deadline.date);
