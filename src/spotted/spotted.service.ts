@@ -15,7 +15,7 @@ export class SpottedService {
     const { prisma } = this;
 
     const spottedPosts: any[] = await prisma.$queryRaw`
-        SELECT s.id,
+        SELECT DISTINCT s.id,
        "createdAt",
        title,
        text,
