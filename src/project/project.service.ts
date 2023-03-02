@@ -3,6 +3,10 @@ import { DbService } from '../db/db.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project-dto';
 
+// TODO:
+// - add isAlreadyApplied property to the return object
+// - refactor prisma into plain sql because it's not possible to do above task with prisma (I think so :D)
+
 @Injectable()
 export class ProjectService {
   constructor(private readonly prisma: DbService) {}
@@ -25,12 +29,10 @@ export class ProjectService {
       },
     });
 
-    const formattedProjects = projects.map((project) => ({
+    return projects.map((project) => ({
       ...project,
       username: `${project.author.name} ${project.author.surname}`,
     }));
-
-    return formattedProjects;
   }
 
   getProjectParticipants(
