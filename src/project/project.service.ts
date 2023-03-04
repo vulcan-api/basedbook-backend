@@ -10,7 +10,11 @@ import { UpdateProjectDto } from './dto/update-project-dto';
 @Injectable()
 export class ProjectService {
   constructor(private readonly prisma: DbService) {}
-  async getAllProjects(skip: number, take: number): Promise<any> {
+  async getAllProjects(
+    skip: number,
+    take: number,
+    userId: number,
+  ): Promise<any> {
     const projects = await this.prisma.project.findMany({
       orderBy: { createdAt: 'desc' },
       skip,
@@ -26,12 +30,24 @@ export class ProjectService {
             surname: true,
           },
         },
+        UserProject: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                surname: true,
+              },
+            },
+          },
+        },
       },
     });
-
     return projects.map((project) => ({
       ...project,
-      username: `${project.author.name} ${project.author.surname}`,
+      hasAlreadyApplied: project.UserProject.some(
+        (userProject) => userProject.user?.id === userId,
+      ),
     }));
   }
 

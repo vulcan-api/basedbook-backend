@@ -19,6 +19,7 @@ import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { ReportDto } from './dto/report.dto';
 import { ApplyToProjectDto } from './dto/apply.dto';
+import { GetAllProjectsDto } from './dto/getAllProjects.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('project')
@@ -26,16 +27,19 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Get()
-  getAllProjects(
-    @Query('skip') skip = '0',
-    @Query('take') take = '10',
+  async getAllProjects(
+    @Query() query: GetAllProjectsDto,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
-    return this.projectService.getAllProjects(parseInt(skip), parseInt(take));
+    return this.projectService.getAllProjects(
+      query.skip ?? 0,
+      query.take ?? 10,
+      user.userId,
+    );
   }
 
   @Get('/:id')
-  getProject(@Param('id') id: string, @GetUser() user: JwtAuthDto): object {
+  getProject(@Param('id') id: string): object {
     return this.projectService.getProjectById(parseInt(id));
   }
 
@@ -44,7 +48,6 @@ export class ProjectController {
     @Query('skip') skip = '0',
     @Query('take') take = '10',
     @Param('id') id: string,
-    @GetUser() user: JwtAuthDto,
   ): object {
     return this.projectService.getProjectParticipants(
       parseInt(skip),
@@ -63,16 +66,13 @@ export class ProjectController {
   }
 
   @Patch()
-  async updateProject(
-    @Body() body: UpdateProjectDto,
-    @GetUser() user: JwtAuthDto,
-  ): Promise<object> {
+  async updateProject(@Body() body: UpdateProjectDto): Promise<object> {
     await this.projectService.updateProjectById(body);
     return { body, statusCode: 200 };
   }
 
   @Delete()
-  async deleteProject(@Body('id') id: number, @GetUser() user: JwtAuthDto) {
+  async deleteProject(@Body('id') id: number) {
     await this.projectService.deleteProjectById(id);
   }
 
