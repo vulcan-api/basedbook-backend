@@ -58,6 +58,15 @@ export class ProjectService {
   ): Promise<any> {
     return this.prisma.userProject.findMany({
       where: { projectId: projectId },
+      select: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            surname: true,
+          },
+        },
+      },
       skip,
       take,
     });
