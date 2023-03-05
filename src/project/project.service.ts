@@ -28,6 +28,7 @@ export class ProjectService {
           select: {
             name: true,
             surname: true,
+            username: true,
           },
         },
         UserProject: {
