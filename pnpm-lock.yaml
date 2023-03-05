@@ -25,6 +25,7 @@ specifiers:
   '@types/supertest': ^2.0.12
   '@typescript-eslint/eslint-plugin': ^5.53.0
   '@typescript-eslint/parser': ^5.53.0
+  cache-manager: ^5.1.7
   class-transformer: ^0.5.1
   class-validator: ^0.14.0
   cookie-parser: ^1.4.6
@@ -55,18 +56,19 @@ specifiers:
   ts-node: ^10.9.1
   tsconfig-paths: 4.1.1
   typescript: ^4.9.5
-  vulcan-api-js: github:Muj-Elektryk/vulcan-api-js
+  vulcan-api-js: github:nasz-elektryk/vulcan-api-js
   warp: ^5.0.3
   webpack: ^5.75.0
 
 dependencies:
   '@nestjs-modules/mailer': 1.8.1_qjyj2b37oh52zq44hrbo2j5jqy
-  '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
+  '@nestjs/common': 9.3.9_nza3ix4qrkhc5teka4arycjvca
   '@nestjs/config': 2.3.1_jrq2rdgfp2sx67wmylmrqliwxe
   '@nestjs/core': 9.3.9_q6agyr4hwia55oswpsa7zjxcpm
   '@nestjs/jwt': 10.0.2_@nestjs+common@9.3.9
   '@nestjs/passport': 9.0.3_v3ijvyhfbmibt6kvwmic262qla
   '@nestjs/platform-express': 9.3.9_77foi4w27ghy47yutmnzv7krjy
+  cache-manager: 5.1.7
   class-transformer: 0.5.1
   class-validator: 0.14.0
   cookie-parser: 1.4.6
@@ -81,7 +83,7 @@ dependencies:
   passport-local: 1.0.0
   reflect-metadata: 0.1.13
   rxjs: 7.8.0
-  vulcan-api-js: github.com/Muj-Elektryk/vulcan-api-js/b40df26892c31bf1f42accd3f3e80241f13ad9d5
+  vulcan-api-js: github.com/nasz-elektryk/vulcan-api-js/b40df26892c31bf1f42accd3f3e80241f13ad9d5
   webpack: 5.75.0
 
 devDependencies:
@@ -1271,7 +1273,7 @@ packages:
       '@nestjs/core': ^7.0.9 || ^8.0.0 || ^9.0.0
       nodemailer: ^6.4.6
     dependencies:
-      '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
+      '@nestjs/common': 9.3.9_nza3ix4qrkhc5teka4arycjvca
       '@nestjs/core': 9.3.9_q6agyr4hwia55oswpsa7zjxcpm
       glob: 8.0.3
       inline-css: 4.0.1
@@ -1324,7 +1326,7 @@ packages:
       - webpack-cli
     dev: true
 
-  /@nestjs/common/9.3.9_welcnyot5bzd5wa2aovbkxpi4i:
+  /@nestjs/common/9.3.9_nza3ix4qrkhc5teka4arycjvca:
     resolution: {integrity: sha512-GshTD9Xz+wD2em6NyzU4NXw5IXMUmapgDgD+iuj6XL0258hvDwODmNk37mBBnZvTZlqER+krvIUKnS34etqF/A==}
     peerDependencies:
       cache-manager: <=5
@@ -1340,6 +1342,7 @@ packages:
       class-validator:
         optional: true
     dependencies:
+      cache-manager: 5.1.7
       class-transformer: 0.5.1
       class-validator: 0.14.0
       iterare: 1.2.1
@@ -1355,7 +1358,7 @@ packages:
       reflect-metadata: ^0.1.13
       rxjs: ^6.0.0 || ^7.2.0
     dependencies:
-      '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
+      '@nestjs/common': 9.3.9_nza3ix4qrkhc5teka4arycjvca
       dotenv: 16.0.3
       dotenv-expand: 10.0.0
       lodash: 4.17.21
@@ -1382,7 +1385,7 @@ packages:
       '@nestjs/websockets':
         optional: true
     dependencies:
-      '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
+      '@nestjs/common': 9.3.9_nza3ix4qrkhc5teka4arycjvca
       '@nestjs/platform-express': 9.3.9_77foi4w27ghy47yutmnzv7krjy
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.1.1
@@ -1400,7 +1403,7 @@ packages:
     peerDependencies:
       '@nestjs/common': ^8.0.0 || ^9.0.0
     dependencies:
-      '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
+      '@nestjs/common': 9.3.9_nza3ix4qrkhc5teka4arycjvca
       '@types/jsonwebtoken': 9.0.1
       jsonwebtoken: 9.0.0
     dev: false
@@ -1411,7 +1414,7 @@ packages:
       '@nestjs/common': ^8.0.0 || ^9.0.0
       passport: ^0.4.0 || ^0.5.0 || ^0.6.0
     dependencies:
-      '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
+      '@nestjs/common': 9.3.9_nza3ix4qrkhc5teka4arycjvca
       passport: 0.6.0
     dev: false
 
@@ -1421,7 +1424,7 @@ packages:
       '@nestjs/common': ^9.0.0
       '@nestjs/core': ^9.0.0
     dependencies:
-      '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
+      '@nestjs/common': 9.3.9_nza3ix4qrkhc5teka4arycjvca
       '@nestjs/core': 9.3.9_q6agyr4hwia55oswpsa7zjxcpm
       body-parser: 1.20.1
       cors: 2.8.5
@@ -1474,7 +1477,7 @@ packages:
       '@nestjs/platform-express':
         optional: true
     dependencies:
-      '@nestjs/common': 9.3.9_welcnyot5bzd5wa2aovbkxpi4i
+      '@nestjs/common': 9.3.9_nza3ix4qrkhc5teka4arycjvca
       '@nestjs/core': 9.3.9_q6agyr4hwia55oswpsa7zjxcpm
       '@nestjs/platform-express': 9.3.9_77foi4w27ghy47yutmnzv7krjy
       tslib: 2.5.0
@@ -2652,6 +2655,12 @@ packages:
   /bytes/3.1.2:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
     engines: {node: '>= 0.8'}
+
+  /cache-manager/5.1.7:
+    resolution: {integrity: sha512-2W43F4ruaYb7dSiCOqkKtpnmn51/3DqxbKMMTxHfLa6qtj1letd8rr17/P/c7D7wYViqQLa+LetLCoKSVwBN1w==}
+    dependencies:
+      lodash.clonedeep: 4.5.0
+      lru-cache: 7.18.2
 
   /call-bind/1.0.2:
     resolution: {integrity: sha512-7O+FbCihrB5WGbFYesctwmTKae6rOiIzmz1icreWJ+0aA7LJfuqhEso2T9ncpcFtzMQtzXf2QGGueWJGTYsqrA==}
@@ -3971,7 +3980,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-    dev: false
 
   /fork-ts-checker-webpack-plugin/7.3.0_hhrrucqyg4eysmfpujvov2ym5u:
     resolution: {integrity: sha512-IN+XTzusCjR5VgntYFgxbxVx3WraPRnKehBFrf00cMSrtUuW9MsG9dhL6MWpY6MkjC3wVwoujfCDgZZCQwbswA==}
@@ -4386,7 +4394,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.14.9
+      follow-redirects: 1.15.2
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -5383,6 +5391,9 @@ packages:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
     dev: true
 
+  /lodash.clonedeep/4.5.0:
+    resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
+
   /lodash.defaults/4.2.0:
     resolution: {integrity: sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ==}
     dev: true
@@ -5455,6 +5466,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
+
+  /lru-cache/7.18.2:
+    resolution: {integrity: sha512-KytVYmZ3reaw/f3d7GCISvWWjTYxszNdvD5rDvm/zECga3eSWzryRY7iauJsjo6aaw03lHYTSNTk7lW83Bv+zQ==}
+    engines: {node: '>=12'}
 
   /lru_map/0.3.3:
     resolution: {integrity: sha512-Pn9cox5CsMYngeDbmChANltQl+5pi6XmTrraMSzhPmMBbmgcxmqWry0U3PGapCU1yB4/LqCcom7qhHZiF/jGfQ==}
@@ -8167,8 +8182,8 @@ packages:
       readable-stream: 3.6.1
     dev: true
 
-  github.com/Muj-Elektryk/vulcan-api-js/b40df26892c31bf1f42accd3f3e80241f13ad9d5:
-    resolution: {tarball: https://codeload.github.com/Muj-Elektryk/vulcan-api-js/tar.gz/b40df26892c31bf1f42accd3f3e80241f13ad9d5}
+  github.com/nasz-elektryk/vulcan-api-js/b40df26892c31bf1f42accd3f3e80241f13ad9d5:
+    resolution: {tarball: https://codeload.github.com/nasz-elektryk/vulcan-api-js/tar.gz/b40df26892c31bf1f42accd3f3e80241f13ad9d5}
     name: vulcan-api-js
     version: 3.3.0
     dependencies:

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import {
   AccountTools,
   Attendance,
@@ -12,12 +12,19 @@ import { DbService } from '../db/db.service';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { VulcanDto } from './dto/vulcanDto';
 import { Lesson, LuckyNumber, Period, Student, Message } from 'vulcan-api-js';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class SchoolService {
-  constructor(private readonly prisma: DbService) {}
+  constructor(
+    private readonly prisma: DbService,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+  ) {}
 
   private async getClient(userId: number): Promise<VulcanHebe> {
+    const cachedClient = await this.cacheManager.get<VulcanHebe>('client');
+    if (cachedClient) return cachedClient;
+
     const keystore = new Keystore();
     const tokens = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -63,6 +70,7 @@ export class SchoolService {
       }),
     );
     await client.selectStudent();
+    await this.cacheManager.set('client', client, 300000);
     return client;
   }
 

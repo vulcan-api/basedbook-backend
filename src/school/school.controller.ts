@@ -1,5 +1,6 @@
 import {
   Body,
+  CacheInterceptor,
   Controller,
   Delete,
   Get,
@@ -8,6 +9,7 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
@@ -20,6 +22,7 @@ import { VulcanGuard } from './vulcan.guard';
 import { Exam, Homework, Lesson } from 'vulcan-api-js';
 
 @UseGuards(AuthGuard('jwt'))
+@UseInterceptors(CacheInterceptor)
 @Controller('school')
 export class SchoolController {
   constructor(private readonly schoolService: SchoolService) {}

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { SchoolController } from './school.controller';
 import { SchoolService } from './school.service';
 import { AuthModule } from '../auth/auth.module';
@@ -6,6 +6,6 @@ import { AuthModule } from '../auth/auth.module';
 @Module({
   controllers: [SchoolController],
   providers: [SchoolService],
-  imports: [AuthModule],
+  imports: [AuthModule, CacheModule.register()],
 })
 export class SchoolModule {}
