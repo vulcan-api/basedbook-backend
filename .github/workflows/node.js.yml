@@ -27,4 +27,4 @@ jobs:
         cache: 'pnpm'
     - run: pnpm i
     - run: pnpm build:prod
-    - run: systemctl restart basedbook-api
+    - run: pm2 restart BasedBook-backend
