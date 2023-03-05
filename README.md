@@ -4,8 +4,8 @@
 ![](https://img.shields.io/github/license/Muj-Elektryk/basedbook-backend)
 ![](https://img.shields.io/github/package-json/v/Muj-Elektryk/basedbook-backend)
 ![](https://img.shields.io/github/commit-activity/w/Muj-Elektryk/basedbook-backend)
+![](https://img.shields.io/github/actions/workflow/status/nasz-elektryk/basedbook-backend/node.js.yml)
 ![](https://img.shields.io/github/stars/Muj-Elektryk/basedbook-backend?style=social)
-
 
 An innovative educational social platform backend.
 
