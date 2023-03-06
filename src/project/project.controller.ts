@@ -20,6 +20,7 @@ import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { ReportDto } from './dto/report.dto';
 import { ApplyToProjectDto } from './dto/apply.dto';
 import { GetAllProjectsDto } from './dto/getAllProjects.dto';
+import { LeaveProjectDto } from './dto/leave.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('project')
@@ -92,6 +93,15 @@ export class ProjectController {
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
     await this.projectService.apply(dto.projectId, user.userId);
+    return { statusCode: 200 };
+  }
+  @Post('/leave')
+  @HttpCode(HttpStatus.CREATED)
+  async leaveProject(
+    @Body() dto: LeaveProjectDto,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    await this.projectService.leave(dto.projectId, user.userId);
     return { statusCode: 200 };
   }
 }

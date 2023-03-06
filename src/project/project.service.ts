@@ -121,4 +121,10 @@ export class ProjectService {
       });
     return { msg: 'Successfully applied to the project' };
   }
+  async leave(projectId: number, userId: number): Promise<object> {
+    await this.prisma.userProject.deleteMany({
+      where: { projectId, userId },
+    });
+    return { msg: 'Successfully left the project' };
+  }
 }
