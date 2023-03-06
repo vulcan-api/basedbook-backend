@@ -4,12 +4,14 @@ import * as dotenv from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { PrismaExceptionFilter } from './db/exception/prismaException.filter';
+import helmet from 'helmet';
 
 dotenv.config();
 const { PORT = 3000 } = process.env;
 
 (async function () {
   const app = await NestFactory.create(AppModule);
+  app.use(helmet());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
