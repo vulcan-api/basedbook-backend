@@ -137,7 +137,7 @@ export class SpottedService {
   ): Promise<void> {
     await this.prisma.comment.create({
       data: {
-        author: 'test',
+        authorId: userId,
         postId,
         text,
         parentId: commentId,
