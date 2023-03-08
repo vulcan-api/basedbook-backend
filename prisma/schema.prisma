@@ -39,7 +39,6 @@ model User {
   GroupPost       GroupPost[]
   UserPost        UserPost[]
   SpottedLikes    SpottedLikes[]
-  Comment         SpottedComment[]
   userSkills      UserSkils[]
   UserProject     UserProject[]
   facebook        String?
@@ -96,16 +95,16 @@ model RestURL {
 }
 
 model SpottedPost {
-  id             Int              @id @default(autoincrement())
-  createdAt      DateTime         @default(now())
-  title          String
-  text           String
-  author         User             @relation(fields: [authorId], references: [id])
-  authorId       Int
-  isAnonymous    Boolean
-  Report         Report[]
-  SpottedLikes   SpottedLikes[]
-  SpottedComment SpottedComment[]
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  title        String
+  text         String
+  author       User           @relation(fields: [authorId], references: [id])
+  authorId     Int
+  isAnonymous  Boolean
+  Report       Report[]
+  SpottedLikes SpottedLikes[]
+  Comment      Comment[]
 }
 
 model SpottedLikes {
@@ -155,13 +154,15 @@ model Report {
   userPostId    Int?
 }
 
-model SpottedComment {
-  Id            Int          @id @default(autoincrement())
-  user          User         @relation(fields: [userId], references: [id])
-  userId        Int
-  spottedPost   SpottedPost? @relation(fields: [spottedPostId], references: [id])
-  spottedPostId Int?
-  createdAt     DateTime     @default(now())
+model Comment {
+  id       Int         @id @default(autoincrement())
+  text     String
+  author   String
+  post     SpottedPost @relation(fields: [postId], references: [id])
+  postId   Int
+  parent   Comment?    @relation("ChildComments", fields: [parentId], references: [id])
+  parentId Int?
+  children Comment[]   @relation("ChildComments")
 }
 
 model Group {
