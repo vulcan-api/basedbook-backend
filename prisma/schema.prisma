@@ -48,6 +48,7 @@ model User {
   darkTheme       Boolean          @default(false)
   Olympics        Olympics[]
   userId          Int? // WTF what is this, why is it here? will it break if i delete if?
+  Comment         Comment[]
   Followers       Follows[]        @relation("follower")
   Following       Follows[]        @relation("following")
 }
@@ -157,7 +158,8 @@ model Report {
 model Comment {
   id       Int         @id @default(autoincrement())
   text     String
-  author   String
+  authorId Int
+  user     User        @relation(fields: [authorId], references: [id])
   post     SpottedPost @relation(fields: [postId], references: [id])
   postId   Int
   parent   Comment?    @relation("ChildComments", fields: [parentId], references: [id])

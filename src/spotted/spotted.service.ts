@@ -35,6 +35,7 @@ export class SpottedService {
       return post;
     });
   }
+
   async getUsersPosts(skip: number, take: number, userId: number) {
     const { prisma } = this;
 
@@ -125,6 +126,22 @@ export class SpottedService {
   async removeLike(postId: number, userId: number) {
     await this.prisma.spottedLikes.deleteMany({
       where: { postId, userId },
+    });
+  }
+
+  async addComment(
+    postId: number,
+    userId: number,
+    text: string,
+    commentId?: number,
+  ): Promise<object> {
+    return await this.prisma.comment.create({
+      data: {
+        author: 'test',
+        postId,
+        text,
+        parentId: commentId,
+      },
     });
   }
 

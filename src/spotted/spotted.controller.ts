@@ -19,6 +19,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { ReportDto } from './dto/report.dto';
+import { CommentDto } from './dto/comment.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('spotted')
@@ -98,5 +99,20 @@ export class SpottedController {
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
     return this.spottedService.report(dto.postId, user.userId, dto.reason);
+  }
+
+  @Post('/post/:postId/comment')
+  async addComment(
+    @Param('postId') postId: string,
+    @Body() dto: CommentDto,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    await this.spottedService.addComment(
+      +postId,
+      user.userId,
+      dto.text,
+      dto.commentId,
+    );
+    return { ok: true, statusCode: 200 };
   }
 }
