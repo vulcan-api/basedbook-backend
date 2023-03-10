@@ -29,6 +29,7 @@ export class ProjectService {
             name: true,
             surname: true,
             username: true,
+            id: true,
           },
         },
         UserProject: {
