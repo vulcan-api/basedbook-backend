@@ -38,6 +38,9 @@ export class SpottedService {
         Comment: {
           skip: commentSkip,
           take: commentTake,
+          orderBy: {
+            parentId: 'asc',
+          },
         },
         SpottedLikes: true,
       },
@@ -51,7 +54,11 @@ export class SpottedService {
       post.isLiked = post.SpottedLikes.some(
         (like: any) => like.userId === userId,
       );
-      post.comments = this.nestReplies(post.Comment);
+      post.comments = this.nestReplies(
+        post.Comment,
+        undefined,
+        maxRepliesNesting,
+      );
       delete post.Comment;
       return post;
     });
@@ -179,28 +186,6 @@ export class SpottedService {
   async removeLike(postId: number, userId: number) {
     await this.prisma.spottedLikes.deleteMany({
       where: { postId, userId },
-    });
-  }
-
-  async addComment(
-    postId: number,
-    userId: number,
-    text: string,
-    commentId?: number,
-  ): Promise<void> {
-    await this.prisma.comment.create({
-      data: {
-        authorId: userId,
-        postId,
-        text,
-        parentId: commentId,
-      },
-    });
-  }
-
-  async deleteComment(commentId: number, userId: number): Promise<void> {
-    await this.prisma.comment.deleteMany({
-      where: { id: commentId, authorId: userId },
     });
   }
 
