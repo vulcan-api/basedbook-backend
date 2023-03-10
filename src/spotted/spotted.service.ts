@@ -8,15 +8,18 @@ export class SpottedService {
   constructor(private readonly prisma: DbService) {}
 
   async getPostList(
-    skip: number,
-    take: number,
     userId: number,
+    postSkip = 0,
+    postTake = 999,
+    commentSkip = 999,
+    commentTake = 999,
+    maxRepliesNesting = 2,
   ): Promise<any[]> {
     const { prisma } = this;
 
     const spottedPosts = await prisma.spottedPost.findMany({
-      skip,
-      take,
+      skip: postSkip,
+      take: postTake,
       orderBy: {
         createdAt: 'desc',
       },
@@ -32,7 +35,10 @@ export class SpottedService {
             id: true,
           },
         },
-        Comment: true,
+        Comment: {
+          skip: commentSkip,
+          take: commentTake,
+        },
         SpottedLikes: true,
       },
     });
@@ -47,12 +53,17 @@ export class SpottedService {
       );
       post.comments = this.nestReplies(post.Comment);
       delete post.Comment;
-      console.log(post.comments);
       return post;
     });
   }
 
-  private nestReplies(comments: any[], parentId?: number): object | null {
+  private nestReplies(
+    comments: any[],
+    parentId?: number,
+    nestingLeft?: number,
+  ): object | null {
+    if (nestingLeft) if (nestingLeft-- === 0) return null;
+
     let processingComments: any[];
     if (!parentId) {
       processingComments = comments.filter((comment) => !comment.parentId);
@@ -138,7 +149,6 @@ export class SpottedService {
     newPostData: UpdatePostDto | { id?: number },
     userId: number,
   ) {
-    console.log('newPostData: ', newPostData);
     const { id } = newPostData;
     delete newPostData.id;
 

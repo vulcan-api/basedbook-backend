@@ -20,6 +20,7 @@ import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { ReportDto } from './dto/report.dto';
 import { CommentDto } from './dto/comment.dto';
+import { take } from 'rxjs';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('spotted')
@@ -28,14 +29,20 @@ export class SpottedController {
 
   @Get('/post')
   getAllPosts(
-    @Query('skip') skip = '0',
-    @Query('take') take = '10',
+    @Query('postSkip') postSkip = '0',
+    @Query('postTake') postTake = '10',
+    @Query('commentSkip') skipComment = '0',
+    @Query('commentTake') takeComment = '10',
+    @Query('maxRepliesNesting') maxRepliesNesting = '2',
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
     return this.spottedService.getPostList(
-      parseInt(skip),
-      parseInt(take),
       user.userId,
+      +postSkip,
+      +postTake,
+      +skipComment,
+      +takeComment,
+      +maxRepliesNesting,
     );
   }
 
