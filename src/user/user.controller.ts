@@ -1,13 +1,16 @@
 import { Controller, Param, Get, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SpottedService } from '../spotted/spotted.service';
+import { ProjectService } from '../project/project.service';
 
 @Controller('/user')
 export class UserController {
   constructor(
-    private userService: UserService,
-    private spottedService: SpottedService,
+    private readonly userService: UserService,
+    private readonly spottedService: SpottedService,
+    private readonly projectService: ProjectService,
   ) {}
+
   @Get()
   async findUsersByName(@Query('name') name: string): Promise<object[]> {
     if (name) return this.userService.findUsersByUserName(name);
@@ -22,5 +25,10 @@ export class UserController {
   @Get('/:userId/spottedPosts')
   async getSpottedPosts(@Param('userId') userId: string) {
     return this.spottedService.getUsersPosts(0, 999, parseInt(userId));
+  }
+
+  @Get('/:userId/projects')
+  async getProjects(@Param('userId') userId: string) {
+    return this.projectService.getUserProjects(parseInt(userId));
   }
 }
