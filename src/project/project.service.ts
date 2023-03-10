@@ -132,7 +132,7 @@ export class ProjectService {
   }
 
   async getUserProjects(userId: number): Promise<any> {
-    return this.prisma.userProject.findMany({
+    const userProjects = await this.prisma.userProject.findMany({
       where: { userId },
       select: {
         project: {
@@ -145,6 +145,7 @@ export class ProjectService {
         },
       },
     });
+    return userProjects.map((userProject) => userProject.project);
   }
 
   async leave(projectId: number, userId: number): Promise<object> {
