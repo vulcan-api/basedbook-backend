@@ -100,7 +100,7 @@ model SpottedPost {
   createdAt    DateTime       @default(now())
   title        String
   text         String
-  author       User           @relation(fields: [authorId], references: [id])
+  author       User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId     Int
   isAnonymous  Boolean
   Report       Report[]
@@ -110,9 +110,9 @@ model SpottedPost {
 
 model SpottedLikes {
   id     Int         @id @default(autoincrement())
-  post   SpottedPost @relation(fields: [postId], references: [id])
+  post   SpottedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
-  user   User        @relation(fields: [userId], references: [id])
+  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 
   @@unique([userId, postId])
@@ -159,10 +159,10 @@ model Comment {
   id       Int         @id @default(autoincrement())
   text     String
   authorId Int
-  user     User        @relation(fields: [authorId], references: [id])
-  post     SpottedPost @relation(fields: [postId], references: [id])
+  user     User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post     SpottedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId   Int
-  parent   Comment?    @relation("ChildComments", fields: [parentId], references: [id])
+  parent   Comment?    @relation("ChildComments", fields: [parentId], references: [id], onDelete: Cascade)
   parentId Int?
   children Comment[]   @relation("ChildComments")
 }
