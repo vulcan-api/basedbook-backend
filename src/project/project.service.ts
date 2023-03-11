@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project-dto';
-import { async } from 'rxjs';
 
 // TODO:
 // - add isAlreadyApplied property to the return object
@@ -28,10 +27,8 @@ export class ProjectService {
         text: true,
         author: {
           select: {
-            name: true,
-            surname: true,
-            username: true,
             id: true,
+            username: true,
           },
         },
         UserProject: {
@@ -66,8 +63,7 @@ export class ProjectService {
         user: {
           select: {
             id: true,
-            name: true,
-            surname: true,
+            username: true,
           },
         },
       },
@@ -77,7 +73,21 @@ export class ProjectService {
   }
 
   getProjectById(id: number): Promise<any> {
-    return this.prisma.project.findUnique({ where: { id } });
+    return this.prisma.project.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        createdAt: true,
+        title: true,
+        text: true,
+        author: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+    });
   }
 
   async addProject(projectData: CreateProjectDto, authorId: number) {
