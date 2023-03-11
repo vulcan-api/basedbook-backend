@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CommentDto } from './dto/comment.dto';
 import { GetUser } from '../../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../../auth/dto/jwt-auth.dto';
@@ -10,7 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @Post('/:postId/comment')
+  @Post('/comment/:postId')
   async addComment(
     @Param('postId') postId: string,
     @Body() dto: CommentDto,
@@ -22,6 +29,15 @@ export class CommentController {
       dto.text,
       dto.commentId,
     );
+    return { ok: true, statusCode: 200 };
+  }
+
+  @Delete('/comment/:commentId')
+  async deleteComment(
+    @Param('commentId') commentId: string,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<object> {
+    await this.commentService.deleteComment(+commentId, user.userId);
     return { ok: true, statusCode: 200 };
   }
 }
