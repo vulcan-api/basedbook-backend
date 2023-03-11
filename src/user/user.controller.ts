@@ -1,4 +1,4 @@
-import { Controller, Param, Get, Query } from '@nestjs/common';
+import { Controller, Param, Get, Query, ParseIntPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SpottedService } from '../spotted/spotted.service';
 import { ProjectService } from '../project/project.service';
@@ -23,8 +23,8 @@ export class UserController {
   }
 
   @Get('/:userId/spottedPosts')
-  async getSpottedPosts(@Param('userId') userId: string) {
-    return this.spottedService.getUsersPosts(0, 999, parseInt(userId));
+  async getSpottedPosts(@Param('userId', ParseIntPipe) userId: number) {
+    return this.spottedService.getUsersPosts(0, 999, userId);
   }
 
   @Get('/:userId/projects')
