@@ -108,8 +108,8 @@ export class ProjectService {
     });
   }
 
-  async deleteProjectById(id: number) {
-    await this.prisma.project.delete({ where: { id } });
+  async deleteProjectById(id: number, userId: number) {
+    await this.prisma.project.deleteMany({ where: { id, authorId: userId } });
   }
 
   async report(
