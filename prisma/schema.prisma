@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  MODERATOR
+}
+
 model User {
   id              Int              @id @default(autoincrement())
   name            String?
@@ -51,6 +56,7 @@ model User {
   Comment         Comment[]
   Followers       Follows[]        @relation("follower")
   Following       Follows[]        @relation("following")
+  role            Role             @default(USER)
 }
 
 model Follows {
