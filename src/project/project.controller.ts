@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -40,8 +41,11 @@ export class ProjectController {
   }
 
   @Get('/:id')
-  getProject(@Param('id') id: string): object {
-    return this.projectService.getProjectById(parseInt(id));
+  getProject(
+    @Param('id', ParseIntPipe) postId: number,
+    @GetUser() user: JwtAuthDto,
+  ): object {
+    return this.projectService.getProjectById(postId, user.userId);
   }
 
   @Get('/:id/participants')

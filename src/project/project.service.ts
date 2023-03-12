@@ -49,6 +49,7 @@ export class ProjectService {
       hasAlreadyApplied: project.UserProject.some(
         (userProject) => userProject.user?.id === userId,
       ),
+      isOwned: project.author.id === userId,
     }));
   }
 
@@ -72,22 +73,25 @@ export class ProjectService {
     });
   }
 
-  getProjectById(id: number): Promise<any> {
-    return this.prisma.project.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        createdAt: true,
-        title: true,
-        text: true,
-        author: {
-          select: {
-            id: true,
-            username: true,
+  async getProjectById(postId: number, userId: number): Promise<object> {
+    const project: { [key: string]: any } =
+      await this.prisma.project.findUniqueOrThrow({
+        where: { id: postId },
+        select: {
+          id: true,
+          createdAt: true,
+          title: true,
+          text: true,
+          author: {
+            select: {
+              id: true,
+              username: true,
+            },
           },
         },
-      },
-    });
+      });
+    project.isOwned = project.author.id === userId;
+    return project;
   }
 
   async addProject(projectData: CreateProjectDto, authorId: number) {
@@ -142,20 +146,39 @@ export class ProjectService {
   }
 
   async getUserProjects(userId: number): Promise<any> {
-    const userProjects = await this.prisma.userProject.findMany({
-      where: { userId },
-      select: {
-        project: {
-          select: {
-            id: true,
-            createdAt: true,
-            title: true,
-            text: true,
+    const projects: { [key: string]: any } = await this.prisma.project.findMany(
+      {
+        where: { authorId: userId },
+        select: {
+          id: true,
+          createdAt: true,
+          title: true,
+          text: true,
+          author: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+          UserProject: {
+            select: {
+              user: {
+                select: {
+                  id: true,
+                },
+              },
+            },
           },
         },
       },
+    );
+    return projects.map((project: any) => {
+      project.hasAlreadyApplied = project.UserProject.some(
+        (userProject: any) => userProject.user.id === userId,
+      );
+      delete project.UserProject;
+      return project;
     });
-    return userProjects.map((userProject) => userProject.project);
   }
 
   async leave(projectId: number, userId: number): Promise<object> {
