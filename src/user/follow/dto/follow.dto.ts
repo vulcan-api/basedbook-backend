@@ -1,9 +1,9 @@
 import { IsInt, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
-export class FriendIdDto {
+export class FollowDto {
   @IsNotEmpty()
   @IsInt()
   @IsNumber()
   @IsPositive()
-  friendId: number;
+  userToFollowId: number;
 }
