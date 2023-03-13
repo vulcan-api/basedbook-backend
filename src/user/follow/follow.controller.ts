@@ -22,7 +22,7 @@ export class FollowController {
 
   @Get('/followers/:userId')
   getAllFollowers(@Param('userId') userId: string): Promise<object[]> {
-    if ((+userId as any).isNan())
+    if (isNaN(+userId))
       throw new Error(
         'request should looks like /user/follows/followers/:userId where userId is integer number',
       );
@@ -31,7 +31,7 @@ export class FollowController {
 
   @Get('/following/:userId')
   getAllFollowing(@Param('userId') userId: string): Promise<object[]> {
-    if ((+userId as any).isNan())
+    if (isNaN(+userId))
       throw new Error(
         'request should looks like /user/follows/following/:userId where userId is integer number',
       );
