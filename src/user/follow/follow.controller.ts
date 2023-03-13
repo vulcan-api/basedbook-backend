@@ -41,15 +41,14 @@ export class FollowController {
   @HttpCode(HttpStatus.CREATED)
   @Post()
   async follow(@GetUser() user: JwtAuthDto, @Body() dto: FollowDto) {
-    await this.friendsService.followUser(user.userId, dto.userToFollowId);
+    await this.friendsService.followUser(user.userId, dto.userId);
+    return { statusCode: HttpStatus.CREATED, message: 'followed' };
   }
 
   @HttpCode(HttpStatus.OK)
   @Delete()
-  async unfollow(
-    @GetUser() user: JwtAuthDto,
-    @Body('friendId') friendId: number,
-  ) {
-    await this.friendsService.unfollowUser(user.userId, friendId);
+  async unfollow(@GetUser() user: JwtAuthDto, @Body() dto: FollowDto) {
+    await this.friendsService.unfollowUser(user.userId, dto.userId);
+    return { statusCode: HttpStatus.OK, message: 'unfollowed' };
   }
 }

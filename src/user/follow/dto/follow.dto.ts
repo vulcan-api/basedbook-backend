@@ -5,5 +5,5 @@ export class FollowDto {
   @IsInt()
   @IsNumber()
   @IsPositive()
-  userToFollowId: number;
+  userId: number;
 }
