@@ -1,8 +1,19 @@
-import { Controller, Param, Get, Query, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  Get,
+  Query,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { SpottedService } from '../spotted/spotted.service';
 import { ProjectService } from '../project/project.service';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../auth/decorator/getUser.decorator';
+import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('/user')
 export class UserController {
   constructor(
@@ -18,8 +29,11 @@ export class UserController {
   }
 
   @Get('/:userId')
-  async getPublicInformation(@Param('userId') userId: string) {
-    return this.userService.getPublicInformation(parseInt(userId));
+  async getPublicInformation(
+    @Param('userId') userId: string,
+    @GetUser() user: JwtAuthDto,
+  ) {
+    return this.userService.getPublicInformation(+userId, user.userId);
   }
 
   @Get('/:userId/spottedPosts')

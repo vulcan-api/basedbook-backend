@@ -5,7 +5,7 @@ import { DbService } from '../db/db.service';
 export class UserService {
   constructor(private prisma: DbService) {}
 
-  async getPublicInformation(id: number): Promise<object> {
+  async getPublicInformation(id: number, userId: number): Promise<object> {
     const userPublicInformation: any = await this.prisma.user.findUniqueOrThrow(
       {
         where: { id },
@@ -16,19 +16,18 @@ export class UserService {
           class_name: true,
           profileDesc: true,
           email: true,
-          _count: {
-            select: {
-              Followers: true,
-              Following: true,
-            },
-          },
+          Followers: true,
+          Following: true,
         },
       },
     );
 
-    userPublicInformation.Followers = userPublicInformation._count.Followers;
-    userPublicInformation.Following = userPublicInformation._count.Following;
-    delete userPublicInformation._count;
+    userPublicInformation.isAlreadyFollowed =
+      userPublicInformation.Followers.some(
+        (following: any) => following.followerId === userId,
+      );
+    userPublicInformation.Followers = userPublicInformation.Followers.length;
+    userPublicInformation.Following = userPublicInformation.Following.length;
 
     return userPublicInformation;
   }

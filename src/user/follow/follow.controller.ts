@@ -16,7 +16,7 @@ import { JwtAuthDto } from '../../auth/dto/jwt-auth.dto';
 import { FollowDto } from './dto/follow.dto';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('user/follow')
+@Controller('user/follows')
 export class FollowController {
   constructor(private readonly friendsService: FollowService) {}
 
@@ -39,7 +39,7 @@ export class FollowController {
   }
 
   @HttpCode(HttpStatus.CREATED)
-  @Post('/follow')
+  @Post()
   async follow(@GetUser() user: JwtAuthDto, @Body() dto: FollowDto) {
     await this.friendsService.followUser(user.userId, dto.userToFollowId);
   }
