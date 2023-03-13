@@ -1,11 +1,7 @@
 # BasedBook backend
-![](https://img.shields.io/github/languages/top/Muj-Elektryk/basedbook-backend)
-![](https://img.shields.io/tokei/lines/github/Muj-Elektryk/basedbook-backend)
-![](https://img.shields.io/github/license/Muj-Elektryk/basedbook-backend)
-![](https://img.shields.io/github/package-json/v/Muj-Elektryk/basedbook-backend)
-![](https://img.shields.io/github/commit-activity/w/Muj-Elektryk/basedbook-backend)
-![](https://img.shields.io/github/actions/workflow/status/nasz-elektryk/basedbook-backend/node.js.yml)
-![](https://img.shields.io/github/stars/Muj-Elektryk/basedbook-backend?style=social)
+![](https://img.shields.io/github/actions/workflow/status/nasz-elektryk/basedbook-backend/tests.yml?logo=github-actions&logoColor=white&style=for-the-badge)
+![](https://img.shields.io/github/license/nasz-elektryk/basedbook-backend?logo=gnu&style=for-the-badge)
+![](https://img.shields.io/github/package-json/v/nasz-elektryk/basedbook-backend?color=yellow&logo=pnpm&logoColor=white&style=for-the-badge)
 
 An innovative educational social platform backend.
 
