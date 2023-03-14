@@ -29,8 +29,6 @@ export class AuthService {
         surname: dto.surname,
         passwordHash: sha512(dto.password),
         profileDesc: '',
-        postsProjects: '',
-        profileSettings: '',
         email: dto.email,
       },
     });
