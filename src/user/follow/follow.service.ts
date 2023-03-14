@@ -24,7 +24,7 @@ export class FollowService {
       },
     });
     if (followers.length === 0) return [];
-    return followers[0];
+    return followers[0].Following;
   }
 
   async getAllFollowers(userId: number): Promise<object[]> {
