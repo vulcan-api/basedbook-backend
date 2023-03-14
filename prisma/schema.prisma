@@ -50,6 +50,7 @@ model User {
   UserProject     UserProject[]
   userSkills      UserSkils[]
   Olympics        Olympics[]       @relation("OlympicsToUser")
+  facebookId      String?          @unique
 }
 
 model Follows {
