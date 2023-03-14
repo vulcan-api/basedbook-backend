@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../../db/db.service';
+import { async } from 'rxjs';
+import { CarriageReturnLineFeed } from 'ts-loader/dist/constants';
 
 @Injectable()
 export class FollowService {
   constructor(private readonly prisma: DbService) {}
 
-  async getAllFollowing(userId: number): Promise<object[]> {
-    return this.prisma.user.findMany({
+  async getAllFollowing(userId: number): Promise<any> {
+    const followers: any[] = await this.prisma.user.findMany({
       where: { id: userId },
       select: {
         Following: {
@@ -21,10 +23,12 @@ export class FollowService {
         },
       },
     });
+    if (followers.length === 0) return [];
+    return followers[0];
   }
 
   async getAllFollowers(userId: number): Promise<object[]> {
-    return this.prisma.user.findMany({
+    const followers: any[] = await this.prisma.user.findMany({
       where: { id: userId },
       select: {
         Followers: {
@@ -39,6 +43,8 @@ export class FollowService {
         },
       },
     });
+    if (followers.length === 0) return [];
+    return followers[0].Followers;
   }
 
   async followUser(userId: number, userToFollowId: number) {
