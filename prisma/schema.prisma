@@ -8,49 +8,47 @@ datasource db {
 }
 
 model User {
-  id              Int              @id @default(autoincrement())
-  name            String?
-  username        String           @unique
-  surname         String?
-  class_name      String?
-  passwordHash    String
-  profileDesc     String
-  postsProjects   String
-  profileSettings String
-  loginID         Int?
-  email           String           @unique
-  restURLId       Int?
-  certificate     String?
-  fingerprint     String?
-  privateKey      String?
-  firebaseToken   String?
-  isVerified      Boolean          @default(false)
-  avatar          Bytes?
-  darkTheme       Boolean          @default(false)
-  facebook        String?
-  instagram       String?
-  website         String?
-  youtube         String?
-  userId          Int?
-  role            Role             @default(USER)
-  Comment         Comment[]
-  Followers       Follows[]        @relation("following")
-  Following       Follows[]        @relation("follower")
-  GroupAdmin      GroupAdmin[]
-  GroupMember     GroupMember[]
-  GroupPost       GroupPost[]
-  project         Project[]
-  report          Report[]
-  SpottedComment  SpottedComment[]
-  SpottedLikes    SpottedLikes[]
-  spottedPost     SpottedPost[]
-  UnverifiedUser  UnverifiedUser[]
-  restURL         RestURL?         @relation(fields: [restURLId], references: [id])
-  UserPost        UserPost[]
-  UserProject     UserProject[]
-  userSkills      UserSkils[]
-  Olympics        Olympics[]       @relation("OlympicsToUser")
-  facebookId      String?          @unique
+  id             Int              @id @default(autoincrement())
+  name           String?
+  username       String           @unique
+  surname        String?
+  class_name     String?
+  passwordHash   String
+  profileDesc    String
+  loginID        Int?
+  email          String           @unique
+  restURLId      Int?
+  certificate    String?
+  fingerprint    String?
+  privateKey     String?
+  firebaseToken  String?
+  isVerified     Boolean          @default(false)
+  avatar         Bytes?
+  darkTheme      Boolean          @default(false)
+  facebook       String?
+  instagram      String?
+  website        String?
+  youtube        String?
+  userId         Int?
+  role           Role             @default(USER)
+  Comment        Comment[]
+  Followers      Follows[]        @relation("following")
+  Following      Follows[]        @relation("follower")
+  GroupAdmin     GroupAdmin[]
+  GroupMember    GroupMember[]
+  GroupPost      GroupPost[]
+  project        Project[]
+  report         Report[]
+  SpottedComment SpottedComment[]
+  SpottedLikes   SpottedLikes[]
+  spottedPost    SpottedPost[]
+  UnverifiedUser UnverifiedUser[]
+  restURL        RestURL?         @relation(fields: [restURLId], references: [id])
+  UserPost       UserPost[]
+  UserProject    UserProject[]
+  userSkills     UserSkils[]
+  Olympics       Olympics[]       @relation("OlympicsToUser")
+  facebookId     String?          @unique
 }
 
 model Follows {
