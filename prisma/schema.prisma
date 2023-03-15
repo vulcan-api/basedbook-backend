@@ -49,6 +49,7 @@ model User {
   userSkills     UserSkils[]
   Olympics       Olympics[]       @relation("OlympicsToUser")
   facebookId     String?          @unique
+  Faq            Faq[]
 }
 
 model Follows {
@@ -223,6 +224,15 @@ model SpottedComment {
   createdAt     DateTime     @default(now())
   SpottedPost   SpottedPost? @relation(fields: [spottedPostId], references: [id])
   User          User         @relation(fields: [userId], references: [id])
+}
+
+model Faq {
+  id         Int     @id @default(autoincrement())
+  question   String
+  answer     String?
+  isAnswered Boolean @default(false)
+  askerId    Int
+  asker      User    @relation(fields: [askerId], references: [id])
 }
 
 enum Role {
