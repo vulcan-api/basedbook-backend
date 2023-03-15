@@ -76,8 +76,8 @@ export class ProjectController {
     return { body, statusCode: 200 };
   }
 
-  @Delete()
-  async deleteProject(@Body('id') id: number, @GetUser() user: JwtAuthDto) {
+  @Delete('/:id')
+  async deleteProject(@Param('id') id: number, @GetUser() user: JwtAuthDto) {
     await this.projectService.deleteProjectById(id, user.userId);
     return { ok: true, statusCode: 204 };
   }

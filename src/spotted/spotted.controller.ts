@@ -72,9 +72,9 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
-  @Delete('/post')
+  @Delete('/post/:id')
   async deletePost(
-    @Body('id') id: number,
+    @Param('id') id: number,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
     if (!id) throw new Error('No post id provided');
