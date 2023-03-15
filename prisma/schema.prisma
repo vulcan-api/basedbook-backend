@@ -232,6 +232,7 @@ model Faq {
   answer     String?
   isAnswered Boolean @default(false)
   askerId    Int
+  hierarchy  Int     @default(0)
   asker      User    @relation(fields: [askerId], references: [id])
 }
 
