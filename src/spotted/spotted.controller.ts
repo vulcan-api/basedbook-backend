@@ -77,6 +77,7 @@ export class SpottedController {
     @Body('id') id: number,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
+    if (!id) throw new Error('No post id provided');
     await this.spottedService.deletePostById(id, user.userId);
     return { ok: true, statusCode: 200 };
   }
