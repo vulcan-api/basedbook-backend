@@ -9,6 +9,7 @@ import * as process from 'process';
 import { SchoolModule } from './school/school.module';
 import { UserModule } from './user/user.module';
 import { OlympicsModule } from './olympics/olympics.module';
+import { OauthModule } from './oauth/oauth.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { OlympicsModule } from './olympics/olympics.module';
     SchoolModule,
     UserModule,
     OlympicsModule,
+    OauthModule,
   ],
 })
 export class AppModule {}

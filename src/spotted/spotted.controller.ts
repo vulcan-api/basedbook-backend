@@ -19,8 +19,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { ReportDto } from './dto/report.dto';
-import { CommentDto } from './comment/dto/comment.dto';
-import { take } from 'rxjs';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('spotted')
