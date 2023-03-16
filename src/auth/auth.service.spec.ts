@@ -48,7 +48,10 @@ describe('SpottedController', () => {
   });
 
   it('should return a jwt token', async () => {
-    const token: string = await authService.generateAuthJwt({ userId: 1 });
+    const token: string = await authService.generateAuthJwt({
+      userId: 1,
+      role: 'USER',
+    });
     expect(token).toBeDefined();
   });
 });
