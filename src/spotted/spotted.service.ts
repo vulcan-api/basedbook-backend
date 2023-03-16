@@ -187,17 +187,24 @@ export class SpottedService {
   async changePostById(
     newPostData: UpdatePostDto | { id?: number },
     userId: number,
+    role?: string,
   ) {
     const { id } = newPostData;
     delete newPostData.id;
-
+    if (role === 'MODERATOR')
+      await this.prisma.spottedPost.updateMany({
+        data: newPostData,
+        where: { id },
+      });
     await this.prisma.spottedPost.updateMany({
       data: newPostData,
       where: { id, authorId: userId },
     });
   }
 
-  async deletePostById(id: number, userId: number) {
+  async deletePostById(id: number, userId: number, role?: string) {
+    if (role === 'MODERATOR')
+      await this.prisma.spottedPost.deleteMany({ where: { id } });
     await this.prisma.spottedPost.deleteMany({
       where: { id, authorId: userId },
     });

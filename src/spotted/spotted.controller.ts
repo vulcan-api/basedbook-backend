@@ -66,7 +66,7 @@ export class SpottedController {
     @Body() body: UpdatePostDto,
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
-    await this.spottedService.changePostById(body, user.userId);
+    await this.spottedService.changePostById(body, user.userId, user.role);
     return { ok: true, statusCode: 200 };
   }
 
@@ -76,7 +76,7 @@ export class SpottedController {
     @GetUser() user: JwtAuthDto,
   ): Promise<object> {
     if (!id) throw new Error('No post id provided');
-    await this.spottedService.deletePostById(id, user.userId);
+    await this.spottedService.deletePostById(id, user.userId, user.role);
     return { ok: true, statusCode: 200 };
   }
 
