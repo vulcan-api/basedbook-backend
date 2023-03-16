@@ -6,7 +6,7 @@ import { JwtAuthDto } from '../dto/jwt-auth.dto';
 const { SECRET = 'secret' } = process.env;
 
 const extractFromCookie = (req: any): string | null => {
-  console.log(`Request path: "${req.path}"`, req.cookies);
+  console.log(`\n\nRequest path: "${req.path}"`, req.cookies);
   if (req && req.cookies) return req.cookies['jwt'];
   return null;
 };
