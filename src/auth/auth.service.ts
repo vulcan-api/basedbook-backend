@@ -125,6 +125,7 @@ export class AuthService {
             Following: true,
           },
         },
+        role: true,
       },
     });
     if (!userPublicInfo) return null;
