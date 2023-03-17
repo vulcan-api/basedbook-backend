@@ -3,6 +3,18 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-facebook';
 import { ConfigService } from '@nestjs/config';
 
+export interface FacebookUser {
+  emails: {
+    value: string;
+  }[];
+  name: {
+    familyName: string;
+    givenName: string;
+  };
+  id: string;
+  accessToken: string;
+}
+
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
   constructor(private readonly configService: ConfigService) {
