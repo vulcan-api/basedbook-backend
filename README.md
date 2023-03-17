@@ -5,17 +5,38 @@
 
 An innovative educational social platform backend.
 
-Have you ever thought of a social platform, which combines your school's online gradebook, friends and communities? If you have, the answer for you is **BasedBook**.
+Have you ever thought of a social platform, which combines your school's online grade book, friends and communities? If you have, the answer for you is **BasedBook**.
 
 # Why BasedBook?
 ## Modular design
 Our social platform is designed to be modular. Backend API is separated from frontend, which means if you don't like our UI, you can always write your own frontend in your favourite framework.
 
 ## Modern and easy to understand technologies
-BasedBook is written in modern NestJS framework and TypeScript, which insures type safety. Code is clean and easy to understand, so as to make developers' lives easier.
+BasedBook is written in modern NestJS framework and TypeScript, which insures type safety. Code is clean and easy to understand, to make developers' lives easier.
 
 ## BasedBook ties your local communities together
 BasedBook lets you share your ideas and projects with other people in your school, village, town or city.
+
+# How to build and run
+## Requirements
+- NodeJS (required v14.6.0+, but we recommend using the latest LTS version)
+- pnpm (install by running ```npm i -g pnpm```)
+- PostgresSQL
+- other things specified in .env.example file
+## Steps
+#### 1. Clone the repository
+``` git clone [repo_url]```
+#### 2. Enter the directory
+``` cd basedbook-backend ```
+#### 3. Install dependencies and build prisma
+``` pnpm build ```
+#### 4. Create .env file and change values to your own
+``` cp .env.example .env ```
+#### 5. Build for production
+``` pnpm build:prod ```
+#### 6. Run
+``` pnpm start ```
+
 
 # Some commands:
 ### Running in the watch mode
