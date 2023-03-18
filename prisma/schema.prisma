@@ -31,9 +31,12 @@ model User {
   youtube        String?
   userId         Int?
   role           Role             @default(USER)
+  facebookId     String?          @unique
+  googleId       String?          @unique
   Comment        Comment[]
-  Followers      Follows[]        @relation("following")
+  Faq            Faq[]
   Following      Follows[]        @relation("follower")
+  Followers      Follows[]        @relation("following")
   GroupAdmin     GroupAdmin[]
   GroupMember    GroupMember[]
   GroupPost      GroupPost[]
@@ -48,8 +51,6 @@ model User {
   UserProject    UserProject[]
   userSkills     UserSkils[]
   Olympics       Olympics[]       @relation("OlympicsToUser")
-  facebookId     String?          @unique
-  Faq            Faq[]
 }
 
 model Follows {
