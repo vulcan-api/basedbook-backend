@@ -29,16 +29,13 @@ export class SettingsDto {
 
   @IsOptional()
   @IsNotEmpty()
-  @IsUrl()
   facebook?: string;
   @IsOptional()
   @IsNotEmpty()
-  @IsUrl()
   instagram?: string;
 
   @IsOptional()
   @IsNotEmpty()
-  @IsUrl()
   youtube?: string;
 
   @IsOptional()
