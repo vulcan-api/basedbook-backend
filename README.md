@@ -19,7 +19,7 @@ BasedBook lets you share your ideas and projects with other people in your schoo
 
 # How to build and run
 ## Requirements
-- NodeJS (required v14.6.0+, but we recommend using the latest LTS version)
+- NodeJS (required v16.0.0+, but we recommend using the latest LTS version)
 - pnpm (install by running ```npm i -g pnpm```)
 - PostgresSQL
 - other things specified in .env.example file
