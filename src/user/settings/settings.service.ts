@@ -55,4 +55,12 @@ export class SettingsService {
       },
     });
   }
+  async getAvatar(userId: number): Promise<Buffer | null> {
+    return this.prisma.user
+      .findUniqueOrThrow({
+        where: { id: userId },
+        select: { avatar: true },
+      })
+      .then((user) => user.avatar);
+  }
 }
