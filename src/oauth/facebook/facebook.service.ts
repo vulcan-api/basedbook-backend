@@ -20,6 +20,7 @@ export class FacebookService {
           username: `${user.name.givenName} ${user.name.familyName}`,
           passwordHash: '',
           profileDesc: '',
+          facebookId: user.id,
         },
       })
     ).id;

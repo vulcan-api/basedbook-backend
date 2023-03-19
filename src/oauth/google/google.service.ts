@@ -20,6 +20,7 @@ export class GoogleService {
           username: user.username,
           passwordHash: '',
           profileDesc: '',
+          googleId: user.id,
         },
       })
     ).id;
