@@ -6,7 +6,9 @@ import {
   HttpCode,
   HttpStatus,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
+  ParseIntPipe,
   Patch,
   UploadedFile,
   UseGuards,
@@ -45,5 +47,11 @@ export class SettingsController {
   @Get('get')
   async getSettings(@GetUser() user: JwtAuthDto): Promise<object> {
     return await this.settingsService.getSettings(user.userId);
+  }
+  @Get('avatar/:id')
+  async getAvatar(
+    @Param('id', ParseIntPipe) userId: number,
+  ): Promise<Buffer | null> {
+    return await this.settingsService.getAvatar(userId);
   }
 }

@@ -28,26 +28,21 @@ export class SettingsDto {
   surname?: string;
 
   @IsOptional()
-  @IsNotEmpty()
-  @IsUrl()
   facebook?: string;
+
   @IsOptional()
-  @IsNotEmpty()
-  @IsUrl()
   instagram?: string;
 
   @IsOptional()
-  @IsNotEmpty()
-  @IsUrl()
   youtube?: string;
 
   @IsOptional()
-  @IsNotEmpty()
   @IsUrl()
   website?: string;
+
   @IsOptional()
-  @IsNotEmpty()
   profileDesc?: string;
+
   @IsOptional()
   @IsBoolean()
   darkTheme?: boolean;
