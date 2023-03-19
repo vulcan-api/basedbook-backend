@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { InsertPostDto } from './dto/insertPost.dto';
 import { UpdatePostDto } from './dto/updatePost.dto';
+import { filterProfanity } from '../lib/profanity_filter/profanity_filter';
 
 @Injectable()
 export class SpottedService {
@@ -179,6 +180,7 @@ export class SpottedService {
   }
 
   async insertNewPost(postData: InsertPostDto, authorId: number) {
+    postData.text = filterProfanity(postData.text);
     await this.prisma.spottedPost.create({
       data: Object.assign(postData, { authorId }),
     });
