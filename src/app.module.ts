@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { DbModule } from './db/db.module';
@@ -11,6 +16,7 @@ import { UserModule } from './user/user.module';
 import { OlympicsModule } from './olympics/olympics.module';
 import { OauthModule } from './oauth/oauth.module';
 import { FaqModule } from './faq/faq.module';
+import { CachingMiddleware } from './middleware/caching.middleware';
 
 @Module({
   imports: [
@@ -43,4 +49,10 @@ import { FaqModule } from './faq/faq.module';
     FaqModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): any {
+    consumer
+      .apply(CachingMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.GET });
+  }
+}
