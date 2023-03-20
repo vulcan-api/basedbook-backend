@@ -63,6 +63,7 @@ specifiers:
   ts-node: ^10.9.1
   tsconfig-paths: 4.1.1
   typescript: ^4.9.5
+  unique-username-generator: ^1.1.3
   vulcan-api-js: github:nasz-elektryk/vulcan-api-js
   warp: ^5.0.3
   webpack: ^5.76.2
@@ -94,6 +95,7 @@ dependencies:
   passport-local: 1.0.0
   reflect-metadata: 0.1.13
   rxjs: 7.8.0
+  unique-username-generator: 1.1.3
   vulcan-api-js: github.com/nasz-elektryk/vulcan-api-js/b40df26892c31bf1f42accd3f3e80241f13ad9d5
   webpack: 5.76.2
 
@@ -7934,6 +7936,10 @@ packages:
   /undefsafe/2.0.5:
     resolution: {integrity: sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==}
     dev: true
+
+  /unique-username-generator/1.1.3:
+    resolution: {integrity: sha512-TB6YdqPMKMpTSgxAzjZkKWtmpZPHvARoWreCKBpc1UrLFz/0C6Q96/qdjpLr9OXPCHk16sD1LHjTr3JDj7q2JA==}
+    dev: false
 
   /universalify/0.1.2:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}

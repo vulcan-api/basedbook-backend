@@ -8,5 +8,6 @@ import { AuthModule } from '../../auth/auth.module';
   controllers: [FacebookController],
   providers: [FacebookService, FacebookStrategy],
   imports: [AuthModule],
+  exports: [FacebookService],
 })
 export class FacebookModule {}

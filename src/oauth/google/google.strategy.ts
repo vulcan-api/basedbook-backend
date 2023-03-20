@@ -5,7 +5,6 @@ import { ConfigService } from '@nestjs/config';
 
 export interface GoogleUser {
   id: string;
-  username: string;
   email: string;
   name: string;
   surname: string;
@@ -29,7 +28,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   ): Promise<void> {
     const user = {
       id: profile.id,
-      username: profile.displayName,
       email: profile.emails ? profile.emails[0].value : '',
       name: profile.name ? profile.name.givenName : '',
       surname: profile.name ? profile.name.familyName : '',

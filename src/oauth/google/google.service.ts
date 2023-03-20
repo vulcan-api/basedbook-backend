@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { GoogleUser } from './google.strategy';
 import { DbService } from '../../db/db.service';
+import { FacebookService } from '../facebook/facebook.service';
 
 @Injectable()
 export class GoogleService {
-  constructor(private readonly prisma: DbService) {}
+  constructor(
+    private readonly prisma: DbService,
+    private readonly randomUsernameService: FacebookService,
+  ) {}
   async registerGoogleUser(user: GoogleUser): Promise<number> {
     const usr = await this.prisma.user.findUnique({
       where: { googleId: user.id },
@@ -17,7 +21,7 @@ export class GoogleService {
           email: user.email,
           name: user.name,
           surname: user.surname,
-          username: user.username,
+          username: await this.randomUsernameService.getRandomUsername(),
           passwordHash: '',
           profileDesc: '',
           googleId: user.id,
