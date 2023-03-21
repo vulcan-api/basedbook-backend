@@ -5,6 +5,7 @@ import {
   Query,
   ParseIntPipe,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SpottedService } from '../spotted/spotted.service';
@@ -44,5 +45,11 @@ export class UserController {
   @Get('/:userId/projects')
   async getProjects(@Param('userId') userId: string) {
     return this.projectService.getUserProjects(parseInt(userId));
+  }
+
+  @Delete()
+  async deleteAccount(@GetUser() user: JwtAuthDto) {
+    await this.userService.deleteAccount(user.userId);
+    return { message: 'Account deleted', statusCode: 200 };
   }
 }

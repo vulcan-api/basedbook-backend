@@ -33,6 +33,7 @@ model User {
   role           Role             @default(USER)
   facebookId     String?          @unique
   googleId       String?          @unique
+  newsLetter     Boolean          @default(false)
   Comment        Comment[]
   Faq            Faq[]
   Following      Follows[]        @relation("follower")
@@ -46,7 +47,7 @@ model User {
   SpottedLikes   SpottedLikes[]
   spottedPost    SpottedPost[]
   UnverifiedUser UnverifiedUser[]
-  restURL        RestURL?         @relation(fields: [restURLId], references: [id])
+  restURL        RestURL?         @relation(fields: [restURLId], references: [id], onDelete: Cascade)
   UserPost       UserPost[]
   UserProject    UserProject[]
   userSkills     UserSkils[]
@@ -56,8 +57,8 @@ model User {
 model Follows {
   followerId  Int
   followingId Int
-  follower    User @relation("follower", fields: [followerId], references: [id])
-  following   User @relation("following", fields: [followingId], references: [id])
+  follower    User @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@id([followerId, followingId])
 }
@@ -67,8 +68,8 @@ model UserSkils {
   skillId  Int
   userId   Int
   skillLvl enumSkillLvl
-  skill    Skills       @relation(fields: [skillId], references: [id])
-  user     User         @relation(fields: [userId], references: [id])
+  skill    Skills       @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Skills {
@@ -80,7 +81,7 @@ model Skills {
 model UnverifiedUser {
   tempId String @id
   userId Int
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model RestURL {
@@ -174,16 +175,16 @@ model GroupAdmin {
   Id      Int    @id @default(autoincrement())
   groupId Int?
   userId  Int
-  group   Group? @relation(fields: [groupId], references: [Id])
-  user    User   @relation(fields: [userId], references: [id])
+  group   Group? @relation(fields: [groupId], references: [Id], onDelete: Cascade)
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model GroupMember {
   Id      Int    @id @default(autoincrement())
   groupId Int?
   userId  Int
-  group   Group? @relation(fields: [groupId], references: [Id])
-  user    User   @relation(fields: [userId], references: [id])
+  group   Group? @relation(fields: [groupId], references: [Id], onDelete: Cascade)
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model GroupPost {
@@ -192,7 +193,7 @@ model GroupPost {
   title     String
   text      String
   authorId  Int
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   Report    Report[]
 }
 
@@ -223,8 +224,8 @@ model SpottedComment {
   userId        Int
   spottedPostId Int?
   createdAt     DateTime     @default(now())
-  SpottedPost   SpottedPost? @relation(fields: [spottedPostId], references: [id])
-  User          User         @relation(fields: [userId], references: [id])
+  SpottedPost   SpottedPost? @relation(fields: [spottedPostId], references: [id], onDelete: Cascade)
+  User          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Faq {
@@ -232,9 +233,9 @@ model Faq {
   question   String
   answer     String?
   isAnswered Boolean @default(false)
-  askerId    Int
+  askerId    Int?
   hierarchy  Int     @default(0)
-  asker      User    @relation(fields: [askerId], references: [id])
+  asker      User?   @relation(fields: [askerId], references: [id], onDelete: SetNull)
 }
 
 enum Role {
