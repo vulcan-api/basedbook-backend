@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseFilters } from '@nestjs/common';
+import { Controller, Post, Body, UseFilters } from '@nestjs/common';
 import { RegisterDto } from '../dto';
 import { AuthService } from '../auth.service';
 import { VulcanExceptionFilter } from '../exception/vulcanException.filter';
@@ -9,7 +9,8 @@ export class RegisterController {
 
   @Post()
   @UseFilters(new VulcanExceptionFilter())
-  async register(@Body() dto: RegisterDto): Promise<object> {
-    return this.authService.signup(dto);
+  async register(@Body() dto: RegisterDto) {
+    await this.authService.signup(dto);
+    return { msg: 'Successfully registered a new account!', statusCode: 201 };
   }
 }

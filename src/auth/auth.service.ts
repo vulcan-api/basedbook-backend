@@ -5,6 +5,7 @@ import { sha512 } from 'js-sha512';
 import { MailerService } from '@nestjs-modules/mailer';
 import { JwtAuthDto } from './dto/jwt-auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import { checkProfanity } from '../lib/profanity_filter/profanity_filter';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,9 @@ export class AuthService {
   ) {}
 
   async signup(dto: RegisterDto): Promise<object> {
+    if (checkProfanity(dto.username))
+      throw new ForbiddenException('Username contains profanity!');
+    console.table({ username: dto.username });
     const sampleUser = await this.prisma.user.findFirst({
       where: {
         OR: [{ username: dto.username }, { email: dto.email }],
