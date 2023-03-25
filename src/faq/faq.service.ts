@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
+import e from 'express';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class FaqService {
-  constructor(private readonly prisma: DbService) {}
+  constructor(
+    private readonly prisma: DbService,
+    private readonly mailerService: MailerService,
+  ) {}
 
   async askQuestion(question: string, askerId: number) {
     await this.prisma.faq.create({
@@ -49,6 +54,30 @@ export class FaqService {
   async deleteQuestion(questionId: number) {
     await this.prisma.faq.delete({
       where: { id: questionId },
+    });
+  }
+
+  async sendMailAboutNewQuestion(question: string) {
+    const moderators = await this.prisma.user.findMany({
+      where: {
+        Roles: {
+          some: { role: 'MODERATOR' },
+        },
+      },
+      select: { email: true },
+    });
+    const emails: string[] = moderators.map((e) => e.email);
+
+    const htmlEmailContent = `
+      <h1>Właśnie dodano nowe pytanie na FAQ:</h1>
+      <p>${question}</p>
+    `;
+
+    await this.mailerService.sendMail({
+      to: emails,
+      from: 'noreply@basedbook.com',
+      subject: 'Zadano nowe pytanie na FAQ',
+      html: htmlEmailContent,
     });
   }
 }
