@@ -3,6 +3,7 @@ import { DbService } from '../db/db.service';
 import { InsertPostDto } from './dto/insertPost.dto';
 import { UpdatePostDto } from './dto/updatePost.dto';
 import { filterProfanity } from '../lib/profanity_filter/profanity_filter';
+import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 
 @Injectable()
 export class SpottedService {
@@ -189,11 +190,11 @@ export class SpottedService {
   async changePostById(
     newPostData: UpdatePostDto | { id?: number },
     userId: number,
-    role?: string,
+    roles?: typeof JwtAuthDto.prototype.roles,
   ) {
     const { id } = newPostData;
     delete newPostData.id;
-    if (role === 'MODERATOR')
+    if (roles?.includes('MODERATOR'))
       await this.prisma.spottedPost.updateMany({
         data: newPostData,
         where: { id },
@@ -204,8 +205,12 @@ export class SpottedService {
     });
   }
 
-  async deletePostById(id: number, userId: number, role?: string) {
-    if (role === 'MODERATOR')
+  async deletePostById(
+    id: number,
+    userId: number,
+    roles?: typeof JwtAuthDto.prototype.roles,
+  ) {
+    if (roles?.includes('MODERATOR'))
       await this.prisma.spottedPost.deleteMany({ where: { id } });
     await this.prisma.spottedPost.deleteMany({
       where: { id, authorId: userId },

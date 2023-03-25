@@ -15,9 +15,9 @@ export class ModeratorGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const req = context.switchToHttp().getRequest();
     const user: JwtAuthDto = req.user;
-    console.log('Role: ', user.role);
+    console.log('Roles: ', user.roles);
 
-    if (user.role === 'MODERATOR') return true;
+    if (user.roles.includes('MODERATOR')) return true;
     throw new HttpException(
       {
         status: HttpStatus.FORBIDDEN,

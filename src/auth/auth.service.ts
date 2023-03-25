@@ -63,10 +63,18 @@ export class AuthService {
   async login(dto: LoginDto): Promise<[string, string, object]> {
     const user = await this.prisma.user.findUniqueOrThrow({
       where: { email: dto.email },
+      include: {
+        Roles: {
+          select: { role: true },
+        },
+      },
     });
 
     if (sha512(dto.password) === user.passwordHash) {
-      return this.generateAuthCookie({ userId: user.id, role: user.role });
+      return this.generateAuthCookie({
+        userId: user.id,
+        roles: user.Roles.map((e) => e.role),
+      });
     }
     throw new ForbiddenException('Wrong credentials!');
   }
@@ -103,9 +111,11 @@ export class AuthService {
   }
 
   async generateAuthCookie(
-    payload: Omit<JwtAuthDto, 'role'> & { role?: string },
+    payload: Omit<JwtAuthDto, 'roles'> & {
+      roles?: typeof JwtAuthDto.prototype.roles;
+    },
   ): Promise<[string, string, object]> {
-    if (payload.role === undefined) payload.role = 'USER';
+    if (payload.roles === undefined) payload.roles = ['USER'];
     const jwt = await this.generateAuthJwt(payload as JwtAuthDto);
     return ['jwt', jwt, { secure: true }];
   }
@@ -129,13 +139,15 @@ export class AuthService {
             Following: true,
           },
         },
-        role: true,
+        Roles: true,
       },
     });
     if (!userPublicInfo) return null;
     userPublicInfo.followers = userPublicInfo._count.Followers;
     userPublicInfo.following = userPublicInfo._count.Following;
     delete userPublicInfo._count;
+
+    userPublicInfo.Roles = userPublicInfo.Roles.map((e: any) => e.role);
 
     return userPublicInfo;
   }

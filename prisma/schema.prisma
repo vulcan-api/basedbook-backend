@@ -30,7 +30,6 @@ model User {
   website        String?
   youtube        String?
   userId         Int?
-  role           Role             @default(USER)
   facebookId     String?          @unique
   googleId       String?          @unique
   newsLetter     Boolean          @default(false)
@@ -52,6 +51,14 @@ model User {
   UserProject    UserProject[]
   userSkills     UserSkils[]
   Olympics       Olympics[]       @relation("OlympicsToUser")
+  Roles          Roles[]
+}
+
+model Roles {
+  id     Int  @id @default(autoincrement())
+  role   Role @default(USER)
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Follows {

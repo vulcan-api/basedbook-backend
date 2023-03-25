@@ -7,5 +7,5 @@ export class JwtAuthDto {
 
   @IsNotEmpty()
   @IsString()
-  role: string;
+  roles: ('USER' | 'MODERATOR' | 'FAQ')[];
 }
