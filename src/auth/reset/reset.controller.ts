@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  Param,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -18,9 +19,12 @@ export class ResetController {
   async sendResetPasswordEmail(@Body('email') email: string) {
     await this.authService.sendResetEmail(email);
   }
-  @Patch()
+  @Patch(':userHash')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async resetPassword(@Body() dto: ResetPasswordDto): Promise<void> {
-    await this.authService.resetPassword(dto.newPassword, dto.email);
+  async resetPassword(
+    @Body() dto: ResetPasswordDto,
+    @Param('userHash') userHash: string,
+  ): Promise<void> {
+    await this.authService.resetPassword(userHash, dto.newPassword);
   }
 }

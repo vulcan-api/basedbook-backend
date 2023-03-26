@@ -8,50 +8,51 @@ datasource db {
 }
 
 model User {
-  id             Int              @id @default(autoincrement())
-  name           String?
-  username       String           @unique
-  surname        String?
-  class_name     String?
-  passwordHash   String
-  profileDesc    String
-  loginID        Int?
-  email          String           @unique
-  restURLId      Int?
-  certificate    String?
-  fingerprint    String?
-  privateKey     String?
-  firebaseToken  String?
-  isVerified     Boolean          @default(false)
-  avatar         Bytes?
-  darkTheme      Boolean          @default(false)
-  facebook       String?
-  instagram      String?
-  website        String?
-  youtube        String?
-  userId         Int?
-  facebookId     String?          @unique
-  googleId       String?          @unique
-  newsLetter     Boolean          @default(false)
-  Comment        Comment[]
-  Faq            Faq[]
-  Following      Follows[]        @relation("follower")
-  Followers      Follows[]        @relation("following")
-  GroupAdmin     GroupAdmin[]
-  GroupMember    GroupMember[]
-  GroupPost      GroupPost[]
-  project        Project[]
-  report         Report[]
-  SpottedComment SpottedComment[]
-  SpottedLikes   SpottedLikes[]
-  spottedPost    SpottedPost[]
-  UnverifiedUser UnverifiedUser[]
-  restURL        RestURL?         @relation(fields: [restURLId], references: [id], onDelete: Cascade)
-  UserPost       UserPost[]
-  UserProject    UserProject[]
-  userSkills     UserSkils[]
-  Olympics       Olympics[]       @relation("OlympicsToUser")
-  Roles          Roles[]
+  id                   Int                    @id @default(autoincrement())
+  name                 String?
+  username             String                 @unique
+  surname              String?
+  class_name           String?
+  passwordHash         String
+  profileDesc          String
+  loginID              Int?
+  email                String                 @unique
+  restURLId            Int?
+  certificate          String?
+  fingerprint          String?
+  privateKey           String?
+  firebaseToken        String?
+  isVerified           Boolean                @default(false)
+  avatar               Bytes?
+  darkTheme            Boolean                @default(false)
+  facebook             String?
+  instagram            String?
+  website              String?
+  youtube              String?
+  userId               Int?
+  facebookId           String?                @unique
+  googleId             String?                @unique
+  newsLetter           Boolean                @default(false)
+  Comment              Comment[]
+  Faq                  Faq[]
+  Following            Follows[]              @relation("follower")
+  Followers            Follows[]              @relation("following")
+  GroupAdmin           GroupAdmin[]
+  GroupMember          GroupMember[]
+  GroupPost            GroupPost[]
+  project              Project[]
+  report               Report[]
+  SpottedComment       SpottedComment[]
+  SpottedLikes         SpottedLikes[]
+  spottedPost          SpottedPost[]
+  UnverifiedUser       UnverifiedUser[]
+  restURL              RestURL?               @relation(fields: [restURLId], references: [id], onDelete: Cascade)
+  UserPost             UserPost[]
+  UserProject          UserProject[]
+  userSkills           UserSkils[]
+  Olympics             Olympics[]             @relation("OlympicsToUser")
+  Roles                Roles[]
+  PasswordResetRequest PasswordResetRequest[]
 }
 
 model Roles {
@@ -243,6 +244,12 @@ model Faq {
   askerId    Int?
   hierarchy  Int     @default(0)
   asker      User?   @relation(fields: [askerId], references: [id], onDelete: SetNull)
+}
+
+model PasswordResetRequest {
+  hash   String @id
+  userId Int    @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Role {

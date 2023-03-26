@@ -46,13 +46,17 @@ export class AuthService {
     });
 
     const emailHTML = `
-       <h1>Witaj na najlepszej platformie społecznościowej — Muj Elektryk!</h1>
-       <p><a href="http://localhost:3000/auth/verify/${tempUser.tempId}">Potwierdź konto</a></p>
+      <html lang="pl">
+        <body>
+          <h1>Witaj na najlepszej platformie społecznościowej — Muj Elektryk!</h1>
+          <p><a href="http://localhost:3000/auth/verify/${tempUser.tempId}">Potwierdź konto</a></p>
+        </body>
+      </html>
     `;
     /* sending confirmation email */
     await this.mailerService.sendMail({
       to: dto.email,
-      from: 'noreply@basedbook.com',
+      from: 'muj-elektryk@sevedev.com',
       subject: 'Potwierdzenie adresu email w serwisie BasedBook',
       html: emailHTML,
     });
@@ -153,28 +157,56 @@ export class AuthService {
   }
 
   async sendResetEmail(email: string): Promise<void> {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUniqueOrThrow({
       where: {
         email,
       },
+      select: {
+        id: true,
+      },
     });
-    if (!user) return;
     const emailContent = `
-      <h1>Aby zresetować hasło kliknij w poniższy link</h1> 
-      <a href="http://localhost:3000/auth/reset/${user.email}">Zresetuj hasło</a>
+      <html lang="pl">
+        <body>
+          <h1>Aby zresetować hasło kliknij w poniższy link</h1> 
+          <a href="http://localhost:3000/auth/reset/${sha512(
+            String(user.id),
+          )}">Zresetuj hasło</a>
+        </body>
+      </html>
     `;
+    const passwordResetRequest =
+      await this.prisma.passwordResetRequest.findUnique({
+        where: {
+          userId: user.id,
+        },
+      });
+    if (!passwordResetRequest) {
+      await this.prisma.passwordResetRequest.create({
+        data: {
+          userId: user.id,
+          hash: sha512(String(user.id)),
+        },
+      });
+    }
     await this.mailerService.sendMail({
       to: email,
-      from: 'noreply@basedbook.com',
+      from: 'muj-elektryk@sevedev.com',
       subject: 'Zmiana hasła w serwisie BasedBook',
       html: emailContent,
     });
   }
 
-  async resetPassword(newPassword: string, email: string): Promise<void> {
+  async resetPassword(userHash: string, newPassword: string): Promise<void> {
+    const resetRequest =
+      await this.prisma.passwordResetRequest.findUniqueOrThrow({
+        where: {
+          hash: userHash,
+        },
+      });
     await this.prisma.user.update({
       where: {
-        email,
+        id: resetRequest.userId,
       },
       data: {
         passwordHash: sha512(newPassword),
