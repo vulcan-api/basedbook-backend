@@ -14,6 +14,7 @@ model User {
   surname              String?
   class_name           String?
   passwordHash         String
+  isBanned             Boolean                @default(false)
   profileDesc          String
   loginID              Int?
   email                String                 @unique

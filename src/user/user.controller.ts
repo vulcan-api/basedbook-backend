@@ -6,6 +6,7 @@ import {
   ParseIntPipe,
   UseGuards,
   Delete,
+  Post,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SpottedService } from '../spotted/spotted.service';
@@ -51,5 +52,11 @@ export class UserController {
   async deleteAccount(@GetUser() user: JwtAuthDto) {
     await this.userService.deleteAccount(user.userId);
     return { message: 'Account deleted', statusCode: 200 };
+  }
+
+  @Post('/:userId/ban')
+  async banUser(@GetUser() user: JwtAuthDto) {
+    await this.userService.banUser(user.userId);
+    return { message: 'User banned', statusCode: 200 };
   }
 }
