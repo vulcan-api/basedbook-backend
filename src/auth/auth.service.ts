@@ -78,6 +78,7 @@ export class AuthService {
       return this.generateAuthCookie({
         userId: user.id,
         roles: user.Roles.map((e) => e.role),
+        isBanned: user.isBanned,
       });
     }
     throw new ForbiddenException('Wrong credentials!');
@@ -86,6 +87,14 @@ export class AuthService {
   async verify(id: string): Promise<[string, string, object]> {
     const unverifiedUser = await this.prisma.unverifiedUser.findUniqueOrThrow({
       where: { tempId: id },
+      include: {
+        user: {
+          select: {
+            isBanned: true,
+            Roles: { select: { role: true } },
+          },
+        },
+      },
     });
 
     await this.prisma.user.update({
@@ -97,7 +106,11 @@ export class AuthService {
       where: { tempId: id },
     });
 
-    return this.generateAuthCookie({ userId: unverifiedUser.userId });
+    return this.generateAuthCookie({
+      userId: unverifiedUser.userId,
+      isBanned: unverifiedUser.user.isBanned,
+      roles: unverifiedUser.user.Roles.map((e) => e.role),
+    });
   }
 
   async isTaken(username: string, email: string): Promise<boolean> {
@@ -124,9 +137,9 @@ export class AuthService {
     return ['jwt', jwt, { secure: true }];
   }
 
-  async getUserPublicInfo(email: string): Promise<object | null> {
+  async getUserPublicInfo(email: string): Promise<object> {
     const { prisma } = this;
-    const userPublicInfo: any = await prisma.user.findUnique({
+    const userPublicInfo: any = await prisma.user.findUniqueOrThrow({
       where: {
         email,
       },
@@ -143,10 +156,10 @@ export class AuthService {
             Following: true,
           },
         },
-        Roles: true,
+        Roles: { select: { role: true } },
+        isBanned: true,
       },
     });
-    if (!userPublicInfo) return null;
     userPublicInfo.followers = userPublicInfo._count.Followers;
     userPublicInfo.following = userPublicInfo._count.Following;
     delete userPublicInfo._count;

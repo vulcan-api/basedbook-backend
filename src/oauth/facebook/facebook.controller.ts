@@ -35,6 +35,7 @@ export class FacebookController {
     const jwt = await this.authService.generateAuthCookie({
       userId,
       roles: ['USER'],
+      isBanned: false,
     });
     response.cookie(...jwt);
     response.send({ token: jwt[1] });

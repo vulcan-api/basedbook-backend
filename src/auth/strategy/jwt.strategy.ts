@@ -21,10 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(jwtAuthDto: JwtAuthDto): Promise<any> {
-    /*
-     * In this function we can do entire validation / authorization
-     * returning value will be assigned to req.user
-     */
+    if (jwtAuthDto.isBanned) throw new Error('User is banned');
     console.log('validation successful, jwtAuthDto: ', jwtAuthDto);
     return jwtAuthDto;
   }

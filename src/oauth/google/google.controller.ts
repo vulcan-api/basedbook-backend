@@ -27,6 +27,8 @@ export class GoogleController {
     const userId = await this.googleService.registerGoogleUser(user);
     const jwt = await this.authService.generateAuthCookie({
       userId,
+      roles: ['USER'],
+      isBanned: true,
     });
     response.cookie(...jwt);
     response.send({ token: jwt[1] });
