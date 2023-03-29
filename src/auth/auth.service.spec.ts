@@ -51,6 +51,7 @@ describe('SpottedController', () => {
     const token: string = await authService.generateAuthJwt({
       userId: 1,
       roles: ['USER'],
+      isBanned: false,
     });
     expect(token).toBeDefined();
   });
