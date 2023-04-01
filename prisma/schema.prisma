@@ -239,7 +239,7 @@ model SpottedComment {
 
 model Faq {
   id         Int     @id @default(autoincrement())
-  question   String
+  question   String  @unique
   answer     String?
   isAnswered Boolean @default(false)
   askerId    Int?
