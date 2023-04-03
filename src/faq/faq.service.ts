@@ -73,7 +73,7 @@ export class FaqService {
       <p>${question}</p>
     `;
 
-    await this.mailerService.sendMail({
+    this.mailerService.sendMail({
       to: emails,
       from: 'noreply@basedbook.com',
       subject: 'Zadano nowe pytanie na FAQ',

@@ -54,7 +54,7 @@ export class AuthService {
       </html>
     `;
     /* sending confirmation email */
-    await this.mailerService.sendMail({
+    this.mailerService.sendMail({
       to: dto.email,
       from: 'muj-elektryk@sevedev.com',
       subject: 'Potwierdzenie adresu email w serwisie BasedBook',
@@ -202,7 +202,7 @@ export class AuthService {
         },
       });
     }
-    await this.mailerService.sendMail({
+    this.mailerService.sendMail({
       to: email,
       from: 'muj-elektryk@sevedev.com',
       subject: 'Zmiana hasła w serwisie BasedBook',
