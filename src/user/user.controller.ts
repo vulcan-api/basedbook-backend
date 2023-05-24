@@ -10,18 +10,16 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SpottedService } from '../spotted/spotted.service';
-import { ProjectService } from '../project/project.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
+import { OptionalJwtGuard } from '../auth/guards/OptionalJwt.guard';
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('/user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly spottedService: SpottedService,
-    private readonly projectService: ProjectService,
   ) {}
 
   @Get()
@@ -30,12 +28,16 @@ export class UserController {
     return [];
   }
 
+  @UseGuards(OptionalJwtGuard)
   @Get('/:userId')
   async getPublicInformation(
-    @Param('userId') userId: string,
+    @Param('userId', ParseIntPipe) userId: number,
     @GetUser() user: JwtAuthDto,
   ) {
-    return this.userService.getPublicInformation(+userId, user.userId);
+    return this.userService.getPublicInformation(
+      userId,
+      user ? user.userId : undefined,
+    );
   }
 
   @Get('/:userId/spottedPosts')
@@ -43,11 +45,7 @@ export class UserController {
     return this.spottedService.getUsersPosts(0, 999, userId);
   }
 
-  @Get('/:userId/projects')
-  async getProjects(@Param('userId') userId: string) {
-    return this.projectService.getUserProjects(parseInt(userId));
-  }
-
+  @UseGuards(AuthGuard('jwt'))
   @Delete()
   async deleteAccount(@GetUser() user: JwtAuthDto) {
     await this.userService.deleteAccount(user.userId);

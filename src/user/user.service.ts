@@ -5,7 +5,10 @@ import { DbService } from '../db/db.service';
 export class UserService {
   constructor(private prisma: DbService) {}
 
-  async getPublicInformation(id: number, userId: number): Promise<object> {
+  async getPublicInformation(
+    id: number,
+    userId: number | undefined,
+  ): Promise<object> {
     const userPublicInformation: any = await this.prisma.user.findUniqueOrThrow(
       {
         where: { id },
@@ -13,11 +16,14 @@ export class UserService {
           name: true,
           surname: true,
           username: true,
-          class_name: true,
           profileDesc: true,
           email: true,
           Followers: true,
           Following: true,
+          youtube: true,
+          facebook: true,
+          instagram: true,
+          website: true,
         },
       },
     );

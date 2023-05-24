@@ -23,7 +23,6 @@ export class SettingsService {
         youtube: settings.youtube,
         website: settings.website,
         profileDesc: settings.profileDesc,
-        darkTheme: settings.darkTheme,
       },
     });
   }
@@ -51,7 +50,6 @@ export class SettingsService {
         youtube: true,
         website: true,
         profileDesc: true,
-        darkTheme: true,
       },
     });
   }

@@ -4,7 +4,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUrl,
 } from 'class-validator';
 
 export class SettingsDto {
@@ -37,7 +36,7 @@ export class SettingsDto {
   youtube?: string;
 
   @IsOptional()
-  @IsUrl()
+  @IsString()
   website?: string;
 
   @IsOptional()

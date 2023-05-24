@@ -15,7 +15,6 @@ import { GetUser } from '../../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../../auth/dto/jwt-auth.dto';
 import { FollowDto } from './dto/follow.dto';
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('user/follows')
 export class FollowController {
   constructor(private readonly friendsService: FollowService) {}
@@ -38,6 +37,7 @@ export class FollowController {
     return this.friendsService.getAllFollowing(+userId);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.CREATED)
   @Post()
   async follow(@GetUser() user: JwtAuthDto, @Body() dto: FollowDto) {
@@ -45,6 +45,7 @@ export class FollowController {
     return { statusCode: HttpStatus.CREATED, message: 'followed' };
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
   @Delete()
   async unfollow(@GetUser() user: JwtAuthDto, @Body() dto: FollowDto) {
