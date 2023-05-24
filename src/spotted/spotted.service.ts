@@ -133,7 +133,7 @@ export class SpottedService {
       skip,
       take,
     });
-    return spottedPosts.map((post: any) => {
+    spottedPosts.map((post: any) => {
       post.isLiked = post.SpottedLikes.some(
         (like: { userId: number }) => like.userId === userId,
       );
@@ -142,6 +142,7 @@ export class SpottedService {
       delete post._count;
       return post;
     });
+    return spottedPosts;
   }
 
   async getPostById(postId: number, userId: number | undefined): Promise<any> {

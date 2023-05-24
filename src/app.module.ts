@@ -45,7 +45,7 @@ import { CachingMiddleware } from './middleware/caching.middleware';
     SchoolModule,
     UserModule,
     OlympicsModule,
-    OauthModule,
+    // OauthModule,
     FaqModule,
   ],
 })
