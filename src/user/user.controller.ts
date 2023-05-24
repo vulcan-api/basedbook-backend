@@ -13,8 +13,7 @@ import { SpottedService } from '../spotted/spotted.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
-import { OptionalJwtGuard } from '../auth/guards/OptionalJwt.guard';
-
+@UseGuards(AuthGuard('jwt'))
 @Controller('/user')
 export class UserController {
   constructor(
@@ -28,7 +27,6 @@ export class UserController {
     return [];
   }
 
-  @UseGuards(OptionalJwtGuard)
   @Get('/:userId')
   async getPublicInformation(
     @Param('userId', ParseIntPipe) userId: number,
@@ -45,7 +43,6 @@ export class UserController {
     return this.spottedService.getUsersPosts(0, 999, userId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Delete()
   async deleteAccount(@GetUser() user: JwtAuthDto) {
     await this.userService.deleteAccount(user.userId);

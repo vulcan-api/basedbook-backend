@@ -20,13 +20,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { ReportDto } from './dto/report.dto';
-import { OptionalJwtGuard } from '../auth/guards/OptionalJwt.guard';
-
+@UseGuards(AuthGuard('jwt'))
 @Controller('spotted')
 export class SpottedController {
   constructor(private readonly spottedService: SpottedService) {}
 
-  @UseGuards(OptionalJwtGuard)
   @Get('/post')
   getAllPostsUnauthorized(
     @Query('postSkip') postSkip = '0',
@@ -50,7 +48,6 @@ export class SpottedController {
   getPostsCount(): Promise<number> {
     return this.spottedService.getPostsCount();
   }
-  @UseGuards(OptionalJwtGuard)
   @Get('/post/:id')
   getSpecificPost(
     @Param('id', ParseIntPipe) id: number,
@@ -59,7 +56,6 @@ export class SpottedController {
     return this.spottedService.getPostById(id, user ? user.userId : undefined);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Put('/post')
   async addNewSpottedPost(
     @Body() body: InsertPostDto,
@@ -69,7 +65,6 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Patch('/post')
   async changePostData(
     @Body() body: UpdatePostDto,
@@ -79,7 +74,6 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Delete('/post/:id')
   async deletePost(
     @Param('id') id: number,
@@ -90,7 +84,6 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Post('/post/:id/like')
   async giveALike(
     @Param('id') id: number,
@@ -100,7 +93,6 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Post('/post/:id/unlike')
   async removeLike(
     @Param('id') postId: number,
@@ -110,7 +102,6 @@ export class SpottedController {
     return { ok: true, statusCode: 200 };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Post('/report')
   @HttpCode(HttpStatus.CREATED)
   async reportPost(
