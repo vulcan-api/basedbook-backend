@@ -17,6 +17,7 @@ import { OlympicsModule } from './olympics/olympics.module';
 import { OauthModule } from './oauth/oauth.module';
 import { FaqModule } from './faq/faq.module';
 import { CachingMiddleware } from './middleware/caching.middleware';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { CachingMiddleware } from './middleware/caching.middleware';
     OlympicsModule,
     // OauthModule,
     FaqModule,
+    ChatModule,
   ],
 })
 export class AppModule implements NestModule {

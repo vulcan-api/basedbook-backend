@@ -54,6 +54,20 @@ model User {
   Olympics             Olympics[]             @relation("OlympicsToUser")
   Roles                Roles[]
   PasswordResetRequest PasswordResetRequest[]
+  sentMessages         Message[]              @relation("sentMessages")
+  receivedMessages     Message[]              @relation("receivedMessages")
+}
+
+model Message {
+  id         BigInt    @id @default(autoincrement())
+  content    String?
+  sendTime   DateTime  @default(now())
+  senderId   Int
+  receiverId Int
+  sender     User      @relation("sentMessages", fields: [senderId], references: [id])
+  receiver   User      @relation("receivedMessages", fields: [receiverId], references: [id])
+  editTime   DateTime? @updatedAt
+  isEdited   Boolean   @default(false)
 }
 
 model Roles {
