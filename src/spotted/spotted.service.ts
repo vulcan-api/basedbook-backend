@@ -45,10 +45,14 @@ export class SpottedService {
           },
         },
         SpottedLikes: true,
+        _count: {
+          select: {
+            Comment: true,
+          },
+        },
       },
     });
-
-    return spottedPosts.map((post: any) => {
+    spottedPosts.map((post: any) => {
       post.isOwned = post.author.id === userId;
       if (post.isAnonymous) delete post.author;
 
@@ -56,14 +60,12 @@ export class SpottedService {
       post.isLiked = post.SpottedLikes.some(
         (like: any) => like.userId === userId,
       );
-      post.comments = this.nestReplies(
-        post.Comment,
-        undefined,
-        maxRepliesNesting,
-      );
+      post.comments = post._count.Comment || 0;
+      delete post._count;
       delete post.Comment;
       return post;
     });
+    return spottedPosts;
   }
 
   private nestReplies(
@@ -164,10 +166,15 @@ export class SpottedService {
           },
           isAnonymous: true,
           _count: {
-            select: { SpottedLikes: true },
+            select: { SpottedLikes: true, Comment: true },
           },
           SpottedLikes: {
             select: { userId: true },
+          },
+          Comment: {
+            orderBy: {
+              parentId: 'asc',
+            },
           },
         },
       });
@@ -177,6 +184,11 @@ export class SpottedService {
       (like: { userId: number }) => like.userId === userId,
     );
     spottedPost.isOwned = spottedPost.author.id === userId;
+    spottedPost.comments = this.nestReplies(
+      spottedPost.Comment,
+      undefined,
+      1000,
+    );
     delete spottedPost._count;
     delete spottedPost.SpottedLikes;
 
