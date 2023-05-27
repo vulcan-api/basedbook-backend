@@ -1,9 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { DbService } from "../db/db.service";
-import { InsertPostDto } from "./dto/insertPost.dto";
-import { UpdatePostDto } from "./dto/updatePost.dto";
-import { filterProfanity } from "../lib/profanity_filter/profanity_filter";
-import { JwtAuthDto } from "../auth/dto/jwt-auth.dto";
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { DbService } from '../db/db.service';
+import { InsertPostDto } from './dto/insertPost.dto';
+import { UpdatePostDto } from './dto/updatePost.dto';
+import { filterProfanity } from '../lib/profanity_filter/profanity_filter';
+import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 
 @Injectable()
 export class SpottedService {
@@ -72,8 +72,8 @@ export class SpottedService {
     comments: any[],
     parentId?: number,
     nestingLeft?: number,
-  ): object | null {
-    if (nestingLeft) if (nestingLeft-- === 0) return null;
+  ): any[] | null {
+    if (nestingLeft && nestingLeft-- === 0) return null;
 
     let processingComments: any[];
     if (!parentId) {
@@ -83,7 +83,7 @@ export class SpottedService {
         (comment) => comment.parentId === parentId,
       );
     }
-    const answer: any = {};
+    const answer: any[] = [];
 
     processingComments.forEach((processingElement) =>
       comments.splice(
@@ -93,13 +93,15 @@ export class SpottedService {
     );
 
     processingComments.forEach((processingElement) => {
-      answer[processingElement.id] = Object.assign(processingElement, {
-        replies: this.nestReplies(comments, processingElement.id),
-      });
+      const nestedReplies = this.nestReplies(comments, processingElement.id);
+      const modifiedElement = { ...processingElement, replies: nestedReplies };
+      answer.push(modifiedElement);
     });
-    if (!Object.keys(answer).length) return null;
+
+    if (answer.length === 0) return null;
     return answer;
   }
+
   async getPostsCount() {
     return await this.prisma.spottedPost.count();
   }
@@ -182,7 +184,7 @@ export class SpottedService {
                 select: {
                   id: true,
                   username: true,
-                }
+                },
               },
               authorId: true,
               parentId: true,
