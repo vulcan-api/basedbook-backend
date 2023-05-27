@@ -1,9 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { DbService } from '../db/db.service';
-import { InsertPostDto } from './dto/insertPost.dto';
-import { UpdatePostDto } from './dto/updatePost.dto';
-import { filterProfanity } from '../lib/profanity_filter/profanity_filter';
-import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { DbService } from "../db/db.service";
+import { InsertPostDto } from "./dto/insertPost.dto";
+import { UpdatePostDto } from "./dto/updatePost.dto";
+import { filterProfanity } from "../lib/profanity_filter/profanity_filter";
+import { JwtAuthDto } from "../auth/dto/jwt-auth.dto";
 
 @Injectable()
 export class SpottedService {
@@ -174,6 +174,18 @@ export class SpottedService {
           Comment: {
             orderBy: {
               parentId: 'asc',
+            },
+            select: {
+              id: true,
+              text: true,
+              user: {
+                select: {
+                  id: true,
+                  username: true,
+                }
+              },
+              authorId: true,
+              parentId: true,
             },
           },
         },
