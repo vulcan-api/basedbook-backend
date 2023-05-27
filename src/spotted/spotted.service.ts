@@ -191,6 +191,7 @@ export class SpottedService {
     );
     delete spottedPost._count;
     delete spottedPost.SpottedLikes;
+    delete spottedPost.Comment;
 
     return spottedPost;
   }
