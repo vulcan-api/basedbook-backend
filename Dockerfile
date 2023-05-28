@@ -1,21 +1,19 @@
-# This file is uncomplited
-# TODO: setup correctly docker
-
 FROM node:18
 WORKDIR /app
 
+RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
+
+COPY package*.json .
+COPY tsconfig*.json .
+COPY ./prisma .
+RUN pnpm build:prod
+
 COPY . .
 
-RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
-RUN pnpm build
 
-#ENV DATABASE_URL="postgresql://elektryk:nie_zgadniesz_hasla@193.46.243.109:5432/muj_elektryk"
+ENV DATABASE_URL="postgresql://postgres:postgres@localhost:5432/basedbook"
 # TODO: set SMTP_* env
-#ENV SMTP_HOST=""
-#ENV SMTP_USER=""
-#ENV SMTP_PASS=""
-#ENV SMTP_PORT=""
-#ENV SECRET="secret"
+ENV SECRET="secret"
 
 EXPOSE 3000
 
