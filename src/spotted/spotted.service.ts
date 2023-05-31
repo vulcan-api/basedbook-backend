@@ -159,7 +159,7 @@ export class SpottedService {
       post.isLiked = post.SpottedLikes.some(
         (like: { userId: number }) => like.userId === userId,
       );
-      post.likes = post._count.SpottedLikes;
+      post.likes = post.SpottedLikes.length;
       post.comments = post._count.Comment || 0;
       delete post.Comment;
       delete post.SpottedLikes;
