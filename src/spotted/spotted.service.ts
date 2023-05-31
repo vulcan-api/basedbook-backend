@@ -101,18 +101,18 @@ export class SpottedService {
     if (answer.length === 0) return null;
     return answer;
   }
-  async addIsOwnedAttribute(comments: any, userId: number) {
-    return comments.map((comment: any) => {
-      comment.isOwned = false;
-      if (comment.user.id === userId) {
-        comment.isOwned = true;
-      }
+  addIsOwnedAttribute(comments: any[], userId: number) {
+    const newComments: any[] = [];
+    comments.map((comment) => {
+      comment.isOwned = comment.authorId === userId;
       if (comment.replies && comment.replies.length > 0) {
         comment.replies = this.addIsOwnedAttribute(comment.replies, userId);
       }
-      return comment;
+      newComments.push(comment);
     });
+    return newComments;
   }
+
   async getPostsCount() {
     return await this.prisma.spottedPost.count();
   }
@@ -212,7 +212,6 @@ export class SpottedService {
           },
         },
       });
-
     spottedPost.likes = spottedPost._count.SpottedLikes;
     spottedPost.isLiked = spottedPost.SpottedLikes.some(
       (like: { userId: number }) => like.userId === userId,
@@ -229,7 +228,6 @@ export class SpottedService {
     delete spottedPost._count;
     delete spottedPost.SpottedLikes;
     delete spottedPost.Comment;
-
     return spottedPost;
   }
 
