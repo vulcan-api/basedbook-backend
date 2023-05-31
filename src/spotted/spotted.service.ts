@@ -118,11 +118,18 @@ export class SpottedService {
             username: true,
           },
         },
-        _count: {
-          select: { SpottedLikes: true },
+        Comment: {
+          skip: 0,
+          take: 1000,
+          orderBy: {
+            parentId: 'asc',
+          },
         },
-        SpottedLikes: {
-          select: { userId: true },
+        SpottedLikes: true,
+        _count: {
+          select: {
+            Comment: true,
+          },
         },
       },
       where: {
@@ -142,6 +149,8 @@ export class SpottedService {
         (like: { userId: number }) => like.userId === userId,
       );
       post.likes = post._count.SpottedLikes;
+      post.comments = post._count.Comment || 0;
+      delete post.Comment;
       delete post.SpottedLikes;
       delete post._count;
       return post;
