@@ -55,19 +55,44 @@ model User {
   Roles                Roles[]
   PasswordResetRequest PasswordResetRequest[]
   sentMessages         Message[]              @relation("sentMessages")
-  receivedMessages     Message[]              @relation("receivedMessages")
+  addedToConversations ConversationUser[]     @relation("addedBy")
+  conversationsUsers   ConversationUser[]     @relation("userInConversation")
+}
+
+model Conversation {
+  id                   Int                @id @default(autoincrement())
+  name                 String?
+  messages             Message[]
+  usersInConversations ConversationUser[]
 }
 
 model Message {
-  id         BigInt    @id @default(autoincrement())
-  content    String?
-  sendTime   DateTime  @default(now())
-  senderId   Int
-  receiverId Int
-  sender     User      @relation("sentMessages", fields: [senderId], references: [id])
-  receiver   User      @relation("receivedMessages", fields: [receiverId], references: [id])
-  editTime   DateTime? @updatedAt
-  isEdited   Boolean   @default(false)
+  id             BigInt       @id @default(autoincrement())
+  content        String?
+  senderId       Int
+  conversationId Int
+  sendTime       DateTime     @default(now())
+  sender         User         @relation("sentMessages", fields: [senderId], references: [id])
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  editTime       DateTime?    @updatedAt
+  isEdited       Boolean      @default(false)
+}
+
+model ConversationUser {
+  id             Int          @id @default(autoincrement())
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id], "userInConversation")
+  conversationId Int
+  userId         Int
+  addedById      Int?
+  addedBy        User?        @relation(fields: [addedById], references: [id], "addedBy")
+  addedTime      DateTime?    @default(now())
+  isAccepted     Boolean      @default(false)
+  acceptedTime   DateTime?
+  isAdmin        Boolean      @default(false)
+  readTime       DateTime?
+
+  @@unique([conversationId, userId])
 }
 
 model Roles {
