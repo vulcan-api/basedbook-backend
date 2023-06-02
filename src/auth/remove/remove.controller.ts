@@ -1,6 +1,8 @@
 import {
+  Body,
   Controller,
   Delete,
+  ForbiddenException,
   HttpCode,
   HttpStatus,
   UseGuards,
@@ -9,6 +11,8 @@ import { RemoveService } from './remove.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../decorator/getUser.decorator';
 import { JwtAuthDto } from '../dto/jwt-auth.dto';
+import { RemoveAccountDto } from './dto/remove-account.dto';
+
 @UseGuards(AuthGuard('jwt'))
 @Controller('auth/remove')
 export class RemoveController {
@@ -16,7 +20,18 @@ export class RemoveController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete()
-  async removeAccount(@GetUser() requester: JwtAuthDto): Promise<void> {
+  async removeAccount(
+    @GetUser() requester: JwtAuthDto,
+    @Body() dto: RemoveAccountDto,
+  ): Promise<void> {
+    if (
+      !(await this.removeService.checkIfUserExists(
+        requester.userId,
+        dto.password,
+      ))
+    )
+      throw new ForbiddenException('Please provide correct password!');
+
     await this.removeService.removeUser(requester.userId);
   }
 }
