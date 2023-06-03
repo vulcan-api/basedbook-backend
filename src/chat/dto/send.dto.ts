@@ -1,8 +1,8 @@
 import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
-export class SendMessageDto {
+export class SendDto {
   @IsInt()
-  receiverId: number;
+  conversation: number;
 
   @IsString()
   @IsNotEmpty()
