@@ -222,7 +222,7 @@ export class SpottedService {
       undefined,
       1000,
     );
-    if (userId) {
+    if (userId && spottedPost.comments) {
       this.addIsOwnedAttribute(spottedPost.comments, userId);
     }
     delete spottedPost._count;
