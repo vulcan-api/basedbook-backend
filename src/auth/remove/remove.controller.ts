@@ -11,7 +11,7 @@ import { RemoveService } from './remove.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../decorator/getUser.decorator';
 import { JwtAuthDto } from '../dto/jwt-auth.dto';
-import { RemoveAccountDto } from './dto/remove-account.dto';
+import { RemoveAccountDto } from '../dto/remove-account.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('auth/remove')
