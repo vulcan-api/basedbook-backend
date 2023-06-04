@@ -101,6 +101,17 @@ export class SpottedService {
     if (answer.length === 0) return null;
     return answer;
   }
+  addIsOwnedAttribute(comments: any[], userId: number) {
+    const newComments: any[] = [];
+    comments.map((comment) => {
+      comment.isOwned = comment.authorId === userId;
+      if (comment.replies && comment.replies.length > 0) {
+        comment.replies = this.addIsOwnedAttribute(comment.replies, userId);
+      }
+      newComments.push(comment);
+    });
+    return newComments;
+  }
 
   async getPostsCount() {
     return await this.prisma.spottedPost.count();
@@ -118,11 +129,18 @@ export class SpottedService {
             username: true,
           },
         },
-        _count: {
-          select: { SpottedLikes: true },
+        Comment: {
+          skip: 0,
+          take: 1000,
+          orderBy: {
+            parentId: 'asc',
+          },
         },
-        SpottedLikes: {
-          select: { userId: true },
+        SpottedLikes: true,
+        _count: {
+          select: {
+            Comment: true,
+          },
         },
       },
       where: {
@@ -141,7 +159,9 @@ export class SpottedService {
       post.isLiked = post.SpottedLikes.some(
         (like: { userId: number }) => like.userId === userId,
       );
-      post.likes = post._count.SpottedLikes;
+      post.likes = post.SpottedLikes.length;
+      post.comments = post._count.Comment || 0;
+      delete post.Comment;
       delete post.SpottedLikes;
       delete post._count;
       return post;
@@ -192,7 +212,6 @@ export class SpottedService {
           },
         },
       });
-
     spottedPost.likes = spottedPost._count.SpottedLikes;
     spottedPost.isLiked = spottedPost.SpottedLikes.some(
       (like: { userId: number }) => like.userId === userId,
@@ -203,10 +222,12 @@ export class SpottedService {
       undefined,
       1000,
     );
+    if (userId && spottedPost.comments) {
+      this.addIsOwnedAttribute(spottedPost.comments, userId);
+    }
     delete spottedPost._count;
     delete spottedPost.SpottedLikes;
     delete spottedPost.Comment;
-
     return spottedPost;
   }
 

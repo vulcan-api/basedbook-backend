@@ -26,6 +26,9 @@ dependencies:
   '@nestjs/platform-express':
     specifier: ^9.3.10
     version: 9.3.10(@nestjs/common@9.3.10)(@nestjs/core@9.3.10)
+  '@types/speakeasy':
+    specifier: ^2.0.7
+    version: 2.0.7
   cache-manager:
     specifier: ^5.1.7
     version: 5.1.7
@@ -77,6 +80,9 @@ dependencies:
   passport-local:
     specifier: ^1.0.0
     version: 1.0.0
+  passport-totp:
+    specifier: ^0.0.2
+    version: 0.0.2
   pm2:
     specifier: ^5.3.0
     version: 5.3.0
@@ -86,6 +92,9 @@ dependencies:
   rxjs:
     specifier: ^7.8.0
     version: 7.8.0
+  speakeasy:
+    specifier: ^2.0.0
+    version: 2.0.0
   unique-username-generator:
     specifier: ^1.1.3
     version: 1.1.3
@@ -2113,6 +2122,12 @@ packages:
       '@types/node': 18.11.18
     dev: true
 
+  /@types/speakeasy@2.0.7:
+    resolution: {integrity: sha512-JEcOhN2SQCoX86ZfiZEe8px84sVJtivBXMZfOVyARTYEj0hrwwbj1nF0FwEL3nJSoEV6uTbcdLllMKBgAYHWCQ==}
+    dependencies:
+      '@types/node': 18.11.18
+    dev: false
+
   /@types/stack-utils@2.0.1:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: true
@@ -2725,6 +2740,10 @@ packages:
     dependencies:
       safe-buffer: 5.2.1
     dev: true
+
+  /base32.js@0.0.1:
+    resolution: {integrity: sha512-EGHIRiegFa62/SsA1J+Xs2tIzludPdzM064N9wjbiEgHnGnJ1V0WEpA4pEwCYT5nDvZk3ubf0shqaCS7k6xeUQ==}
+    dev: false
 
   /base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
@@ -6588,6 +6607,11 @@ packages:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
 
+  /notp@2.0.3:
+    resolution: {integrity: sha512-oBig/2uqkjQ5AkBuw4QJYwkEWa/q+zHxI5/I5z6IeP2NT0alpJFsP/trrfCC+9xOAgQSZXssNi962kp5KBmypQ==}
+    engines: {node: '> v0.6.0'}
+    dev: false
+
   /npm-run-path@4.0.1:
     resolution: {integrity: sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==}
     engines: {node: '>=8'}
@@ -6877,6 +6901,15 @@ packages:
     engines: {node: '>= 0.4.0'}
     dev: false
 
+  /passport-totp@0.0.2:
+    resolution: {integrity: sha512-WhCnOSvLy4HDEZxwRwFGRpzQzqw+Q/vDZGzralzjTZerZeNI8EFwxmlgiIohhsBCkLZ+u3BR8Bz2v+gXQoDTcw==}
+    engines: {node: '>= 0.4.0'}
+    dependencies:
+      notp: 2.0.3
+      passport-strategy: 1.0.0
+      pkginfo: 0.2.3
+    dev: false
+
   /passport@0.6.0:
     resolution: {integrity: sha512-0fe+p3ZnrWRW74fe8+SvCyf4a3Pb2/h7gFkQ8yTJpAO50gDzlfjZUZTO1k5Eg9kUct22OxHLqDZoKUWRHOh9ug==}
     engines: {node: '>= 0.4.0'}
@@ -6973,6 +7006,11 @@ packages:
     dependencies:
       find-up: 4.1.0
     dev: true
+
+  /pkginfo@0.2.3:
+    resolution: {integrity: sha512-7W7wTrE/NsY8xv/DTGjwNIyNah81EQH0MWcTzrHL6pOpMocOGZc0Mbdz9aXxSrp+U0mSmkU8jrNCDCfUs3sOBg==}
+    engines: {node: '>= 0.4.0'}
+    dev: false
 
   /pluralize@8.0.0:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
@@ -7863,6 +7901,13 @@ packages:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
     deprecated: Please use @jridgewell/sourcemap-codec instead
     dev: true
+
+  /speakeasy@2.0.0:
+    resolution: {integrity: sha512-lW2A2s5LKi8rwu77ewisuUOtlCydF/hmQSOJjpTqTj1gZLkNgTaYnyvfxy2WBr4T/h+9c4g8HIITfj83OkFQFw==}
+    engines: {node: '>= 0.10.0'}
+    dependencies:
+      base32.js: 0.0.1
+    dev: false
 
   /specificity@0.4.1:
     resolution: {integrity: sha512-1klA3Gi5PD1Wv9Q0wUoOQN1IWAuPu0D1U03ThXTr0cJ20+/iq2tHSDnK7Kk/0LXJ1ztUB2/1Os0wKmfyNgUQfg==}
