@@ -10,6 +10,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ResetModule } from './reset/reset.module';
 import { RemoveController } from './remove/remove.controller';
 import { RemoveService } from './remove/remove.service';
+import { TotpController } from './totp/totp.controller';
+import { TotpService } from './totp/totp.service';
 
 const { SECRET: secret = 'secret' } = process.env;
 
@@ -25,8 +27,8 @@ const { SECRET: secret = 'secret' } = process.env;
       signOptions: { expiresIn: 3600 * 24 * 30 },
     }),
   ],
-  controllers: [AuthController, RemoveController],
-  providers: [AuthService, JwtStrategy, RemoveService],
+  controllers: [AuthController, RemoveController, TotpController],
+  providers: [AuthService, JwtStrategy, RemoveService, TotpService],
   exports: [AuthService, JwtStrategy, PassportModule],
 })
 export class AuthModule {}
