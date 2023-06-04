@@ -10,6 +10,7 @@
     "build:packages": "pnpm i",
     "build:prod": "pnpm build && rimraf dist && nest build",
     "build:prisma": "prisma generate",
+    "db:seed": "prisma db seed",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -23,6 +24,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
+  },
+  "prisma": {
+    "seed": "ts-node ./prisma/seed/main.ts"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",

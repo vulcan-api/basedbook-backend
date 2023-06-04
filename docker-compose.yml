@@ -3,7 +3,10 @@
 services:
   db:
     # TODO: postgres should deploy prisma after it is up
-    image: postgres
+    image: ghcr.io/nasz-elektryk/basedbook-db
+    build:
+      context: .
+      dockerfile: docker/postgres/Dockerfile
     ports:
       - "5432:5432"
     environment:
@@ -11,11 +14,11 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: basedbook
     network_mode: host
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data
   backend:
     image: ghcr.io/nasz-elektryk/basedbook-backend
-    build: .
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
     command: pnpm start:dev
     network_mode: host
     ports:
