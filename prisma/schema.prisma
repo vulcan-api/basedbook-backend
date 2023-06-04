@@ -57,6 +57,13 @@ model User {
   sentMessages         Message[]              @relation("sentMessages")
   addedToConversations ConversationUser[]     @relation("addedBy")
   conversationsUsers   ConversationUser[]     @relation("userInConversation")
+  UserTotpSecret       UserTotpSecret[]
+}
+
+model UserTotpSecret {
+  userId Int    @id
+  user   User   @relation(fields: [userId], references: [id])
+  secret String
 }
 
 model Conversation {
