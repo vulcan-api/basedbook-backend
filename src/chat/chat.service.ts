@@ -149,21 +149,47 @@ export class ChatService {
         },
       });
       const promises = conversations.map(async (conversation: any) => {
-        conversation.conversation.numberOfUnreadMessages =
-          await this.getNumberOfUnreadMessages(
-            userId,
-            conversation.conversation.id,
-          );
-        return conversation;
+        const { conversation: conversationObj } = conversation;
+        conversationObj.numberOfUnreadMessages =
+          await this.getNumberOfUnreadMessages(userId, conversationObj.id);
+        conversationObj.lastMessage = await this.getLastMessage(
+          conversationObj.id,
+        );
+        return conversationObj;
       });
-
       return await Promise.all(promises);
     } catch (e) {
       console.log(e);
       return 'Error';
     }
   }
-
+  public async getLastMessage(conversationId: number): Promise<any> {
+    try {
+      const result = await this.prisma.message.findMany({
+        where: {
+          conversationId: conversationId,
+        },
+        select: {
+          id: true,
+          content: true,
+          sendTime: true,
+          sender: {
+            select: {
+              username: true,
+            },
+          },
+        },
+        orderBy: {
+          sendTime: 'desc',
+        },
+        take: 1,
+      });
+      return result[0];
+    } catch (e) {
+      console.log(e);
+      return 'Error';
+    }
+  }
   public async acceptInvitation(
     conversationId: number,
     userId: number,

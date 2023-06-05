@@ -43,7 +43,10 @@ export class ChatController {
 
   @Get('conversations/')
   async getUserConversations(@GetUser() user: JwtAuthDto) {
-    return await this.chatService.getUserConversations(user.userId);
+    const conversations = await this.chatService.getUserConversations(
+      user.userId,
+    );
+    return this.convertBigIntToString(conversations);
   }
 
   @Get('conversation/:conversationId/members')
