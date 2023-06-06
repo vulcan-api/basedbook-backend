@@ -76,9 +76,10 @@ export class AuthService {
 
     if (sha512(dto.password) === user.passwordHash) {
       return this.generateAuthCookie({
-        userId: user.id,
-        roles: user.Roles.map((e) => e.role),
+        has2FAEnabled: !!user.totpSecret,
         isBanned: user.isBanned,
+        roles: user.Roles.map((e) => e.role),
+        userId: user.id,
       });
     }
     throw new ForbiddenException('Wrong credentials!');
@@ -91,6 +92,7 @@ export class AuthService {
         user: {
           select: {
             isBanned: true,
+            totpSecret: true,
             Roles: { select: { role: true } },
           },
         },
@@ -108,6 +110,7 @@ export class AuthService {
 
     return this.generateAuthCookie({
       userId: unverifiedUser.userId,
+      has2FAEnabled: !!unverifiedUser.user.totpSecret,
       isBanned: unverifiedUser.user.isBanned,
       roles: unverifiedUser.user.Roles.map((e) => e.role),
     });
