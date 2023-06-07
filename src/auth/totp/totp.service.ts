@@ -1,10 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as speakeasy from 'speakeasy';
 import { DbService } from '../../db/db.service';
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class TotpService {
-  constructor(private readonly prisma: DbService) {}
+  constructor(
+    private readonly prisma: DbService,
+    private readonly authService: AuthService,
+  ) {}
   async getQrCodeUrl(userId: number): Promise<{ url: string | undefined }> {
     const secret = speakeasy.generateSecret({
       name: 'BasedBook',
@@ -21,20 +25,38 @@ export class TotpService {
     };
   }
 
-  async verify(userId: number, userToken: string): Promise<boolean> {
+  async verify(
+    email: string,
+    userToken: string,
+  ): Promise<[string, string, object]> {
     const user = await this.prisma.user.findUniqueOrThrow({
       where: {
-        id: userId,
+        email,
       },
       select: {
         totpSecret: true,
+        isBanned: true,
+        Roles: true,
+        id: true,
       },
     });
 
-    return speakeasy.totp.verify({
-      secret: user.totpSecret ?? '',
-      encoding: 'base32',
-      token: userToken,
+    if (
+      !speakeasy.totp.verify({
+        secret: user.totpSecret ?? '',
+        encoding: 'base32',
+        token: userToken,
+      })
+    )
+      throw new HttpException(
+        'The TOTP code is incorrect!',
+        HttpStatus.NOT_FOUND,
+      );
+
+    return this.authService.generateAuthCookie({
+      userId: user.id,
+      isBanned: user.isBanned,
+      roles: user.Roles.map((e) => e.role),
     });
   }
 
