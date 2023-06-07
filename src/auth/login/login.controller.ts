@@ -19,6 +19,10 @@ export class LoginController {
   @HttpCode(HttpStatus.OK)
   async login(@Body() dto: LoginDto, @Res() res: Response) {
     const jwt = await this.authService.login(dto);
+    if (!jwt.length) {
+      res.send({ has2FAEnabled: true });
+      return;
+    }
     res.cookie(...jwt);
     res.cookie(
       'user_info',

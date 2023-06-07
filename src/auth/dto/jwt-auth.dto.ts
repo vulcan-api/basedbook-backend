@@ -13,6 +13,4 @@ export class JwtAuthDto {
   @IsBoolean()
   isBanned: boolean;
 
-  @IsBoolean()
-  has2FAEnabled: boolean;
 }

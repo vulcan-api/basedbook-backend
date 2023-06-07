@@ -64,7 +64,7 @@ export class AuthService {
     return { msg: 'Successfully registered a new account!' };
   }
 
-  async login(dto: LoginDto): Promise<[string, string, object]> {
+  async login(dto: LoginDto): Promise<[string, string, object] | []> {
     const user = await this.prisma.user.findUniqueOrThrow({
       where: { email: dto.email },
       include: {
@@ -75,12 +75,13 @@ export class AuthService {
     });
 
     if (sha512(dto.password) === user.passwordHash) {
-      return this.generateAuthCookie({
-        has2FAEnabled: !!user.totpSecret,
-        isBanned: user.isBanned,
-        roles: user.Roles.map((e) => e.role),
-        userId: user.id,
-      });
+      if (user.totpSecret === null)
+        return this.generateAuthCookie({
+          isBanned: user.isBanned,
+          roles: user.Roles.map((e) => e.role),
+          userId: user.id,
+        });
+      return [];
     }
     throw new ForbiddenException('Wrong credentials!');
   }
@@ -110,7 +111,6 @@ export class AuthService {
 
     return this.generateAuthCookie({
       userId: unverifiedUser.userId,
-      has2FAEnabled: !!unverifiedUser.user.totpSecret,
       isBanned: unverifiedUser.user.isBanned,
       roles: unverifiedUser.user.Roles.map((e) => e.role),
     });

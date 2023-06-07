@@ -52,7 +52,6 @@ describe('SpottedController', () => {
       userId: 1,
       roles: ['USER'],
       isBanned: false,
-      has2FAEnabled: false,
     });
     expect(token).toBeDefined();
   });
