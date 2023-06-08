@@ -59,7 +59,14 @@ export class TotpService {
       roles: user.Roles.map((e) => e.role),
     });
   }
-
+  async is2faEnabled(userId: number): Promise<boolean> {
+    const user = await this.prisma.user.findUniqueOrThrow({
+      where: {
+        id: userId,
+      },
+    });
+    return !!user.totpSecret;
+  }
   async remove2FA(userId: number) {
     await this.prisma.user.update({
       where: {
