@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   Res,
   UseGuards,
@@ -45,12 +46,10 @@ export class TotpController {
     response.send({ token: jwt[1] });
   }
 
-  @Get('is-enabled')
-  async is2faEnabled(
-    @GetUser() user: JwtAuthDto,
-  ): Promise<{ is2faEnabled: boolean }> {
-    return {
-      is2faEnabled: await this.totpService.is2faEnabled(user.userId),
-    };
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('remove')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove2FA(@GetUser() user: JwtAuthDto) {
+    await this.totpService.remove2FA(user.userId);
   }
 }
