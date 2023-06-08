@@ -92,6 +92,7 @@ export class ChatService {
           conversation: {
             select: {
               id: true,
+              avatarId: true,
               name: true,
               messages: {
                 skip: skip,
