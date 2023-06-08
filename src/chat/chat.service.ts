@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { AddUserDto } from './dto/addUser.dto';
 
@@ -500,9 +500,10 @@ export class ChatService {
     conversationId: number,
   ): Promise<any> {
     try {
-      if (!(await this.isInConversation(conversationId, senderId))) {
-        return 'You are not in this conversation';
+      if (!(await this.isInConversation(senderId, conversationId))) {
+        throw new HttpException('You are not in this conversation', 403);
       }
+
       return await this.prisma.message.create({
         data: {
           content: content,
@@ -512,10 +513,9 @@ export class ChatService {
       });
     } catch (e) {
       console.log(e);
-      return 'Error';
+      throw new Error('Error');
     }
   }
-
   public async deleteMessage(
     senderId: number,
     messageId: number,
