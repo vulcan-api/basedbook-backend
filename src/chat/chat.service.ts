@@ -319,7 +319,7 @@ export class ChatService {
         userId != deletedBy &&
         !(await this.isAdmin(deletedBy, conversationId))
       ) {
-        return 'You are not admin';
+        throw new HttpException('You are not in this conversation', 403);
       }
       await this.prisma.conversationUser.deleteMany({
         where: {
@@ -344,7 +344,7 @@ export class ChatService {
     addedBy: number,
   ) {
     if (!(await this.isAdmin(addedBy, conversationId))) {
-      return 'You are not admin';
+      throw new HttpException('You are not in this conversation', 403);
     }
     try {
       await this.prisma.conversationUser.updateMany({
@@ -375,7 +375,7 @@ export class ChatService {
     deletedBy: number,
   ) {
     if (!(await this.isAdmin(deletedBy, conversationId))) {
-      return 'You are not admin';
+      throw new HttpException('You are not in this conversation', 403);
     }
     try {
       await this.prisma.conversationUser.updateMany({
@@ -461,7 +461,7 @@ export class ChatService {
   ) {
     try {
       if (!(await this.isAdmin(userId, conversationId))) {
-        return 'You are not admin';
+        throw new HttpException('You are not in this conversation', 403);
       }
       await this.prisma.conversation.update({
         where: {

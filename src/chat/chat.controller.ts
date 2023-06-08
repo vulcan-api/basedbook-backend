@@ -17,6 +17,7 @@ import { AddUserDto } from './dto/addUser.dto';
 import { CreateConversationDto } from './dto/createConversation.dto';
 import { EditDto } from './dto/edit.dto';
 import { SendDto } from './dto/send.dto';
+import { UpdateConversationNameDto } from './dto/updateConversationName.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('chat')
@@ -207,6 +208,19 @@ export class ChatController {
     @Param('messageId') messageId: string,
   ) {
     return await this.chatService.deleteMessage(user.userId, +messageId);
+  }
+  @Put('updateName/:conversationId')
+  async updateConversationName(
+    @Body() body: UpdateConversationNameDto,
+    @GetUser() user: JwtAuthDto,
+    @Param('conversationId') conversationId: string,
+  ) {
+    await this.chatService.updateConversationName(
+      user.userId,
+      parseInt(conversationId),
+      body.name,
+    );
+    return { statusCode: 204 };
   }
 
   convertBigIntToString(obj: any): any {
