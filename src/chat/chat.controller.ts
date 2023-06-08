@@ -18,6 +18,7 @@ import { CreateConversationDto } from './dto/createConversation.dto';
 import { EditDto } from './dto/edit.dto';
 import { SendDto } from './dto/send.dto';
 import { UpdateConversationNameDto } from './dto/updateConversationName.dto';
+import { UpdateConversationAvatarDto } from './dto/updateConversationAvatar.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('chat')
@@ -222,7 +223,19 @@ export class ChatController {
     );
     return { statusCode: 204 };
   }
-
+  @Put('updateAvatar/:conversationId')
+  async updateConversationAvatar(
+    @Body() body: UpdateConversationAvatarDto,
+    @GetUser() user: JwtAuthDto,
+    @Param('conversationId') conversationId: string,
+  ) {
+    await this.chatService.updateConversationAvatar(
+      user.userId,
+      parseInt(conversationId),
+      body.avatarId,
+    );
+    return { statusCode: 204 };
+  }
   convertBigIntToString(obj: any): any {
     if (obj instanceof Object) {
       for (const prop in obj) {

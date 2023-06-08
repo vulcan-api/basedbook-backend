@@ -63,6 +63,7 @@ model User {
 model Conversation {
   id                   Int                @id @default(autoincrement())
   name                 String?
+  avatarId             Int                @default(1)
   messages             Message[]
   usersInConversations ConversationUser[]
 }

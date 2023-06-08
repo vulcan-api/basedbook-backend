@@ -483,7 +483,28 @@ export class ChatService {
       return 'Error';
     }
   }
-
+  public async updateConversationAvatar(
+    userId: number,
+    conversationId: number,
+    avatarId: number,
+  ) {
+    try {
+      if (!(await this.isAdmin(userId, conversationId))) {
+        throw new HttpException('You are not in this conversation', 403);
+      }
+      await this.prisma.conversation.update({
+        where: {
+          id: conversationId,
+        },
+        data: {
+          avatarId: avatarId,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      return 'Error';
+    }
+  }
   private async sendSystemMessage(message: string, conversationId: number) {
     return this.prisma.message.create({
       data: {
