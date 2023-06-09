@@ -17,8 +17,7 @@ import { AddUserDto } from './dto/addUser.dto';
 import { CreateConversationDto } from './dto/createConversation.dto';
 import { EditDto } from './dto/edit.dto';
 import { SendDto } from './dto/send.dto';
-import { UpdateConversationNameDto } from './dto/updateConversationName.dto';
-import { UpdateConversationAvatarDto } from './dto/updateConversationAvatar.dto';
+import { UpdateConversationDto } from './dto/updateConversation.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('chat')
@@ -151,7 +150,7 @@ export class ChatController {
     @Body() body: CreateConversationDto,
     @GetUser() user: JwtAuthDto,
   ) {
-    await this.chatService.createConversation(user.userId, body.name);
+    await this.chatService.createConversation(user.userId, body);
     return { statusCode: 201 };
   }
 
@@ -210,32 +209,20 @@ export class ChatController {
   ) {
     return await this.chatService.deleteMessage(user.userId, +messageId);
   }
-  @Put('updateName/:conversationId')
-  async updateConversationName(
-    @Body() body: UpdateConversationNameDto,
+  @Put('update/:conversationId')
+  async updateConversation(
+    @Body() body: UpdateConversationDto,
     @GetUser() user: JwtAuthDto,
     @Param('conversationId') conversationId: string,
   ) {
-    await this.chatService.updateConversationName(
+    await this.chatService.updateConversation(
       user.userId,
       parseInt(conversationId),
-      body.name,
+      body,
     );
     return { statusCode: 204 };
   }
-  @Put('updateAvatar/:conversationId')
-  async updateConversationAvatar(
-    @Body() body: UpdateConversationAvatarDto,
-    @GetUser() user: JwtAuthDto,
-    @Param('conversationId') conversationId: string,
-  ) {
-    await this.chatService.updateConversationAvatar(
-      user.userId,
-      parseInt(conversationId),
-      body.avatarId,
-    );
-    return { statusCode: 204 };
-  }
+
   convertBigIntToString(obj: any): any {
     if (obj instanceof Object) {
       for (const prop in obj) {

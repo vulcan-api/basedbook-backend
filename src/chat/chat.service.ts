@@ -1,6 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { AddUserDto } from './dto/addUser.dto';
+import { UpdateConversationDto } from './dto/updateConversation.dto';
+import { CreateConversationDto } from './dto/createConversation.dto';
 
 @Injectable()
 export class ChatService {
@@ -285,11 +287,15 @@ export class ChatService {
     }
   }
 
-  public async createConversation(createdBy: number, name: string) {
+  public async createConversation(
+    createdBy: number,
+    body: CreateConversationDto,
+  ) {
     try {
       const conversation = await this.prisma.conversation.create({
         data: {
-          name: name,
+          name: body.name,
+          avatarId: body.avatarId,
         },
       });
       await this.prisma.conversationUser.create({
@@ -455,57 +461,34 @@ export class ChatService {
     }
   }
 
-  public async updateConversationName(
+  public async updateConversation(
     userId: number,
     conversationId: number,
-    name: string,
+    body: UpdateConversationDto,
   ) {
     try {
       if (!(await this.isAdmin(userId, conversationId))) {
-        throw new HttpException('You are not in this conversation', 403);
+        throw new HttpException(
+          'You are not an admin of this conversation',
+          403,
+        );
       }
       await this.prisma.conversation.update({
         where: {
           id: conversationId,
         },
         data: {
-          name: name,
+          name: body.name,
+          avatarId: body.avatarId,
         },
       });
-      await this.sendSystemMessage(
-        `${await this.getUsername(
-          userId,
-        )} changed conversation name to ${name}`,
-        conversationId,
-      );
-      return 'Conversation name updated';
+      return 'Conversation updated';
     } catch (e) {
       console.log(e);
       return 'Error';
     }
   }
-  public async updateConversationAvatar(
-    userId: number,
-    conversationId: number,
-    avatarId: number,
-  ) {
-    try {
-      if (!(await this.isAdmin(userId, conversationId))) {
-        throw new HttpException('You are not in this conversation', 403);
-      }
-      await this.prisma.conversation.update({
-        where: {
-          id: conversationId,
-        },
-        data: {
-          avatarId: avatarId,
-        },
-      });
-    } catch (e) {
-      console.log(e);
-      return 'Error';
-    }
-  }
+
   private async sendSystemMessage(message: string, conversationId: number) {
     return this.prisma.message.create({
       data: {
