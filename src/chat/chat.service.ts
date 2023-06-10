@@ -263,6 +263,7 @@ export class ChatService {
             select: {
               id: true,
               name: true,
+              avatarId: true,
             },
           },
         },
