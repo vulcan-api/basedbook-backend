@@ -9,17 +9,11 @@ export class TotpService {
     private readonly prisma: DbService,
     private readonly authService: AuthService,
   ) {}
-  async getQrCodeUrl(userId: number): Promise<{ url: string | undefined }> {
+  async getQrCodeUrl(): Promise<{ url: string | undefined }> {
     const secret = speakeasy.generateSecret({
       name: 'BasedBook',
     });
 
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: {
-        totpSecret: secret.base32,
-      },
-    });
     return {
       url: secret.otpauth_url,
     };
@@ -74,6 +68,27 @@ export class TotpService {
       },
       data: {
         totpSecret: null,
+      },
+    });
+  }
+
+  async confirm(userId: number, secret: string, code: string) {
+    if (
+      !speakeasy.totp.verify({
+        secret: secret,
+        encoding: 'base32',
+        token: code,
+      })
+    )
+      throw new HttpException(
+        'The TOTP code is incorrect!',
+        HttpStatus.NOT_FOUND,
+      );
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        totpSecret: secret,
       },
     });
   }

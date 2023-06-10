@@ -16,6 +16,7 @@ import { GetUser } from '../decorator/getUser.decorator';
 import { Response } from 'express';
 import { AuthService } from '../auth.service';
 import { TotpDto } from '../dto';
+import { ConfirmTotpDto } from '../dto';
 
 @Controller('auth/totp')
 export class TotpController {
@@ -25,10 +26,8 @@ export class TotpController {
   ) {}
   @UseGuards(AuthGuard('jwt'))
   @Get('code')
-  async getQrCodeUrl(
-    @GetUser() user: JwtAuthDto,
-  ): Promise<{ url: string | undefined }> {
-    return this.totpService.getQrCodeUrl(user.userId);
+  async getQrCodeUrl(): Promise<{ url: string | undefined }> {
+    return this.totpService.getQrCodeUrl();
   }
 
   @HttpCode(HttpStatus.OK)
@@ -45,6 +44,17 @@ export class TotpController {
     );
     response.send({ token: jwt[1] });
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Patch('confirm')
+  async confirmTotpCode(
+    @Body() dto: ConfirmTotpDto,
+    @GetUser() user: JwtAuthDto,
+  ): Promise<void> {
+    await this.totpService.confirm(user.userId, dto.secret, dto.code);
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Get('is-enabled')
   async is2faEnabled(
