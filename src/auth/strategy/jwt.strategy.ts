@@ -6,6 +6,14 @@ import { JwtAuthDto } from '../dto/jwt-auth.dto';
 const { SECRET = 'secret' } = process.env;
 
 const extractFromCookie = (req: any): string | null => {
+  /* if it is a WebSocket request  */
+  if (req.hasOwnProperty('handshake')) {
+    console.log(`\n\n A WebSocket Request:`);
+    return req.handshake.headers.cookie
+      .split('; ')
+      .find((cookie: string) => cookie.startsWith('jwt'))
+      .split('=')[1];
+  }
   console.log(`\n\nRequest path: "${req.path}"`, req.cookies);
   if (req && req.cookies) return req.cookies['jwt'];
   return null;
