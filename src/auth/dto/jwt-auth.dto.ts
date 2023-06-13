@@ -12,5 +12,4 @@ export class JwtAuthDto {
   @IsNotEmpty()
   @IsBoolean()
   isBanned: boolean;
-
 }

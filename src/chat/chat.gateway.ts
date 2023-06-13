@@ -13,8 +13,13 @@ import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { Socket } from 'socket.io';
 
-const { WEB_SOCKET_PORT = 3001 } = process.env;
-@WebSocketGateway(+WEB_SOCKET_PORT, { transports: ['websocket'] })
+@WebSocketGateway({ 
+	namespace: '/socket',
+	transports: ['websocket'],
+	cors: {
+	  origin: '*',	
+	},
+})
 export class ChatGateway {
   constructor(private readonly chatService: ChatService) {}
   @UseGuards(AuthGuard('jwt'))
