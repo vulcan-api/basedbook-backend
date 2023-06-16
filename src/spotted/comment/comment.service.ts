@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../../db/db.service';
+import { filterProfanity } from '../../lib/profanity_filter/profanity_filter';
 
 @Injectable()
 export class CommentService {
@@ -11,6 +12,7 @@ export class CommentService {
     text: string,
     commentId?: number,
   ): Promise<void> {
+    text = filterProfanity(text);
     await this.prisma.comment.create({
       data: {
         authorId: userId,
