@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project-dto';
+import { filterProfanity } from '../lib/profanity_filter/profanity_filter';
 
 // TODO:
 // - add isAlreadyApplied property to the return object
@@ -95,6 +96,8 @@ export class ProjectService {
   }
 
   async addProject(projectData: CreateProjectDto, authorId: number) {
+    projectData.text = filterProfanity(projectData.text);
+    projectData.title = filterProfanity(projectData.title);
     await this.prisma.project.create({
       data: Object.assign(projectData, { authorId }),
     });
