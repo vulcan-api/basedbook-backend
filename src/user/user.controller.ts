@@ -13,12 +13,14 @@ import { SpottedService } from '../spotted/spotted.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
+import { ProjectService } from 'src/project/project.service';
 @UseGuards(AuthGuard('jwt'))
 @Controller('/user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly spottedService: SpottedService,
+    private readonly projectsService: ProjectService,
   ) {}
 
   @Get()
@@ -41,6 +43,11 @@ export class UserController {
   @Get('/:userId/spottedPosts')
   async getSpottedPosts(@Param('userId', ParseIntPipe) userId: number) {
     return this.spottedService.getUsersPosts(0, 999, userId);
+  }
+
+  @Get('/:userId/projects')
+  async getUsersProjects(@Param('userId', ParseIntPipe) userId: number) {
+    return this.projectsService.getUserProjects(userId);
   }
 
   @Delete()

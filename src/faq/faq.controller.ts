@@ -16,7 +16,6 @@ import { ModeratorGuard } from '../auth/guards/moderator.guard';
 import { AnswerDto } from './dto/answer.dto';
 import { ChangeQuestionDto } from './dto/changeQuestion.dto';
 import { HierarchyDto } from './dto/hierarchy.dto';
-import { async } from 'rxjs';
 
 @Controller('faq')
 export class FaqController {
