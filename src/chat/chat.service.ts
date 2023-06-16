@@ -408,7 +408,22 @@ export class ChatService {
       return 'Error';
     }
   }
-
+  public async deleteConversation(userId: number, conversationId: number) {
+    if (!(await this.isAdmin(userId, conversationId))) {
+      throw new HttpException('You are not an admin of this conversation', 403);
+    }
+    try {
+      await this.prisma.conversation.delete({
+        where: {
+          id: conversationId,
+        },
+      });
+      return 'Conversation deleted';
+    } catch (e) {
+      console.log(e);
+      return 'Error';
+    }
+  }
   public async getNumberOfUnreadMessages(
     userId: number,
     conversationId: number,

@@ -179,7 +179,17 @@ export class ChatController {
       user.userId,
     );
   }
-
+  @Delete('conversation/delete/:conversationId')
+  async deleteConversation(
+    @GetUser() user: JwtAuthDto,
+    @Param('conversationId') conversationId: string,
+  ) {
+    await this.chatService.deleteConversation(
+      user.userId,
+      parseInt(conversationId),
+    );
+    return { statusCode: 204 };
+  }
   @Post('send')
   async sendMessage(@Body() dto: SendDto, @GetUser() user: JwtAuthDto) {
     await this.chatService.sendMessage(
