@@ -4,7 +4,6 @@ import {
   SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
-import * as process from 'process';
 import { SendDto } from './dto/send.dto';
 import { ChatService } from './chat.service';
 import { ParseIntPipe, UseGuards } from '@nestjs/common';
@@ -13,15 +12,16 @@ import { GetUser } from '../auth/decorator/getUser.decorator';
 import { JwtAuthDto } from '../auth/dto/jwt-auth.dto';
 import { Socket } from 'socket.io';
 
-@WebSocketGateway({ 
-	namespace: '/socket',
-	transports: ['websocket'],
-	cors: {
-	  origin: '*',	
-	},
+@WebSocketGateway({
+  namespace: '/socket',
+  transports: ['websocket'],
+  cors: {
+    origin: '*',
+  },
 })
 export class ChatGateway {
   constructor(private readonly chatService: ChatService) {}
+
   @UseGuards(AuthGuard('jwt'))
   @SubscribeMessage('sendMessage')
   async handleSendMessage(

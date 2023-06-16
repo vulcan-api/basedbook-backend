@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../../db/db.service';
-import { async } from 'rxjs';
-import { CarriageReturnLineFeed } from 'ts-loader/dist/constants';
 
 @Injectable()
 export class FollowService {
