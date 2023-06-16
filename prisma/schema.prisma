@@ -74,8 +74,8 @@ model Message {
   senderId       Int
   conversationId Int
   sendTime       DateTime     @default(now())
-  sender         User         @relation("sentMessages", fields: [senderId], references: [id])
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  sender         User         @relation("sentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   editTime       DateTime?    @updatedAt
   isEdited       Boolean      @default(false)
 }
@@ -83,11 +83,11 @@ model Message {
 model ConversationUser {
   id             Int          @id @default(autoincrement())
   conversation   Conversation @relation(fields: [conversationId], references: [id])
-  user           User         @relation(fields: [userId], references: [id], "userInConversation")
+  user           User         @relation(fields: [userId], references: [id], "userInConversation", onDelete: Cascade)
   conversationId Int
   userId         Int
   addedById      Int?
-  addedBy        User?        @relation(fields: [addedById], references: [id], "addedBy")
+  addedBy        User?        @relation(fields: [addedById], references: [id], "addedBy", onDelete: Cascade)
   addedTime      DateTime?    @default(now())
   isAccepted     Boolean      @default(false)
   acceptedTime   DateTime?
