@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { AddUserDto } from './dto/addUser.dto';
 import { UpdateConversationDto } from './dto/updateConversation.dto';
@@ -50,15 +50,19 @@ export class ChatService {
     body: AddUserDto,
     addedBy: number,
   ): Promise<any> {
+    if (!(await this.isInConversation(addedBy, body.conversationId))) {
+      throw new HttpException(
+        `User ${addedBy} is not in conversation ${body.conversationId}`,
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    if (await this.isInConversation(body.userId, body.conversationId)) {
+      throw new HttpException(
+        `CONFLICT: User ${body.userId} is already in conversation ${body.conversationId}`,
+        HttpStatus.CONFLICT,
+      );
+    }
     try {
-      const isInConversation = await this.prisma.conversationUser.findMany({
-        where: {
-          userId: addedBy,
-        },
-      });
-      if (!isInConversation) {
-        return 'You are not in this conversation';
-      }
       await this.prisma.conversationUser.create({
         data: {
           userId: body.userId,
