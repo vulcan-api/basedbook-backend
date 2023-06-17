@@ -9,10 +9,14 @@ import {
 import { AuthService } from '../auth.service';
 import { LoginDto } from '../dto';
 import { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth/login')
 export class LoginController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post()
   @HttpCode(HttpStatus.OK)
@@ -26,7 +30,11 @@ export class LoginController {
     res.cookie(
       'user_info',
       JSON.stringify(await this.authService.getUserPublicInfo(dto.email)),
-      { secure: true, sameSite: 'none' },
+      {
+        domain: this.configService.get<string>('COOKIE_DOMAIN', 'localhost'),
+        secure: true,
+        sameSite: 'lax',
+      },
     );
     res.send({ token: jwt[1] });
   }

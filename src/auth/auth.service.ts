@@ -6,6 +6,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { JwtAuthDto } from './dto/jwt-auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { checkProfanity } from '../lib/profanity_filter/profanity_filter';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,7 @@ export class AuthService {
     private readonly prisma: DbService,
     private readonly mailerService: MailerService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async signup(dto: RegisterDto): Promise<object> {
@@ -137,7 +139,15 @@ export class AuthService {
   ): Promise<[string, string, object]> {
     if (payload.roles === undefined) payload.roles = ['USER'];
     const jwt = await this.generateAuthJwt(payload as JwtAuthDto);
-    return ['jwt', jwt, { secure: true, sameSite: 'none' }];
+    return [
+      'jwt',
+      jwt,
+      {
+        domain: this.configService.get<string>('COOKIE_DOMAIN', 'localhost'),
+        secure: true,
+        sameSite: 'lax',
+      },
+    ];
   }
 
   async getUserPublicInfo(email: string): Promise<object> {
