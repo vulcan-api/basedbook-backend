@@ -19,10 +19,10 @@ import { Socket } from 'socket.io';
     origin: '*',
   },
 })
+@UseGuards(AuthGuard('jwt'))
 export class ChatGateway {
   constructor(private readonly chatService: ChatService) {}
 
-  @UseGuards(AuthGuard('jwt'))
   @SubscribeMessage('sendMessage')
   async handleSendMessage(
     @ConnectedSocket() socket: Socket,
@@ -39,12 +39,19 @@ export class ChatGateway {
     return data;
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @SubscribeMessage('join')
   async handleJoin(
     @ConnectedSocket() socket: Socket,
     @MessageBody('conversationId', ParseIntPipe) conversationId: number,
   ) {
     socket.join(`${conversationId}`);
+  }
+
+  @SubscribeMessage('leave')
+  async handleLeave(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody('conversationId', ParseIntPipe) conversationId: number,
+  ) {
+    socket.leave(`${conversationId}`);
   }
 }
