@@ -124,7 +124,7 @@ export class ChatService {
         },
       });
       result[0].conversation.messages.sort(function (a, b) {
-        return a.sendTime.getTime() - b.sendTime.getTime();
+        return b.sendTime.getTime() - a.sendTime.getTime();
       });
       result[0].conversation.messages.map((item: any) => {
         item.isOwned = item.sender.id === userId;
