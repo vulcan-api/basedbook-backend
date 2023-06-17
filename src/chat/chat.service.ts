@@ -116,7 +116,7 @@ export class ChatService {
                   },
                 },
                 orderBy: {
-                  sendTime: 'desc',
+                  sendTime: 'asc',
                 },
               },
             },

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -25,19 +26,16 @@ export class ChatController {
   constructor(private chatService: ChatService) {}
   @Get('messages/:conversationId')
   async getConversation(
-    @Param('conversationId') conversationId: string,
-    @Query('skip') skip = '0',
-    @Query('take') take = '10',
+    @Param('conversationId', ParseIntPipe) conversationId: number,
+    @Query('skip') skip: number = 0,
+    @Query('take') take: number = 10,
     @GetUser() user: JwtAuthDto,
   ) {
-    if (isNaN(+conversationId)) {
-      return [];
-    }
     const conversation = await this.chatService.getConversation(
       user.userId,
-      parseInt(conversationId),
-      parseInt(skip),
-      parseInt(take),
+      conversationId,
+      skip,
+      take,
     );
     return this.convertBigIntToString(conversation);
   }
