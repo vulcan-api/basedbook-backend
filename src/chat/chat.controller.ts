@@ -19,6 +19,7 @@ import { CreateConversationDto } from './dto/createConversation.dto';
 import { EditDto } from './dto/edit.dto';
 import { SendDto } from './dto/send.dto';
 import { UpdateConversationDto } from './dto/updateConversation.dto';
+import { GetConversationsDto } from './dto/get-conversations.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('chat')
@@ -27,15 +28,14 @@ export class ChatController {
   @Get('messages/:conversationId')
   async getConversation(
     @Param('conversationId', ParseIntPipe) conversationId: number,
-    @Query('skip') skip: number = 0,
-    @Query('take') take: number = 10,
+    @Query() dto: GetConversationsDto,
     @GetUser() user: JwtAuthDto,
   ) {
     const conversation = await this.chatService.getConversation(
       user.userId,
       conversationId,
-      skip,
-      take,
+      dto.skip,
+      dto.take,
     );
     return this.convertBigIntToString(conversation);
   }
