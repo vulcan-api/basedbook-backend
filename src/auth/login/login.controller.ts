@@ -26,7 +26,7 @@ export class LoginController {
     res.cookie(
       'user_info',
       JSON.stringify(await this.authService.getUserPublicInfo(dto.email)),
-      { secure: true },
+      { secure: true, sameSite: 'none' },
     );
     res.send({ token: jwt[1] });
   }

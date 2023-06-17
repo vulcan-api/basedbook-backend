@@ -137,7 +137,7 @@ export class AuthService {
   ): Promise<[string, string, object]> {
     if (payload.roles === undefined) payload.roles = ['USER'];
     const jwt = await this.generateAuthJwt(payload as JwtAuthDto);
-    return ['jwt', jwt, { secure: true }];
+    return ['jwt', jwt, { secure: true, sameSite: 'none' }];
   }
 
   async getUserPublicInfo(email: string): Promise<object> {
