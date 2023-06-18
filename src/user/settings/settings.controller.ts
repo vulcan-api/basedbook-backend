@@ -56,14 +56,15 @@ export class SettingsController {
   async getAvatar(
     @Param('id', ParseIntPipe) userId: number,
     @Res() response: Response,
-  ): Promise<StreamableFile | null> {
-    response.set({
-      'Content-Type': 'image/jpeg',
-    });
+  ): Promise<void> {
+    response.setHeader('Content-Type', 'image/jpeg');
     const image = await this.settingsService.getAvatar(userId);
 
-    if (!image) return null;
+    if (!image) {
+      response.status(HttpStatus.NO_CONTENT);
+      response.send();
+      return;
+    }
     response.send(image);
-    return new StreamableFile(image);
   }
 }
